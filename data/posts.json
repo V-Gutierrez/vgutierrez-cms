@@ -5,7 +5,11 @@
     "slug": "building-high-performance-engineering-teams",
     "date": "2025-01-15",
     "excerpt": "How to transform underperforming teams into organizational references through culture, process, and technical excellence.",
-    "tags": ["leadership", "team-management", "engineering-culture"],
+    "tags": [
+      "leadership",
+      "team-management",
+      "engineering-culture"
+    ],
     "published": true,
     "contentFile": "posts/post-1.json"
   },
@@ -15,7 +19,11 @@
     "slug": "architecture-decision-records-practical-guide",
     "date": "2025-01-10",
     "excerpt": "How ADRs can transform your technical decision-making process and improve system reliability.",
-    "tags": ["architecture", "documentation", "decision-making"],
+    "tags": [
+      "architecture",
+      "documentation",
+      "decision-making"
+    ],
     "published": true,
     "contentFile": "posts/post-2.json"
   },
@@ -25,8 +33,24 @@
     "slug": "crisis-resolution-distributed-systems",
     "date": "2025-01-05",
     "excerpt": "Lessons learned from resolving critical production issues in high-traffic systems.",
-    "tags": ["distributed-systems", "crisis-management", "troubleshooting"],
+    "tags": [
+      "distributed-systems",
+      "crisis-management",
+      "troubleshooting"
+    ],
     "published": true,
     "contentFile": "posts/post-3.json"
+  },
+  {
+    "id": 4,
+    "title": "Hello",
+    "slug": "hello",
+    "date": "2025-07-09",
+    "excerpt": "World",
+    "tags": [
+      "test"
+    ],
+    "published": true,
+    "contentFile": "posts/post-4.json"
   }
 ]
