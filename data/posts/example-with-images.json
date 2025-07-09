@@ -1,0 +1,17 @@
+{
+  "id": 999,
+  "title": "Example Post with Images",
+  "slug": "example-post-with-images",
+  "date": "2025-01-15",
+  "author": "Victor Gutierrez",
+  "tags": ["example", "images", "blog"],
+  "published": false,
+  "excerpt": "This is an example showing how to properly include images in blog posts.",
+  "content": "<h2>Hero Image Example</h2><img src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/blog/example-post-hero.jpg\" alt=\"Hero image for this blog post\" style=\"width: 100%; border-radius: 8px; margin-bottom: 2rem;\"><h2>Including Images in Content</h2><p>You can include images anywhere in your blog content. Here's an example of an inline image:</p><img src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/blog/example-post-diagram.jpg\" alt=\"Example diagram showing architecture\" style=\"width: 100%; max-width: 600px; margin: 2rem auto; display: block; border-radius: 8px;\"><h2>Image Best Practices</h2><p>When adding images to your blog posts:</p><p>• <strong>Use descriptive alt text</strong> for accessibility</p><p>• <strong>Optimize file sizes</strong> for fast loading</p><p>• <strong>Use consistent styling</strong> with border-radius and margins</p><p>• <strong>Center larger images</strong> using CSS</p><h2>Responsive Images</h2><p>For responsive images that work well on mobile:</p><div style=\"text-align: center; margin: 2rem 0;\"><img src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/blog/example-post-mobile.jpg\" alt=\"Mobile-friendly image example\" style=\"max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\"></div><h2>Code Snippets with Images</h2><p>You can also include screenshots of code or terminal outputs:</p><img src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/blog/example-post-code.jpg\" alt=\"Code example screenshot\" style=\"width: 100%; max-width: 800px; margin: 2rem auto; display: block; border-radius: 8px; border: 1px solid #333;\"><h2>Gallery Style</h2><p>For multiple related images, you can create a simple gallery:</p><div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 2rem 0;\"><img src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/blog/example-post-gallery-1.jpg\" alt=\"Gallery image 1\" style=\"width: 100%; border-radius: 8px;\"><img src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/blog/example-post-gallery-2.jpg\" alt=\"Gallery image 2\" style=\"width: 100%; border-radius: 8px;\"></div><p>Remember to always test your images after publishing to ensure they load correctly!</p>",
+  "readingTime": 3,
+  "seo": {
+    "metaTitle": "Example Post with Images - Victor Gutierrez",
+    "metaDescription": "Learn how to properly include and style images in your blog posts using the CMS system.",
+    "keywords": ["images", "blog", "tutorial", "cms"]
+  }
+}

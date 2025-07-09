@@ -14,7 +14,8 @@
     "sitemap": "node scripts/build-tools.js sitemap",
     "structure": "node scripts/structure.js",
     "start": "node scripts/structure.js",
-    "test-urls": "node scripts/test-urls.js"
+    "test-urls": "node scripts/test-urls.js",
+    "images": "node scripts/image-manager.js"
   },
   "keywords": [
     "cms",

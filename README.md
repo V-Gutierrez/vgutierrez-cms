@@ -55,6 +55,16 @@ Interactive CLI for:
 - Managing project status and metrics
 - Deleting projects
 
+### Image Management
+```bash
+npm run images
+```
+Interactive CLI for:
+- Managing profile photos
+- Adding project images
+- Generating image URLs
+- Following best practices
+
 ### Profile Management
 ```bash
 npm run profile
