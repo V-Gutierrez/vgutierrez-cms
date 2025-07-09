@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Victor Gutierrez - Technical Leader & Solutions Architect</title>
-    <stycle>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -860,40 +860,104 @@
 
         // Load blog posts from GitHub
         async function loadBlogPosts() {
+            const blogContainer = document.getElementById('blog-posts');
+            
             try {
+                // Show loading state
+                if (blogContainer) {
+                    blogContainer.innerHTML = '<div class="loading">🔄 Loading blog posts from GitHub...</div>';
+                }
+                
+                console.log('Fetching posts from:', 'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json');
+                
                 const response = await fetch('https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const posts = await response.json();
+                console.log('Posts loaded:', posts);
+                
                 blogPosts = posts.filter(post => post.published);
+                console.log('Published posts:', blogPosts.length);
                 
                 // Load full content for each post
                 for (let post of blogPosts) {
                     try {
-                        const contentResponse = await fetch(`https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`);
-                        const fullPost = await contentResponse.json();
-                        post.content = fullPost.content;
-                        post.readingTime = fullPost.readingTime;
-                        post.author = fullPost.author;
+                        const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
+                        console.log('Loading post content from:', contentUrl);
+                        
+                        const contentResponse = await fetch(contentUrl);
+                        if (contentResponse.ok) {
+                            const fullPost = await contentResponse.json();
+                            post.content = fullPost.content;
+                            post.readingTime = fullPost.readingTime;
+                            post.author = fullPost.author;
+                        } else {
+                            console.warn(`Could not load content for post ${post.id}: ${contentResponse.status}`);
+                        }
                     } catch (error) {
-                        console.warn(`Could not load content for post ${post.id}:`, error);
+                        console.warn(`Error loading content for post ${post.id}:`, error);
                     }
                 }
                 
                 renderBlogPosts();
+                
             } catch (error) {
                 console.error('Error loading blog posts:', error);
-                initializeBlog(); // Fall back to sample data
+                
+                // Show user-friendly error message
+                if (blogContainer) {
+                    blogContainer.innerHTML = `
+                        <div class="loading" style="color: #ff6b6b;">
+                            <h3>⚠️ Unable to load blog posts</h3>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                            <p>This usually means:</p>
+                            <ul style="text-align: left; margin: 1rem 0;">
+                                <li>📁 GitHub repository not created yet</li>
+                                <li>🔒 Repository is private (needs to be public)</li>
+                                <li>📡 Files not pushed to GitHub yet</li>
+                                <li>⏱️ GitHub CDN still updating (wait 1-2 minutes)</li>
+                            </ul>
+                            <p><strong>Repository URL:</strong><br>
+                            <a href="https://github.com/V-Gutierrez/vgutierrez-cms" target="_blank" style="color: #ffd700;">
+                                https://github.com/V-Gutierrez/vgutierrez-cms
+                            </a></p>
+                        </div>
+                    `;
+                }
+                
+                // Fall back to sample data
+                console.log('Falling back to sample data...');
+                initializeBlog();
             }
         }
 
         // Load portfolio projects from GitHub
         async function loadProjects() {
             try {
+                console.log('Fetching projects from:', 'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json');
+                
                 const response = await fetch('https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const projects = await response.json();
-                renderProjects(projects.filter(project => project.featured)); // Show only featured projects
+                console.log('Projects loaded:', projects.length);
+                
+                // Show only featured projects
+                const featuredProjects = projects.filter(project => project.featured);
+                console.log('Featured projects:', featuredProjects.length);
+                
+                renderProjects(featuredProjects);
+                
             } catch (error) {
                 console.error('Error loading projects:', error);
-                // Keep current projects as fallback
+                console.log('Using fallback projects...');
+                // Keep current projects as fallback - they're already in the HTML
             }
         }
 
@@ -925,6 +989,12 @@
             const heroDescription = document.querySelector('.hero-text .description');
             if (heroDescription && personalInfo.description) {
                 heroDescription.textContent = personalInfo.description;
+            }
+            
+            // Update profile image
+            const profilePlaceholder = document.querySelector('.profile-placeholder');
+            if (profilePlaceholder && personalInfo.profileImage) {
+                profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
             }
             
             // Update skills section
@@ -965,7 +1035,9 @@
             
             container.innerHTML = projects.map(project => `
                 <div class="project-card">
-                    <div class="project-image">${project.category || 'Project'}</div>
+                    <div class="project-image ${project.image ? '' : 'no-image'}" data-category="${project.category || 'Project'}">
+                        ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none';">` : ''}
+                    </div>
                     <div class="project-content">
                         <h3 class="project-title">${project.title}</h3>
                         <p class="project-description">${project.description}</p>
@@ -997,6 +1069,48 @@
         // Format status for display
         function formatStatus(status) {
             return status.replace(/-/g, ' ').toUpperCase();
+        }
+
+        // Debug functions
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debug-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function showDebugInfo() {
+            const output = document.getElementById('debug-output');
+            output.textContent = 'Testing GitHub URLs...\n\n';
+            
+            const urls = [
+                'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json',
+                'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json',
+                'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json'
+            ];
+            
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url);
+                    const status = response.ok ? '✅ OK' : `❌ ${response.status}`;
+                    output.textContent += `${status} ${url}\n`;
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        output.textContent += `   Size: ${JSON.stringify(data).length} chars\n`;
+                        if (Array.isArray(data)) {
+                            output.textContent += `   Items: ${data.length}\n`;
+                        }
+                    }
+                } catch (error) {
+                    output.textContent += `❌ ERROR ${url}\n   ${error.message}\n`;
+                }
+                output.textContent += '\n';
+            }
+            
+            output.textContent += '\nIf you see 404 errors:\n';
+            output.textContent += '1. Create repository: https://github.com/V-Gutierrez/vgutierrez-cms\n';
+            output.textContent += '2. Make it PUBLIC\n';
+            output.textContent += '3. Push your CMS files\n';
+            output.textContent += '4. Wait 1-2 minutes for GitHub CDN\n';
         }
     </script>
 </body>
