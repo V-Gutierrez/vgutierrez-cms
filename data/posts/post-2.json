@@ -1,0 +1,17 @@
+{
+  "id": 2,
+  "title": "Architecture Decision Records: A Practical Guide",
+  "slug": "architecture-decision-records-practical-guide",
+  "date": "2025-01-10",
+  "author": "Victor Gutierrez",
+  "tags": ["architecture", "documentation", "decision-making"],
+  "published": true,
+  "excerpt": "How ADRs can transform your technical decision-making process and improve system reliability.",
+  "content": "<h2>Why ADRs Matter</h2><p>Architecture Decision Records (ADRs) have become an essential tool in my toolkit for managing complex systems. When we resolved critical architectural issues in our PubSub implementation, ADRs were crucial in documenting our decision-making process and ensuring team alignment.</p><h2>The Problem with Undocumented Decisions</h2><p>Without proper documentation, architectural decisions become tribal knowledge. Team members leave, contexts change, and suddenly nobody knows why a particular approach was chosen. This leads to:</p><p>• Repeated discussions about settled issues<br>• Fear of changing existing systems<br>• Inconsistent architectural approaches<br>• Difficulty onboarding new team members</p><h2>ADR Template and Process</h2><p>A good ADR should include:</p><p><strong>Status:</strong> Proposed, Accepted, Deprecated, or Superseded<br><strong>Context:</strong> What situation requires a decision?<br><strong>Decision:</strong> What approach will we take?<br><strong>Consequences:</strong> What are the positive and negative impacts?</p><p>The key is making ADRs part of your regular workflow, not an afterthought. We review ADRs in team meetings and reference them during code reviews.</p><h2>Real-World Impact</h2><p>Using ADRs for our PubSub architecture redesign helped us reduce production incidents by 64%. The documentation ensured everyone understood the rationale behind our choices and could maintain the system effectively.</p>",
+  "readingTime": 4,
+  "seo": {
+    "metaTitle": "Architecture Decision Records: A Practical Guide - Victor Gutierrez",
+    "metaDescription": "Learn how to implement Architecture Decision Records (ADRs) to improve technical decision-making and system reliability in your engineering organization.",
+    "keywords": ["architecture decision records", "ADR", "software architecture", "technical documentation"]
+  }
+}

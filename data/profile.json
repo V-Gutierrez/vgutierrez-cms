@@ -1,0 +1,101 @@
+{
+  "personalInfo": {
+    "name": "Victor Gutierrez",
+    "title": "Senior Technical Leader | Solutions Architect | Multilingual Team Developer",
+    "subtitle": "Technical Leader & Solutions Architect",
+    "location": "São Paulo, Brazil (Open to Relocation)",
+    "email": "victorgutierrezgomes@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/victtorgutierrez/",
+    "github": "https://github.com/victorgutierrez",
+    "description": "Technical Leader & Solutions Architect with expertise in scaling enterprise systems and developing high-performing engineering teams. Specializes in crisis resolution, performance optimization, and cross-domain architecture (backend, frontend, infrastructure). Multilingual professional with proven ability to lead technical transformations across various sectors while building collaborative team cultures."
+  },
+  "languages": [
+    {
+      "language": "Portuguese",
+      "level": "Native Language"
+    },
+    {
+      "language": "Spanish",
+      "level": "C1 Level"
+    },
+    {
+      "language": "English",
+      "level": "C1 Level"
+    },
+    {
+      "language": "Italian",
+      "level": "B1 Level"
+    },
+    {
+      "language": "French",
+      "level": "A2 Level"
+    }
+  ],
+  "skills": {
+    "businessAndProduct": [
+      "Product Strategy & Technical Requirements Translation",
+      "Cost Optimization",
+      "Vendor Management & Technology Evaluation",
+      "Data-Driven Decision Making & Analytics"
+    ],
+    "leadershipAndStrategy": [
+      "Technical Leadership & Team Management",
+      "System Architecture & Design",
+      "Technical Strategy & Roadmap Planning",
+      "Cross-functional Collaboration",
+      "Hiring, Mentorship & Team Development",
+      "Technical Decision Making & Risk Assessment",
+      "Agile Transformation & Process Improvement"
+    ],
+    "architectureAndSystems": [
+      "Distributed Systems",
+      "Event-Driven Architecture",
+      "Cloud Architecture",
+      "API Design & Integration Patterns",
+      "Database Architecture",
+      "Performance Engineering & Scalability Planning",
+      "Enterprise Integrations & Master Data Management"
+    ],
+    "engineeringExcellence": [
+      "Code Quality & Review Processes",
+      "Testing Strategy",
+      "Observability & Monitoring",
+      "Technical Debt Management & Refactoring Strategy",
+      "Quality Gates & Automated Testing Pipelines"
+    ]
+  },
+  "technicalStack": {
+    "databases": ["PostgreSQL", "MongoDB", "Redis", "InfluxDB"],
+    "backend": ["TypeScript", "Python", "Java", "Rust", "Ruby", "Go"],
+    "devops": ["Docker", "Kubernetes", "Terraform", "Ansible"],
+    "cloud": ["AWS", "GCP", "Serverless Architectures"]
+  },
+  "assets": [
+    "Multi-Industry Technical Perspective",
+    "Team Catalyst & Culture Builder",
+    "Cross-Domain Technical Versatility",
+    "High-Performance Architecture Specialist",
+    "Crisis Resolution & System Recovery Specialist",
+    "Multilingual Technical Leader"
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's Degree in Computer Engineering",
+      "institution": "Universidade Positivo",
+      "location": "São Paulo, SP, Brazil",
+      "startDate": "2024-07-01",
+      "endDate": "2029-07-01",
+      "status": "in-progress"
+    }
+  ],
+  "siteSettings": {
+    "theme": "dark",
+    "primaryColor": "#ffd700",
+    "secondaryColor": "#1a1a1a",
+    "backgroundColor": "#0a0a0a",
+    "textColor": "#ffffff",
+    "siteTitle": "Victor Gutierrez - Technical Leader & Solutions Architect",
+    "siteDescription": "Personal website and blog of Victor Gutierrez, Technical Leader & Solutions Architect specializing in enterprise systems and high-performing engineering teams.",
+    "keywords": ["Victor Gutierrez", "Technical Leader", "Solutions Architect", "Software Engineering", "Team Leadership", "System Architecture"]
+  }
+}

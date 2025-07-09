@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1,
+    "title": "ADEO Group Digital Transformation",
+    "slug": "adeo-group-digital-transformation",
+    "description": "Led strategic technical initiatives for enterprise-wide digital transformation, driving adoption of ADEO Group's core Loyalty and Master Data platforms across Brazil operations, impacting 3+ million users.",
+    "category": "Enterprise Architecture",
+    "technologies": ["Enterprise Architecture", "Team Leadership", "International Collaboration"],
+    "status": "completed",
+    "startDate": "2025-06-01",
+    "endDate": "ongoing",
+    "metrics": {
+      "usersImpacted": "3+ million",
+      "scope": "Country-wide retail operations",
+      "teamSize": "5 developers"
+    },
+    "highlights": [
+      "Coordinate international stakeholder alignment with ADEO France headquarters",
+      "Conduct technical negotiations in English with global teams",
+      "Define technical roadmaps through ADR processes",
+      "Drive cross-functional collaboration between local and international teams"
+    ],
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "High-Traffic System Optimization",
+    "slug": "high-traffic-system-optimization",
+    "description": "Optimized high-traffic customer journey performance by redesigning queue system architecture, achieving 80% latency reduction and maintaining SLA/SLO compliance for critical metrics.",
+    "category": "Performance Engineering",
+    "technologies": ["Performance Engineering", "System Architecture", "Queue Systems"],
+    "status": "completed",
+    "startDate": "2023-03-01",
+    "endDate": "2023-08-01",
+    "metrics": {
+      "latencyReduction": "80%",
+      "slaCompliance": "Maintained",
+      "systemType": "High-traffic customer journey"
+    },
+    "highlights": [
+      "Redesigned queue system architecture for primary service",
+      "Achieved 80% latency reduction",
+      "Maintained SLA/SLO compliance for Availability and APDEX metrics",
+      "Improved overall system performance and user experience"
+    ],
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "Team Performance Transformation",
+    "slug": "team-performance-transformation",
+    "description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate.",
+    "category": "Team Leadership",
+    "technologies": ["Team Leadership", "DevOps", "Code Quality"],
+    "status": "completed",
+    "startDate": "2022-11-01",
+    "endDate": "2024-06-01",
+    "metrics": {
+      "deploymentFrequencyIncrease": "70%",
+      "changeFailureRateReduction": "74%",
+      "teamTransformation": "From 'major offender' to company reference"
+    },
+    "highlights": [
+      "Implemented rigorous code review standards",
+      "Established traceability between tickets and code development",
+      "Elevated team reputation from 'major offender' status",
+      "Successful delivery of crucial company initiatives"
+    ],
+    "featured": true
+  },
+  {
+    "id": 4,
+    "title": "NLP Content Classification System",
+    "slug": "nlp-content-classification-system",
+    "description": "Led research and development of Natural Language Processing solution for automated content cataloging and classification, enhancing platform's ability to deliver personalized educational experiences.",
+    "category": "Machine Learning",
+    "technologies": ["Machine Learning", "NLP", "Python"],
+    "status": "completed",
+    "startDate": "2021-10-01",
+    "endDate": "2023-10-01",
+    "metrics": {
+      "automationLevel": "Fully automated",
+      "contentTypes": "Educational content",
+      "personalização": "Enhanced personalization"
+    },
+    "highlights": [
+      "Research and development of NLP solution",
+      "Automated content cataloging and classification",
+      "Enhanced personalized educational experiences",
+      "Drove adoption of modern development practices"
+    ],
+    "featured": false
+  },
+  {
+    "id": 5,
+    "title": "Critical System Recovery",
+    "slug": "critical-system-recovery",
+    "description": "Resolved critical architectural issues in PubSub implementation causing transactional problems, designing ADR-backed solutions that reduced production incidents by 64%.",
+    "category": "System Recovery",
+    "technologies": ["System Recovery", "Architecture", "Problem Solving"],
+    "status": "completed",
+    "startDate": "2023-01-01",
+    "endDate": "2023-06-01",
+    "metrics": {
+      "incidentReduction": "64%",
+      "systemReliability": "Significantly improved",
+      "architecturalIssues": "Fully resolved"
+    },
+    "highlights": [
+      "Resolved critical PubSub implementation issues",
+      "Designed ADR-backed solutions",
+      "Reduced production incidents by 64%",
+      "Significantly improved system reliability"
+    ],
+    "featured": true
+  },
+  {
+    "id": 6,
+    "title": "Military IT Infrastructure Management",
+    "slug": "military-it-infrastructure-management",
+    "description": "Led IT infrastructure management for military organization, overseeing network administration, inventory management, and telecommunications systems with 99%+ uptime in high-compliance environment.",
+    "category": "Infrastructure",
+    "technologies": ["Infrastructure", "Network Administration", "Security"],
+    "status": "completed",
+    "startDate": "2017-12-01",
+    "endDate": "2019-12-01",
+    "metrics": {
+      "uptime": "99%+",
+      "complianceLevel": "High-compliance environment",
+      "systemsCovered": "Network, inventory, telecommunications"
+    },
+    "highlights": [
+      "Led IT infrastructure for military organization",
+      "Managed critical mission systems",
+      "Maintained 99%+ uptime in high-compliance environment",
+      "Provided technical mentorship to junior team members"
+    ],
+    "featured": false
+  }
+]
