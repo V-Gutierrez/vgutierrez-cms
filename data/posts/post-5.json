@@ -1,0 +1,21 @@
+{
+  "id": 5,
+  "title": "Test",
+  "slug": "test",
+  "date": "2025-07-09",
+  "author": "Victor Gutierrez",
+  "tags": [
+    "Test"
+  ],
+  "published": true,
+  "excerpt": "Test",
+  "content": "<html>test</html>",
+  "readingTime": 1,
+  "seo": {
+    "metaTitle": "Test - Victor Gutierrez",
+    "metaDescription": "Test",
+    "keywords": [
+      "Test"
+    ]
+  }
+}

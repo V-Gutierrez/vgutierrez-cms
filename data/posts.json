@@ -52,5 +52,17 @@
     ],
     "published": true,
     "contentFile": "posts/post-4.json"
+  },
+  {
+    "id": 5,
+    "title": "Test",
+    "slug": "test",
+    "date": "2025-07-09",
+    "excerpt": "Test",
+    "tags": [
+      "Test"
+    ],
+    "published": true,
+    "contentFile": "posts/post-5.json"
   }
 ]
