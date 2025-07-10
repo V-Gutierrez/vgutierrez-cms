@@ -1,978 +1,781 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Victor Gutierrez - Technical Leader & Solutions Architect</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
 
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid #333;
-        }
+      /* Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        border-bottom: 1px solid #333;
+      }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffd700;
-        }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffd700;
+      }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
 
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
+      .nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        cursor: pointer;
+      }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #ffd700;
-        }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: #ffd700;
+      }
 
-        /* Main Content */
-        main {
-            margin-top: 80px;
-            min-height: calc(100vh - 80px);
-        }
+      /* Main Content */
+      main {
+        margin-top: 80px;
+        min-height: calc(100vh - 80px);
+      }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.5s ease-in-out;
+      }
 
-        .tab-content.active {
-            display: block;
-        }
+      .tab-content.active {
+        display: block;
+      }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            position: relative;
-            overflow: hidden;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 40%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
-        }
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        position: relative;
+        overflow: hidden;
+      }
 
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at 30% 40%,
+          rgba(255, 215, 0, 0.1) 0%,
+          transparent 50%
+        );
+      }
+
+      .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-text h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.1;
+      }
+
+      .hero-text h1 span {
+        color: #ffd700;
+      }
+
+      .hero-text .subtitle {
+        font-size: 1.2rem;
+        color: #cccccc;
+        margin-bottom: 2rem;
+      }
+
+      .hero-text .description {
+        font-size: 1.1rem;
+        color: #999999;
+        margin-bottom: 3rem;
+        max-width: 500px;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: #ffd700;
+        color: #0a0a0a;
+        padding: 1rem 2rem;
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .cta-button:hover {
+        background: #ffed4a;
+        transform: translateY(-2px);
+      }
+
+      .hero-image {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .profile-placeholder {
+        width: 400px;
+        height: 500px;
+        background: linear-gradient(135deg, #333 0%, #555 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 1.2rem;
+        border: 2px solid #ffd700;
+      }
+
+      /* Skills Section */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 4rem 0;
+      }
+
+      .skill-category {
+        background: #1a1a1a;
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #333;
+      }
+
+      .skill-category h3 {
+        color: #ffd700;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+
+      .skills-list {
+        list-style: none;
+      }
+
+      .skills-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #333;
+      }
+
+      .skills-list li:last-child {
+        border-bottom: none;
+      }
+
+      /* Portfolio Section */
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .project-card {
+        background: #1a1a1a;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #333;
+        transition: transform 0.3s ease;
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .project-image {
+        height: 200px;
+        background: linear-gradient(135deg, #333 0%, #555 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+      }
+
+      .project-content {
+        padding: 1.5rem;
+      }
+
+      .project-title {
+        color: #ffd700;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .project-description {
+        color: #cccccc;
+        margin-bottom: 1rem;
+      }
+
+      .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .tech-tag {
+        background: #333;
+        color: #ffd700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+      }
+
+      /* Blog Section */
+      .blog-posts {
+        display: grid;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .blog-post {
+        background: #1a1a1a;
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #333;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .blog-post:hover {
+        transform: translateY(-2px);
+      }
+
+      .blog-post-title {
+        color: #ffd700;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .blog-post-date {
+        color: #999;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+
+      .blog-post-excerpt {
+        color: #cccccc;
+        line-height: 1.6;
+      }
+
+      .blog-post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0 0.5rem;
+      }
+
+      .tag {
+        background: rgba(255, 215, 0, 0.1);
+        color: #ffd700;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+      }
+
+      .reading-time {
+        color: #999;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        font-style: italic;
+      }
+
+      /* Post Detail */
+      .post-detail {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 20px;
+      }
+
+      .post-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .post-title {
+        color: #ffd700;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .post-meta {
+        color: #999;
+        font-size: 1rem;
+      }
+
+      .post-content {
+        color: #cccccc;
+        font-size: 1.1rem;
+        line-height: 1.8;
+      }
+
+      .post-content h2 {
+        color: #ffd700;
+        margin: 2rem 0 1rem;
+      }
+
+      .post-content p {
+        margin-bottom: 1.5rem;
+      }
+
+      .back-button {
+        display: inline-block;
+        color: #ffd700;
+        text-decoration: none;
+        margin-bottom: 2rem;
+        font-weight: 500;
+      }
+
+      .back-button:hover {
+        text-decoration: underline;
+      }
+
+      /* Section Headers */
+      .section-header {
+        text-align: center;
+        margin: 4rem 0;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        color: #ffd700;
+        margin-bottom: 1rem;
+      }
+
+      .section-subtitle {
+        font-size: 1.2rem;
+        color: #999;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .project-metrics {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #333;
+      }
+
+      .metric {
+        color: #cccccc;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .metric strong {
+        color: #ffd700;
+      }
+
+      .project-status {
+        margin-top: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .project-status.completed {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+      }
+
+      .project-status.in-progress {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+      }
+
+      .project-status.planned {
+        background: rgba(107, 114, 128, 0.2);
+        color: #9ca3af;
+      }
+
+      /* Loading State */
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: #999;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
         .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+          grid-template-columns: 1fr;
+          text-align: center;
         }
 
         .hero-text h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            line-height: 1.1;
+          font-size: 2.5rem;
         }
 
-        .hero-text h1 span {
-            color: #ffd700;
-        }
-
-        .hero-text .subtitle {
-            font-size: 1.2rem;
-            color: #cccccc;
-            margin-bottom: 2rem;
-        }
-
-        .hero-text .description {
-            font-size: 1.1rem;
-            color: #999999;
-            margin-bottom: 3rem;
-            max-width: 500px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: #ffd700;
-            color: #0a0a0a;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .cta-button:hover {
-            background: #ffed4a;
-            transform: translateY(-2px);
-        }
-
-        .hero-image {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .nav-links {
+          gap: 1rem;
         }
 
         .profile-placeholder {
-            width: 400px;
-            height: 500px;
-            background: linear-gradient(135deg, #333 0%, #555 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 1.2rem;
-            border: 2px solid #ffd700;
+          width: 300px;
+          height: 400px;
         }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
-        }
-
-        .skill-category {
-            background: #1a1a1a;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #333;
-        }
-
-        .skill-category h3 {
-            color: #ffd700;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .skills-list {
-            list-style: none;
-        }
-
-        .skills-list li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .skills-list li:last-child {
-            border-bottom: none;
-        }
-
-        /* Portfolio Section */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .project-card {
-            background: #1a1a1a;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #333;
-            transition: transform 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .project-image {
-            height: 200px;
-            background: linear-gradient(135deg, #333 0%, #555 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-        }
-
-        .project-content {
-            padding: 1.5rem;
-        }
-
-        .project-title {
-            color: #ffd700;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .project-description {
-            color: #cccccc;
-            margin-bottom: 1rem;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tech-tag {
-            background: #333;
-            color: #ffd700;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        /* Blog Section */
-        .blog-posts {
-            display: grid;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .blog-post {
-            background: #1a1a1a;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #333;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .blog-post:hover {
-            transform: translateY(-2px);
-        }
-
-        .blog-post-title {
-            color: #ffd700;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .blog-post-date {
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .blog-post-excerpt {
-            color: #cccccc;
-            line-height: 1.6;
-        }
-
-        .blog-post-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0 0.5rem;
-        }
-
-        .tag {
-            background: rgba(255, 215, 0, 0.1);
-            color: #ffd700;
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .reading-time {
-            color: #999;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-
-        /* Post Detail */
-        .post-detail {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-
-        .post-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .post-title {
-            color: #ffd700;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .post-meta {
-            color: #999;
-            font-size: 1rem;
-        }
-
-        .post-content {
-            color: #cccccc;
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        .post-content h2 {
-            color: #ffd700;
-            margin: 2rem 0 1rem;
-        }
-
-        .post-content p {
-            margin-bottom: 1.5rem;
-        }
-
-        .back-button {
-            display: inline-block;
-            color: #ffd700;
-            text-decoration: none;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-
-        .back-button:hover {
-            text-decoration: underline;
-        }
-
-        /* Section Headers */
-        .section-header {
-            text-align: center;
-            margin: 4rem 0;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            color: #ffd700;
-            margin-bottom: 1rem;
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: #999;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .project-metrics {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #333;
-        }
-
-        .metric {
-            color: #cccccc;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .metric strong {
-            color: #ffd700;
-        }
-
-        .project-status {
-            margin-top: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .project-status.completed {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-        }
-
-        .project-status.in-progress {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-
-        .project-status.planned {
-            background: rgba(107, 114, 128, 0.2);
-            color: #9ca3af;
-        }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: #999;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            .profile-placeholder {
-                width: 300px;
-                height: 400px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <nav class="container">
-            <div class="logo">Victor Gutierrez</div>
-            <ul class="nav-links">
-                <li><a href="#" data-tab="home" class="active">Home</a></li>
-                <li><a href="#" data-tab="portfolio">Portfolio</a></li>
-                <li><a href="#" data-tab="blog">Blog</a></li>
-            </ul>
-        </nav>
+      <nav class="container">
+        <div class="logo">Victor Gutierrez</div>
+        <ul class="nav-links">
+          <li><a href="#" data-tab="home" class="active">Home</a></li>
+          <li><a href="#" data-tab="portfolio">Portfolio</a></li>
+          <li><a href="#" data-tab="blog">Blog</a></li>
+        </ul>
+      </nav>
     </header>
 
     <main>
-        <!-- Home Tab -->
-        <div id="home" class="tab-content active">
-            <section class="hero">
-                <div class="container">
-                    <div class="hero-content">
-                        <div class="hero-text">
-                            <h1>Technical Leader & <span>Solutions Architect</span></h1>
-                            <p class="subtitle">Multilingual Team Developer</p>
-                            <p class="description">
-                                Technical Leader & Solutions Architect with expertise in scaling enterprise systems
-                                and developing high-performing engineering teams. Specializes in crisis resolution,
-                                performance optimization, and cross-domain architecture.
-                            </p>
-                            <button class="cta-button" onclick="showTab('portfolio')">View My Work</button>
-                        </div>
-                        <div class="hero-image">
-                            <div class="profile-placeholder">
-                                Profile Image
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Core Competencies</h2>
-                    <p class="section-subtitle">
-                        Multi-domain expertise across leadership, architecture, and engineering excellence
-                    </p>
-                </div>
-
-                <div class="skills-grid">
-                    <div class="skill-category">
-                        <h3>Leadership & Strategy</h3>
-                        <ul class="skills-list">
-                            <li>Technical Leadership & Team Management</li>
-                            <li>System Architecture & Design</li>
-                            <li>Technical Strategy & Roadmap Planning</li>
-                            <li>Cross-functional Collaboration</li>
-                            <li>Agile Transformation & Process Improvement</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <h3>Architecture & Systems</h3>
-                        <ul class="skills-list">
-                            <li>Distributed Systems</li>
-                            <li>Event-Driven Architecture</li>
-                            <li>Cloud Architecture</li>
-                            <li>API Design & Integration Patterns</li>
-                            <li>Performance Engineering & Scalability</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <h3>Technical Stack</h3>
-                        <ul class="skills-list">
-                            <li>Backend: TypeScript, Python, Java, Rust, Go</li>
-                            <li>Databases: PostgreSQL, MongoDB, Redis</li>
-                            <li>Cloud: AWS, GCP, Serverless Architectures</li>
-                            <li>DevOps: Docker, Kubernetes, Terraform</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <h3>Languages</h3>
-                        <ul class="skills-list">
-                            <li>Portuguese (Native)</li>
-                            <li>Spanish (C1 Level)</li>
-                            <li>English (C1 Level)</li>
-                            <li>Italian (B1 Level)</li>
-                            <li>French (A2 Level)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Portfolio Tab -->
-        <div id="portfolio" class="tab-content">
-            <section class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Portfolio</h2>
-                    <p class="section-subtitle">
-                        Key projects and achievements across enterprise systems and team development
-                    </p>
-                </div>
-
-                <div class="portfolio-grid">
-                    <div class="project-card">
-                        <div class="project-image">Enterprise Platform Integration</div>
-                        <div class="project-content">
-                            <h3 class="project-title">ADEO Group Digital Transformation</h3>
-                            <p class="project-description">
-                                Led strategic technical initiatives for enterprise-wide digital transformation,
-                                driving adoption of ADEO Group's core Loyalty and Master Data platforms across
-                                Brazil operations, impacting 3+ million users.
-                            </p>
-                            <div class="project-tech">
-                                <span class="tech-tag">Enterprise Architecture</span>
-                                <span class="tech-tag">Team Leadership</span>
-                                <span class="tech-tag">International Collaboration</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-image">System Performance Optimization</div>
-                        <div class="project-content">
-                            <h3 class="project-title">High-Traffic System Optimization</h3>
-                            <p class="project-description">
-                                Optimized high-traffic customer journey performance by redesigning queue system
-                                architecture, achieving 80% latency reduction and maintaining SLA/SLO compliance
-                                for critical metrics.
-                            </p>
-                            <div class="project-tech">
-                                <span class="tech-tag">Performance Engineering</span>
-                                <span class="tech-tag">System Architecture</span>
-                                <span class="tech-tag">Queue Systems</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-image">Team Transformation</div>
-                        <div class="project-content">
-                            <h3 class="project-title">Team Performance Transformation</h3>
-                            <p class="project-description">
-                                Transformed underperforming team into company reference by implementing rigorous
-                                code review standards, resulting in 70% increase in Deployment Frequency and 74%
-                                reduction in Change Failure Rate.
-                            </p>
-                            <div class="project-tech">
-                                <span class="tech-tag">Team Leadership</span>
-                                <span class="tech-tag">DevOps</span>
-                                <span class="tech-tag">Code Quality</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-image">NLP Research</div>
-                        <div class="project-content">
-                            <h3 class="project-title">NLP Content Classification System</h3>
-                            <p class="project-description">
-                                Led research and development of Natural Language Processing solution for automated
-                                content cataloging and classification, enhancing platform's ability to deliver
-                                personalized educational experiences.
-                            </p>
-                            <div class="project-tech">
-                                <span class="tech-tag">Machine Learning</span>
-                                <span class="tech-tag">NLP</span>
-                                <span class="tech-tag">Python</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-image">Crisis Resolution</div>
-                        <div class="project-content">
-                            <h3 class="project-title">Critical System Recovery</h3>
-                            <p class="project-description">
-                                Resolved critical architectural issues in PubSub implementation causing
-                                transactional problems, designing ADR-backed solutions that reduced production
-                                incidents by 64% and improved system reliability.
-                            </p>
-                            <div class="project-tech">
-                                <span class="tech-tag">System Recovery</span>
-                                <span class="tech-tag">Architecture</span>
-                                <span class="tech-tag">Problem Solving</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-image">Military IT Infrastructure</div>
-                        <div class="project-content">
-                            <h3 class="project-title">Military IT Infrastructure Management</h3>
-                            <p class="project-description">
-                                Led IT infrastructure management for military organization, overseeing network
-                                administration, inventory management, and telecommunications systems with 99%+ uptime
-                                in high-compliance environment.
-                            </p>
-                            <div class="project-tech">
-                                <span class="tech-tag">Infrastructure</span>
-                                <span class="tech-tag">Network Administration</span>
-                                <span class="tech-tag">Security</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Blog Tab -->
-        <div id="blog" class="tab-content">
-            <section class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Blog</h2>
-                    <p class="section-subtitle">
-                        Insights on technical leadership, architecture, and engineering excellence
-                    </p>
-                </div>
-
-                <div id="blog-posts" class="blog-posts">
-                    <div class="loading">Loading blog posts...</div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Post Detail -->
-        <div id="post-detail" class="tab-content">
-            <div class="post-detail">
-                <a href="#" class="back-button" onclick="showTab('blog')">&larr; Back to Blog</a>
-                <div id="post-content">
-                    <!-- Post content will be loaded here -->
-                </div>
+      <!-- Home Tab -->
+      <div id="home" class="tab-content active">
+        <section class="hero">
+          <div class="container">
+            <div class="hero-content">
+              <div class="hero-text">
+                <div class="loading">Loading profile...</div>
+              </div>
+              <div class="hero-image">
+                <div class="profile-placeholder">Loading image...</div>
+              </div>
             </div>
+          </div>
+        </section>
+
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">Core Competencies</h2>
+            <p class="section-subtitle">
+              Multi-domain expertise across leadership, architecture, and
+              engineering excellence
+            </p>
+          </div>
+
+          <div class="skills-grid">
+            <div class="loading">Loading skills...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Portfolio Tab -->
+      <div id="portfolio" class="tab-content">
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">Portfolio</h2>
+            <p class="section-subtitle">
+              Key projects and achievements across enterprise systems and team
+              development
+            </p>
+          </div>
+
+          <div class="portfolio-grid">
+            <div class="loading">Loading projects...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Blog Tab -->
+      <div id="blog" class="tab-content">
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">Blog</h2>
+            <p class="section-subtitle">
+              Insights on technical leadership, architecture, and engineering
+              excellence
+            </p>
+          </div>
+
+          <div id="blog-posts" class="blog-posts">
+            <div class="loading">Loading blog posts...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Post Detail -->
+      <div id="post-detail" class="tab-content">
+        <div class="post-detail">
+          <a href="#" class="back-button" onclick="showTab('blog')"
+            >&larr; Back to Blog</a
+          >
+          <div id="post-content">
+            <!-- Post content will be loaded here -->
+          </div>
         </div>
+      </div>
     </main>
 
     <script>
-        // Tab Navigation
-        function showTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Update nav links
-            const navLinks = document.querySelectorAll('.nav-links a');
-            navLinks.forEach(link => link.classList.remove('active'));
-            
-            const activeLink = document.querySelector(`[data-tab="${tabName}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
-        }
+      // Tab Navigation
+      function showTab(tabName) {
+        // Hide all tabs
+        const tabs = document.querySelectorAll(".tab-content");
+        tabs.forEach((tab) => tab.classList.remove("active"));
 
-        // Add click event listeners to nav links
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const tab = e.target.dataset.tab;
-                showTab(tab);
-            });
+        // Show selected tab
+        document.getElementById(tabName).classList.add("active");
+
+        // Update nav links
+        const navLinks = document.querySelectorAll(".nav-links a");
+        navLinks.forEach((link) => link.classList.remove("active"));
+
+        const activeLink = document.querySelector(`[data-tab="${tabName}"]`);
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
+      }
+
+      // Add click event listeners to nav links
+      document.querySelectorAll(".nav-links a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const tab = e.target.dataset.tab;
+          showTab(tab);
+        });
+      });
+
+      // Blog functionality
+      let blogPosts = [];
+
+      // Sample blog posts (replace with your GitHub API endpoint)
+      const samplePosts = [];
+
+      // Initialize blog posts
+      function initializeBlog() {
+        blogPosts = samplePosts;
+        renderBlogPosts();
+      }
+
+      // Render blog posts
+      function renderBlogPosts() {
+        debugLog("renderBlogPosts() called", {
+          postsToRender: blogPosts.length,
         });
 
-        // Blog functionality
-        let blogPosts = [];
-
-        // Sample blog posts (replace with your GitHub API endpoint)
-        const samplePosts = [
-            {
-                id: 1,
-                title: "Building High-Performance Engineering Teams",
-                date: "2025-01-15",
-                excerpt: "How to transform underperforming teams into organizational references through culture, process, and technical excellence.",
-                content: `
-                    <h2>The Challenge</h2>
-                    <p>When I joined the team at Leroy Merlin, we were known as the "major offender" - a team that consistently delivered late, had quality issues, and was avoided by other departments. The transformation that followed teaches us valuable lessons about leadership, culture, and technical excellence.</p>
-                    
-                    <h2>The Strategy</h2>
-                    <p>The transformation wasn't about individual heroics; it was about systematic change across three key areas:</p>
-                    
-                    <p><strong>1. Culture and Ownership:</strong> We established a culture where every team member felt ownership of the codebase and the business outcomes. This meant understanding not just the "how" but the "why" behind every feature.</p>
-                    
-                    <p><strong>2. Process and Standards:</strong> We implemented rigorous code review standards and established traceability between tickets and code development. This wasn't about bureaucracy - it was about creating predictable, quality outcomes.</p>
-                    
-                    <p><strong>3. Technical Excellence:</strong> We focused on reducing technical debt, improving testing coverage, and establishing proper deployment processes using Semantic Versioning methodology.</p>
-                    
-                    <h2>The Results</h2>
-                    <p>The transformation was measurable: 70% increase in Deployment Frequency, 74% reduction in Change Failure Rate, and 64% reduction in production incidents. More importantly, we became the team that other departments wanted to work with.</p>
-                    
-                    <p>The key insight? High-performance teams aren't built on individual talent alone - they're built on systems, culture, and shared commitment to excellence.</p>
-                `
-            },
-            {
-                id: 2,
-                title: "Architecture Decision Records: A Practical Guide",
-                date: "2025-01-10",
-                excerpt: "How ADRs can transform your technical decision-making process and improve system reliability.",
-                content: `
-                    <h2>Why ADRs Matter</h2>
-                    <p>Architecture Decision Records (ADRs) have become an essential tool in my toolkit for managing complex systems. When we resolved critical architectural issues in our PubSub implementation, ADRs were crucial in documenting our decision-making process and ensuring team alignment.</p>
-                    
-                    <h2>The Problem with Undocumented Decisions</h2>
-                    <p>Without proper documentation, architectural decisions become tribal knowledge. Team members leave, contexts change, and suddenly nobody knows why a particular approach was chosen. This leads to:</p>
-                    
-                    <p>• Repeated discussions about settled issues<br>
-                    • Fear of changing existing systems<br>
-                    • Inconsistent architectural approaches<br>
-                    • Difficulty onboarding new team members</p>
-                    
-                    <h2>ADR Template and Process</h2>
-                    <p>A good ADR should include:</p>
-                    
-                    <p><strong>Status:</strong> Proposed, Accepted, Deprecated, or Superseded<br>
-                    <strong>Context:</strong> What situation requires a decision?<br>
-                    <strong>Decision:</strong> What approach will we take?<br>
-                    <strong>Consequences:</strong> What are the positive and negative impacts?</p>
-                    
-                    <p>The key is making ADRs part of your regular workflow, not an afterthought. We review ADRs in team meetings and reference them during code reviews.</p>
-                    
-                    <h2>Real-World Impact</h2>
-                    <p>Using ADRs for our PubSub architecture redesign helped us reduce production incidents by 64%. The documentation ensured everyone understood the rationale behind our choices and could maintain the system effectively.</p>
-                `
-            },
-            {
-                id: 3,
-                title: "Crisis Resolution in Distributed Systems",
-                date: "2025-01-05",
-                excerpt: "Lessons learned from resolving critical production issues in high-traffic systems.",
-                content: `
-                    <h2>The Crisis</h2>
-                    <p>Picture this: It's 3 AM, your PubSub system is causing transactional failures, and every minute of downtime costs thousands in revenue. This was our reality when critical architectural issues surfaced in our message queue implementation.</p>
-                    
-                    <h2>The Approach</h2>
-                    <p>Crisis resolution in distributed systems requires both technical skills and systematic thinking:</p>
-                    
-                    <p><strong>1. Immediate Stabilization:</strong> First, stop the bleeding. We implemented circuit breakers and fallback mechanisms to prevent cascade failures.</p>
-                    
-                    <p><strong>2. Root Cause Analysis:</strong> Once stable, we conducted thorough investigation using distributed tracing and log analysis to understand the failure modes.</p>
-                    
-                    <p><strong>3. Systematic Fix:</strong> Rather than patching symptoms, we redesigned the queue system architecture to address the underlying issues.</p>
-                    
-                    <h2>Key Lessons</h2>
-                    <p>• <strong>Observability is Critical:</strong> You can't fix what you can't see. Proper monitoring and tracing are essential.</p>
-                    
-                    <p>• <strong>Document Everything:</strong> ADRs helped us capture decision rationale during high-pressure situations.</p>
-                    
-                    <p>• <strong>Team Communication:</strong> Clear communication channels and escalation procedures are as important as technical solutions.</p>
-                    
-                    <p>• <strong>Post-Mortem Culture:</strong> Blameless post-mortems help prevent future incidents and improve team learning.</p>
-                    
-                    <h2>The Outcome</h2>
-                    <p>The architectural changes we implemented reduced production incidents by 64% and significantly improved system reliability. More importantly, the team gained confidence in handling complex distributed systems challenges.</p>
-                `
-            }
-        ];
-
-        // Initialize blog posts
-        function initializeBlog() {
-            blogPosts = samplePosts;
-            renderBlogPosts();
+        const container = document.getElementById("blog-posts");
+        if (!container) {
+          debugLog("ERROR: blog-posts container not found!");
+          return;
         }
 
-        // Render blog posts
-        function renderBlogPosts() {
-            debugLog('renderBlogPosts() called', {
-                postsToRender: blogPosts.length
-            });
-            
-            const container = document.getElementById('blog-posts');
-            if (!container) {
-                debugLog('ERROR: blog-posts container not found!');
-                return;
-            }
-            
-            if (blogPosts.length === 0) {
-                debugLog('No posts to render');
-                container.innerHTML = '<div class="loading">No blog posts available.</div>';
-                return;
-            }
-            
-            const postsHtml = blogPosts.map(post => {
-                debugLog(`Rendering post: ${post.title}`);
-                return `
+        if (blogPosts.length === 0) {
+          debugLog("No posts to render");
+          container.innerHTML =
+            '<div class="loading">No blog posts available.</div>';
+          return;
+        }
+
+        const postsHtml = blogPosts
+          .map((post) => {
+            debugLog(`Rendering post: ${post.title}`);
+            return `
                     <article class="blog-post" onclick="showPost(${post.id})">
                         <h3 class="blog-post-title">${post.title}</h3>
-                        <div class="blog-post-date">${new Date(post.date).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
+                        <div class="blog-post-date">${new Date(
+                          post.date,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
                         })}</div>
                         <p class="blog-post-excerpt">${post.excerpt}</p>
-                        ${post.tags ? `
+                        ${
+                          post.tags
+                            ? `
                             <div class="blog-post-tags">
-                                ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                ${post.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
                             </div>
-                        ` : ''}
-                        ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ''}
+                        `
+                            : ""
+                        }
+                        ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
                     </article>
                 `;
-            }).join('');
-            
-            container.innerHTML = postsHtml;
-            debugLog('Blog posts HTML updated');
-        }
+          })
+          .join("");
 
-        // Show individual post
-        function showPost(postId) {
-            const post = blogPosts.find(p => p.id === postId);
-            if (!post) return;
-            
-            document.getElementById('post-content').innerHTML = `
+        container.innerHTML = postsHtml;
+        debugLog("Blog posts HTML updated");
+      }
+
+      // Show individual post
+      function showPost(postId) {
+        const post = blogPosts.find((p) => p.id === postId);
+        if (!post) return;
+
+        document.getElementById("post-content").innerHTML = `
                 <div class="post-header">
                     <h1 class="post-title">${post.title}</h1>
                     <div class="post-meta">
-                        Published on ${new Date(post.date).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                        })}
+                        Published on ${new Date(post.date).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )}
                     </div>
                 </div>
                 <div class="post-content">
                     ${post.content}
                 </div>
             `;
-            
-            showTab('post-detail');
-        }
 
-        // Load blog posts from GitHub
-        async function loadBlogPosts() {
-            debugLog('loadBlogPosts() called');
-            const blogContainer = document.getElementById('blog-posts');
-            
+        showTab("post-detail");
+      }
+
+      // Load blog posts from GitHub
+      async function loadBlogPosts() {
+        debugLog("loadBlogPosts() called");
+        const blogContainer = document.getElementById("blog-posts");
+
+        try {
+          // Show loading state
+          if (blogContainer) {
+            blogContainer.innerHTML =
+              '<div class="loading">🔄 Loading blog posts from GitHub...</div>';
+            debugLog("Loading state set in blog container");
+          }
+
+          const postsUrl =
+            "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json";
+          debugLog("Attempting to fetch posts from:", postsUrl);
+
+          const response = await fetch(postsUrl);
+          debugLog("Fetch response received", {
+            status: response.status,
+            statusText: response.statusText,
+            ok: response.ok,
+            url: response.url,
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const posts = await response.json();
+          debugLog("Posts JSON parsed successfully", {
+            totalPosts: posts.length,
+            firstPost: posts[0]?.title || "None",
+          });
+
+          blogPosts = posts.filter((post) => post.published);
+          debugLog("Filtered published posts", {
+            publishedCount: blogPosts.length,
+          });
+
+          // Load full content for each post
+          for (let i = 0; i < blogPosts.length; i++) {
+            const post = blogPosts[i];
             try {
-                // Show loading state
-                if (blogContainer) {
-                    blogContainer.innerHTML = '<div class="loading">🔄 Loading blog posts from GitHub...</div>';
-                    debugLog('Loading state set in blog container');
-                }
-                
-                const postsUrl = 'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json';
-                debugLog('Attempting to fetch posts from:', postsUrl);
-                
-                const response = await fetch(postsUrl);
-                debugLog('Fetch response received', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    ok: response.ok,
-                    url: response.url
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const posts = await response.json();
-                debugLog('Posts JSON parsed successfully', {
-                    totalPosts: posts.length,
-                    firstPost: posts[0]?.title || 'None'
-                });
-                
-                blogPosts = posts.filter(post => post.published);
-                debugLog('Filtered published posts', {
-                    publishedCount: blogPosts.length
-                });
-                
-                // Load full content for each post
-                for (let i = 0; i < blogPosts.length; i++) {
-                    const post = blogPosts[i];
-                    try {
-                        const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
-                        debugLog(`Loading content for post ${post.id} from:`, contentUrl);
-                        
-                        const contentResponse = await fetch(contentUrl);
-                        if (contentResponse.ok) {
-                            const fullPost = await contentResponse.json();
-                            post.content = fullPost.content;
-                            post.readingTime = fullPost.readingTime;
-                            post.author = fullPost.author;
-                            debugLog(`Post ${post.id} content loaded successfully`);
-                        } else {
-                            debugLog(`Failed to load content for post ${post.id}:`, contentResponse.status);
-                        }
-                    } catch (error) {
-                        debugLog(`Error loading content for post ${post.id}:`, error.message);
-                    }
-                }
-                
-                debugLog('About to call renderBlogPosts()');
-                renderBlogPosts();
-                debugLog('renderBlogPosts() completed');
-                
+              const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
+              debugLog(`Loading content for post ${post.id} from:`, contentUrl);
+
+              const contentResponse = await fetch(contentUrl);
+              if (contentResponse.ok) {
+                const fullPost = await contentResponse.json();
+                post.content = fullPost.content;
+                post.readingTime = fullPost.readingTime;
+                post.author = fullPost.author;
+                debugLog(`Post ${post.id} content loaded successfully`);
+              } else {
+                debugLog(
+                  `Failed to load content for post ${post.id}:`,
+                  contentResponse.status,
+                );
+              }
             } catch (error) {
-                debugLog('Error in loadBlogPosts:', error.message);
-                console.error('Error loading blog posts:', error);
-                
-                // Show user-friendly error message
-                if (blogContainer) {
-                    blogContainer.innerHTML = `
+              debugLog(
+                `Error loading content for post ${post.id}:`,
+                error.message,
+              );
+            }
+          }
+
+          debugLog("About to call renderBlogPosts()");
+          renderBlogPosts();
+          debugLog("renderBlogPosts() completed");
+        } catch (error) {
+          debugLog("Error in loadBlogPosts:", error.message);
+          console.error("Error loading blog posts:", error);
+
+          // Show user-friendly error message
+          if (blogContainer) {
+            blogContainer.innerHTML = `
                         <div class="loading" style="color: #ff6b6b;">
                             <h3>⚠️ Unable to load blog posts</h3>
                             <p><strong>Error:</strong> ${error.message}</p>
@@ -992,211 +795,344 @@
                             </button>
                         </div>
                     `;
-                }
-                
-                // Fall back to sample data
-                debugLog('Falling back to sample data...');
-                initializeBlog();
-            }
+          }
+
+          // Fall back to sample data
+          debugLog("Falling back to sample data...");
+          initializeBlog();
+        }
+      }
+
+      // Load portfolio projects from GitHub
+      async function loadProjects() {
+        const container = document.querySelector(".portfolio-grid");
+        
+        try {
+          console.log("Fetching projects from GitHub API...");
+
+          if (container) {
+            container.innerHTML = '<div class="loading">Loading projects...</div>';
+          }
+
+          const response = await fetch(
+            "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json",
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const projects = await response.json();
+          console.log("Projects loaded:", projects.length);
+
+          // Show only featured projects or all projects if no featured ones
+          const featuredProjects = projects.filter(project => project.featured);
+          const projectsToShow = featuredProjects.length > 0 ? featuredProjects : projects;
+          
+          console.log("Projects to display:", projectsToShow.length);
+
+          renderProjects(projectsToShow);
+        } catch (error) {
+          console.error("Error loading projects:", error);
+          
+          if (container) {
+            container.innerHTML = `
+              <div class="loading" style="color: #ff6b6b;">
+                <h3>⚠️ Unable to load projects</h3>
+                <p><strong>Error:</strong> ${error.message}</p>
+                <p>Check if the GitHub repository and data files exist</p>
+              </div>
+            `;
+          }
+        }
+      }
+
+      // Load profile data from GitHub
+      async function loadProfile() {
+        try {
+          console.log("Fetching profile from GitHub API...");
+          
+          const response = await fetch(
+            "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json",
+          );
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const profile = await response.json();
+          console.log("Profile loaded successfully");
+          updateProfileData(profile);
+        } catch (error) {
+          console.error("Error loading profile:", error);
+          showProfileError();
+        }
+      }
+
+      // Update profile data on the page
+      function updateProfileData(profile) {
+        if (!profile || !profile.personalInfo) {
+          showProfileError();
+          return;
         }
 
-        // Load portfolio projects from GitHub
-        async function loadProjects() {
-            try {
-                console.log('Fetching projects from:', 'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json');
-                
-                const response = await fetch('https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json');
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const projects = await response.json();
-                console.log('Projects loaded:', projects.length);
-                
-                // Show only featured projects
-                const featuredProjects = projects.filter(project => project.featured);
-                console.log('Featured projects:', featuredProjects.length);
-                
-                renderProjects(featuredProjects);
-                
-            } catch (error) {
-                console.error('Error loading projects:', error);
-                console.log('Using fallback projects...');
-                // Keep current projects as fallback - they're already in the HTML
-            }
+        const personalInfo = profile.personalInfo;
+        const heroText = document.querySelector(".hero-text");
+
+        if (!heroText) return;
+
+        // Build hero content
+        let heroContent = '';
+        
+        if (personalInfo.subtitle) {
+          const parts = personalInfo.subtitle.split("&");
+          if (parts.length > 1) {
+            heroContent += `<h1>${parts[0].trim()} & <span>${parts[1].trim()}</span></h1>`;
+          } else {
+            heroContent += `<h1>${personalInfo.subtitle}</h1>`;
+          }
+        } else {
+          heroContent += '<h1>Profile information not available</h1>';
         }
 
-        // Load profile data from GitHub
-        async function loadProfile() {
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json');
-                const profile = await response.json();
-                updateProfileData(profile);
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                // Keep current profile as fallback
-            }
+        if (personalInfo.role) {
+          heroContent += `<p class="subtitle">${personalInfo.role}</p>`;
         }
 
-        // Update profile data on the page
-        function updateProfileData(profile) {
-            const personalInfo = profile.personalInfo;
-            
-            // Update hero section
-            const heroTitle = document.querySelector('.hero-text h1');
-            if (heroTitle && personalInfo.subtitle) {
-                const parts = personalInfo.subtitle.split('&');
-                if (parts.length > 1) {
-                    heroTitle.innerHTML = `${parts[0].trim()} & <span>${parts[1].trim()}</span>`;
-                }
-            }
-            
-            const heroDescription = document.querySelector('.hero-text .description');
-            if (heroDescription && personalInfo.description) {
-                heroDescription.textContent = personalInfo.description;
-            }
-            
-            // Update profile image
-            const profilePlaceholder = document.querySelector('.profile-placeholder');
-            if (profilePlaceholder && personalInfo.profileImage) {
-                profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
-            }
-            
-            // Update skills section
-            if (profile.skills) {
-                updateSkillsSection(profile.skills);
-            }
+        if (personalInfo.description) {
+          heroContent += `<p class="description">${personalInfo.description}</p>`;
         }
 
-        // Update skills section with profile data
-        function updateSkillsSection(skills) {
-            const skillsGrid = document.querySelector('.skills-grid');
-            if (!skillsGrid) return;
-            
-            const skillCategories = {
-                'leadershipAndStrategy': 'Leadership & Strategy',
-                'architectureAndSystems': 'Architecture & Systems',
-                'engineeringExcellence': 'Engineering Excellence',
-                'businessAndProduct': 'Business & Product'
-            };
-            
-            skillsGrid.innerHTML = Object.entries(skillCategories).map(([key, title]) => {
-                const skillList = skills[key] || [];
-                return `
-                    <div class="skill-category">
-                        <h3>${title}</h3>
-                        <ul class="skills-list">
-                            ${skillList.map(skill => `<li>${skill}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-            }).join('');
+        heroContent += '<button class="cta-button" onclick="showTab(\'portfolio\')">View My Work</button>';
+        
+        heroText.innerHTML = heroContent;
+
+        // Update profile image
+        const profilePlaceholder = document.querySelector(".profile-placeholder");
+        if (profilePlaceholder) {
+          if (personalInfo.profileImage) {
+            profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || 'Profile'}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
+          } else {
+            profilePlaceholder.innerHTML = 'Profile Image';
+          }
         }
 
-        // Update project rendering to handle GitHub data
-        function renderProjects(projects) {
-            const container = document.querySelector('.portfolio-grid');
-            if (!container) return;
-            
-            container.innerHTML = projects.map(project => `
+        // Update skills section
+        if (profile.skills) {
+          updateSkillsSection(profile.skills);
+        } else {
+          showSkillsError();
+        }
+      }
+
+      function showProfileError() {
+        const heroText = document.querySelector(".hero-text");
+        if (heroText) {
+          heroText.innerHTML = `
+            <div class="loading" style="color: #ff6b6b;">
+              <h3>⚠️ Profile data not available</h3>
+              <p>Unable to load profile information from API</p>
+            </div>
+          `;
+        }
+      }
+
+      // Update skills section with profile data
+      function updateSkillsSection(skills) {
+        const skillsGrid = document.querySelector(".skills-grid");
+        if (!skillsGrid) return;
+
+        if (!skills || Object.keys(skills).length === 0) {
+          skillsGrid.innerHTML = '<div class="loading">No skills data available</div>';
+          return;
+        }
+
+        const skillCategories = {
+          leadershipAndStrategy: "Leadership & Strategy",
+          architectureAndSystems: "Architecture & Systems",
+          engineeringExcellence: "Engineering Excellence",
+          businessAndProduct: "Business & Product",
+          technicalStack: "Technical Stack",
+          languages: "Languages"
+        };
+
+        const hasAnySkills = Object.keys(skills).some(key => skills[key] && skills[key].length > 0);
+        
+        if (!hasAnySkills) {
+          skillsGrid.innerHTML = '<div class="loading">No skills available</div>';
+          return;
+        }
+
+        skillsGrid.innerHTML = Object.entries(skillCategories)
+          .filter(([key]) => skills[key] && skills[key].length > 0)
+          .map(([key, title]) => {
+            const skillList = skills[key];
+            return `
+              <div class="skill-category">
+                <h3>${title}</h3>
+                <ul class="skills-list">
+                  ${skillList.map((skill) => `<li>${skill}</li>`).join("")}
+                </ul>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function showSkillsError() {
+        const skillsGrid = document.querySelector(".skills-grid");
+        if (skillsGrid) {
+          skillsGrid.innerHTML = `
+            <div class="loading" style="color: #ff6b6b;">
+              <h3>⚠️ Skills data not available</h3>
+              <p>Unable to load skills information from API</p>
+            </div>
+          `;
+        }
+      }
+
+      // Update project rendering to handle GitHub data
+      function renderProjects(projects) {
+        const container = document.querySelector(".portfolio-grid");
+        if (!container) return;
+
+        if (!projects || projects.length === 0) {
+          container.innerHTML = '<div class="loading">No projects available</div>';
+          return;
+        }
+
+        container.innerHTML = projects
+          .map(
+            (project) => `
                 <div class="project-card">
-                    <div class="project-image ${project.image ? '' : 'no-image'}" data-category="${project.category || 'Project'}">
-                        ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none';">` : ''}
+                    <div class="project-image ${project.image ? "" : "no-image"}">
+                        ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : (project.category || "Project")}
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">${project.title}</h3>
-                        <p class="project-description">${project.description}</p>
+                        <h3 class="project-title">${project.title || 'Untitled Project'}</h3>
+                        <p class="project-description">${project.description || 'No description available'}</p>
+                        ${project.technologies && project.technologies.length > 0 ? `
                         <div class="project-tech">
-                            ${project.technologies.map(tech => 
-                                `<span class="tech-tag">${tech}</span>`
-                            ).join('')}
+                            ${project.technologies
+                              .map(
+                                (tech) =>
+                                  `<span class="tech-tag">${tech}</span>`,
+                              )
+                              .join("")}
                         </div>
-                        ${project.metrics && Object.keys(project.metrics).length > 0 ? `
-                            <div class="project-metrics">
-                                ${Object.entries(project.metrics).map(([key, value]) => 
-                                    `<div class="metric"><strong>${formatMetricKey(key)}:</strong> ${value}</div>`
-                                ).join('')}
-                            </div>
                         ` : ''}
-                        <div class="project-status ${project.status}">${formatStatus(project.status)}</div>
+                        ${
+                          project.metrics &&
+                          Object.keys(project.metrics).length > 0
+                            ? `
+                            <div class="project-metrics">
+                                ${Object.entries(project.metrics)
+                                  .map(
+                                    ([key, value]) =>
+                                      `<div class="metric"><strong>${formatMetricKey(key)}:</strong> ${value}</div>`,
+                                  )
+                                  .join("")}
+                            </div>
+                        `
+                            : ""
+                        }
+                        ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ''}
                     </div>
                 </div>
-            `).join('');
-        }
+            `,
+          )
+          .join("");
+      }
 
-        // Format metric keys for display
-        function formatMetricKey(key) {
-            return key.replace(/([A-Z])/g, ' $1')
-                     .replace(/^./, str => str.toUpperCase())
-                     .replace(/_/g, ' ');
-        }
+      // Format metric keys for display
+      function formatMetricKey(key) {
+        return key
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, (str) => str.toUpperCase())
+          .replace(/_/g, " ");
+      }
 
-        // Format status for display
-        function formatStatus(status) {
-            return status.replace(/-/g, ' ').toUpperCase();
-        }
+      // Format status for display
+      function formatStatus(status) {
+        return status.replace(/-/g, " ").toUpperCase();
+      }
 
-        // Debug functions
-        function toggleDebugPanel() {
-            const panel = document.getElementById('debug-panel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            
-            if (panel.style.display === 'block') {
-                debugLog('Debug panel opened');
+      // Debug functions
+      function debugLog(message, data = null) {
+        console.log('[DEBUG]', message, data || '');
+      }
+
+      function toggleDebugPanel() {
+        const panel = document.getElementById("debug-panel");
+        panel.style.display = panel.style.display === "none" ? "block" : "none";
+
+        if (panel.style.display === "block") {
+          debugLog("Debug panel opened");
+        }
+      }
+
+      async function showDebugInfo() {
+        debugLog("Manual debug test started");
+        const output = document.getElementById("debug-output");
+        output.textContent = "Testing GitHub URLs...\n\n";
+
+        const urls = [
+          "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json",
+          "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json",
+          "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json",
+        ];
+
+        for (const url of urls) {
+          try {
+            debugLog(`Testing URL: ${url}`);
+            const response = await fetch(url);
+            const status = response.ok ? "✅ OK" : `❌ ${response.status}`;
+            output.textContent += `${status} ${url}\n`;
+
+            if (response.ok) {
+              const data = await response.json();
+              output.textContent += `   Size: ${JSON.stringify(data).length} chars\n`;
+              if (Array.isArray(data)) {
+                output.textContent += `   Items: ${data.length}\n`;
+              }
+              debugLog(`URL test success: ${url}`);
+            } else {
+              debugLog(`URL test failed: ${url} - ${response.status}`);
             }
+          } catch (error) {
+            output.textContent += `❌ ERROR ${url}\n   ${error.message}\n`;
+            debugLog(`URL test error: ${url}`, error.message);
+          }
+          output.textContent += "\n";
         }
 
-        async function showDebugInfo() {
-            debugLog('Manual debug test started');
-            const output = document.getElementById('debug-output');
-            output.textContent = 'Testing GitHub URLs...\n\n';
-            
-            const urls = [
-                'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json',
-                'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json',
-                'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json'
-            ];
-            
-            for (const url of urls) {
-                try {
-                    debugLog(`Testing URL: ${url}`);
-                    const response = await fetch(url);
-                    const status = response.ok ? '✅ OK' : `❌ ${response.status}`;
-                    output.textContent += `${status} ${url}\n`;
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        output.textContent += `   Size: ${JSON.stringify(data).length} chars\n`;
-                        if (Array.isArray(data)) {
-                            output.textContent += `   Items: ${data.length}\n`;
-                        }
-                        debugLog(`URL test success: ${url}`);
-                    } else {
-                        debugLog(`URL test failed: ${url} - ${response.status}`);
-                    }
-                } catch (error) {
-                    output.textContent += `❌ ERROR ${url}\n   ${error.message}\n`;
-                    debugLog(`URL test error: ${url}`, error.message);
-                }
-                output.textContent += '\n';
-            }
-            
-            // Test basic JavaScript functionality
-            output.textContent += '\n🔧 JavaScript Tests:\n';
-            output.textContent += `✅ DOM Ready: ${document.readyState}\n`;
-            output.textContent += `✅ Blog Container: ${document.getElementById('blog-posts') ? 'Found' : 'Missing'}\n`;
-            output.textContent += `✅ Current Posts: ${blogPosts.length}\n`;
-            output.textContent += `✅ Sample Posts: ${samplePosts.length}\n`;
-            
-            output.textContent += '\nIf you see 404 errors:\n';
-            output.textContent += '1. Create repository: https://github.com/V-Gutierrez/vgutierrez-cms\n';
-            output.textContent += '2. Make it PUBLIC\n';
-            output.textContent += '3. Push your CMS files\n';
-            output.textContent += '4. Wait 1-2 minutes for GitHub CDN\n';
-            
-            debugLog('Manual debug test completed');
-        }
+        // Test basic JavaScript functionality
+        output.textContent += "\n🔧 JavaScript Tests:\n";
+        output.textContent += `✅ DOM Ready: ${document.readyState}\n`;
+        output.textContent += `✅ Blog Container: ${document.getElementById("blog-posts") ? "Found" : "Missing"}\n`;
+        output.textContent += `✅ Current Posts: ${blogPosts.length}\n`;
+        output.textContent += `✅ Sample Posts: ${samplePosts.length}\n`;
+
+        output.textContent += "\nIf you see 404 errors:\n";
+        output.textContent +=
+          "1. Create repository: https://github.com/V-Gutierrez/vgutierrez-cms\n";
+        output.textContent += "2. Make it PUBLIC\n";
+        output.textContent += "3. Push your CMS files\n";
+        output.textContent += "4. Wait 1-2 minutes for GitHub CDN\n";
+
+        debugLog("Manual debug test completed");
+      }
+
+      // Initialize the site when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        debugLog('DOM loaded, initializing site...');
+        
+        // Load content from GitHub or use fallbacks
+        loadProfile();
+        loadProjects();
+        loadBlogPosts();
+      });
     </script>
-</body>
+  </body>
 </html>
+

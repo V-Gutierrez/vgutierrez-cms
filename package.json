@@ -15,7 +15,10 @@
     "structure": "node scripts/structure.js",
     "start": "node scripts/structure.js",
     "test-urls": "node scripts/test-urls.js",
-    "images": "node scripts/image-manager.js"
+    "images": "node scripts/image-manager.js",
+    "debug": "node scripts/debug-posts.js",
+    "help": "node scripts/help-posts.js",
+    "test-pages": "node scripts/test-pages.js"
   },
   "keywords": [
     "cms",
