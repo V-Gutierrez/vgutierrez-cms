@@ -510,6 +510,83 @@
         font-size: 1.2rem;
       }
 
+      /* Education Section */
+      .education-section {
+        background: #1a1a1a;
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #333;
+        margin: 2rem 0;
+      }
+
+      .education-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      .education-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .education-item:hover {
+        background: rgba(255, 215, 0, 0.1);
+        border-color: rgba(255, 215, 0, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .education-icon {
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffd700;
+        color: #0a0a0a;
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+      }
+
+      .education-content {
+        flex: 1;
+      }
+
+      .education-degree {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ffd700;
+        margin-bottom: 0.25rem;
+      }
+
+      .education-institution {
+        font-weight: 500;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+      }
+
+      .education-period {
+        font-size: 0.9rem;
+        color: #999999;
+        margin-bottom: 0.75rem;
+      }
+
+      .education-description {
+        color: #cccccc;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
       /* Technical Stack Section */
       .tech-stack-section {
         margin: 4rem 0;
@@ -775,6 +852,22 @@
           <div class="languages-section">
             <div id="languages-grid" class="languages-grid">
               <div class="loading">Loading languages...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">Education</h2>
+            <p class="section-subtitle">
+              Academic foundation and continuous learning journey
+            </p>
+          </div>
+
+          <div class="education-section">
+            <div id="education-timeline" class="education-timeline">
+              <div class="loading">Loading education...</div>
             </div>
           </div>
         </section>
@@ -1248,6 +1341,11 @@
           updateLanguagesSection(profile.languages);
         }
 
+        // Update education section
+        if (profile.education) {
+          updateEducationSection(profile.education);
+        }
+
         // Update technical stack section
         if (profile.technicalStack) {
           updateTechnicalStackSection(profile.technicalStack);
@@ -1413,6 +1511,56 @@
                 <div class="language-info">
                   <div class="language-name">${lang.language}</div>
                   <div class="language-level">${lang.level}</div>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      // Update education section
+      function updateEducationSection(education) {
+        const educationContainer = document.getElementById('education-timeline');
+        if (!educationContainer) return;
+
+        if (!education || education.length === 0) {
+          educationContainer.innerHTML = '<div class="loading">No education data available</div>';
+          return;
+        }
+
+        const educationIcons = {
+          'bachelor': '🎓',
+          'master': '📚',
+          'phd': '🔬',
+          'certificate': '📜',
+          'diploma': '🎖️'
+        };
+
+        educationContainer.innerHTML = education
+          .sort((a, b) => new Date(b.startDate) - new Date(a.startDate)) // Sort by start date, newest first
+          .map(edu => {
+            const degreeType = edu.degree.toLowerCase().includes('bachelor') ? 'bachelor' :
+                              edu.degree.toLowerCase().includes('master') ? 'master' :
+                              edu.degree.toLowerCase().includes('phd') ? 'phd' :
+                              edu.degree.toLowerCase().includes('certificate') ? 'certificate' : 'diploma';
+            
+            const icon = educationIcons[degreeType] || '🎓';
+            
+            const startYear = new Date(edu.startDate).getFullYear();
+            const endYear = edu.status === 'in-progress' ? 'Present' : new Date(edu.endDate).getFullYear();
+            const period = `${startYear} - ${endYear}`;
+            
+            const statusText = edu.status === 'in-progress' ? 'Currently Pursuing' : 'Completed';
+            const statusClass = edu.status === 'in-progress' ? 'in-progress' : 'completed';
+            
+            return `
+              <div class="education-item">
+                <div class="education-icon">${icon}</div>
+                <div class="education-content">
+                  <div class="education-degree">${edu.degree}</div>
+                  <div class="education-institution">${edu.institution}</div>
+                  <div class="education-period">${period} • ${statusText}</div>
+                  ${edu.location ? `<div class="education-description">${edu.location}</div>` : ''}
                 </div>
               </div>
             `;
