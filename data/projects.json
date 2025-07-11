@@ -42,7 +42,7 @@
     "endDate": "2023-08-01",
     "metrics": {
       "latencyReduction": "80%",
-      "slaCompliance": "Maintained",
+      "SLACompliance": "Maintained",
       "systemType": "High-traffic customer journey"
     },
     "highlights": [
@@ -59,11 +59,7 @@
     "slug": "team-performance-transformation",
     "description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate.",
     "category": "Team Leadership",
-    "technologies": [
-      "Team Leadership",
-      "DevOps",
-      "Code Quality"
-    ],
+    "technologies": ["Team Leadership", "DevOps", "Code Quality"],
     "status": "completed",
     "startDate": "2022-11-01",
     "endDate": "2024-06-01",
@@ -86,11 +82,7 @@
     "slug": "nlp-content-classification-system",
     "description": "Led research and development of Natural Language Processing solution for automated content cataloging and classification, enhancing platform's ability to deliver personalized educational experiences.",
     "category": "Machine Learning",
-    "technologies": [
-      "Machine Learning",
-      "NLP",
-      "Python"
-    ],
+    "technologies": ["Machine Learning", "NLP", "Python"],
     "status": "completed",
     "startDate": "2021-10-01",
     "endDate": "2023-10-01",
@@ -113,11 +105,7 @@
     "slug": "critical-system-recovery",
     "description": "Resolved critical architectural issues in PubSub implementation causing transactional problems, designing ADR-backed solutions that reduced production incidents by 64%.",
     "category": "System Recovery",
-    "technologies": [
-      "System Recovery",
-      "Architecture",
-      "Problem Solving"
-    ],
+    "technologies": ["System Recovery", "Architecture", "Problem Solving"],
     "status": "completed",
     "startDate": "2023-01-01",
     "endDate": "2023-06-01",
@@ -140,11 +128,7 @@
     "slug": "military-it-infrastructure-management",
     "description": "Led IT infrastructure management for military organization, overseeing network administration, inventory management, and telecommunications systems with 99%+ uptime in high-compliance environment.",
     "category": "Infrastructure",
-    "technologies": [
-      "Infrastructure",
-      "Network Administration",
-      "Security"
-    ],
+    "technologies": ["Infrastructure", "Network Administration", "Security"],
     "status": "completed",
     "startDate": "2017-12-01",
     "endDate": "2019-12-01",
@@ -156,9 +140,9 @@
     "highlights": [
       "Led IT infrastructure for military organization",
       "Managed critical mission systems",
-      "Maintained 99%+ uptime in high-compliance environment",
       "Provided technical mentorship to junior team members"
     ],
-    "featured": false
+    "featured": true
   }
 ]
+

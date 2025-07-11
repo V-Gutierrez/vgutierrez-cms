@@ -349,6 +349,156 @@
         font-style: italic;
       }
 
+      /* Languages Section */
+      .languages-section {
+        background: #1a1a1a;
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #333;
+        margin: 2rem 0;
+      }
+
+      .languages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .language-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .language-item:hover {
+        background: rgba(255, 215, 0, 0.1);
+        border-color: rgba(255, 215, 0, 0.4);
+      }
+
+      .language-flag {
+        font-size: 1.5rem;
+        width: 24px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .language-info {
+        flex: 1;
+      }
+
+      .language-name {
+        font-weight: 600;
+        color: #ffd700;
+        margin-bottom: 0.25rem;
+      }
+
+      .language-level {
+        font-size: 0.85rem;
+        color: #cccccc;
+      }
+
+      /* Social Links */
+      .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .social-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #1a1a1a;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        border: 1px solid #333;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .social-link:hover {
+        background: #ffd700;
+        color: #0a0a0a;
+        border-color: #ffd700;
+        transform: translateY(-2px);
+      }
+
+      .social-icon {
+        font-size: 1.2rem;
+      }
+
+      /* Technical Stack Section */
+      .tech-stack-section {
+        margin: 4rem 0;
+      }
+      
+      .tech-stack-section .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .tech-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+        align-items: start;
+      }
+
+      .tech-category {
+        background: #1a1a1a;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid #333;
+        height: fit-content;
+      }
+
+      .tech-category h4 {
+        color: #ffd700;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        text-transform: capitalize;
+      }
+
+      .tech-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: flex-start;
+        align-content: flex-start;
+      }
+
+      .tech-item {
+        background: #333;
+        color: #ffffff;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        border: 1px solid #555;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .tech-item:hover {
+        background: #ffd700;
+        color: #0a0a0a;
+        border-color: #ffd700;
+      }
+
       /* Post Detail */
       .post-detail {
         max-width: 800px;
@@ -485,6 +635,16 @@
           width: 300px;
           height: 400px;
         }
+
+        .social-links {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .tech-categories {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
       }
     </style>
   </head>
@@ -527,6 +687,38 @@
 
           <div class="skills-grid">
             <div class="loading">Loading skills...</div>
+          </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">Languages</h2>
+            <p class="section-subtitle">
+              Multilingual professional with international collaboration experience
+            </p>
+          </div>
+
+          <div class="languages-section">
+            <div id="languages-grid" class="languages-grid">
+              <div class="loading">Loading languages...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Technical Stack Section -->
+        <section class="tech-stack-section">
+          <div class="container">
+            <div class="section-header">
+              <h2 class="section-title">Technical Stack</h2>
+              <p class="section-subtitle">
+                Technologies and tools used across different domains
+              </p>
+            </div>
+
+            <div id="tech-categories" class="tech-categories">
+              <div class="loading">Loading technical stack...</div>
+            </div>
           </div>
         </section>
       </div>
@@ -905,6 +1097,31 @@
 
         heroContent += '<button class="cta-button" onclick="showTab(\'portfolio\')">View My Work</button>';
         
+        // Add social links if available
+        if (personalInfo.github || personalInfo.linkedin) {
+          heroContent += '<div class="social-links">';
+          
+          if (personalInfo.github) {
+            heroContent += `
+              <a href="${personalInfo.github}" target="_blank" rel="noopener noreferrer" class="social-link">
+                <span class="social-icon">🔗</span>
+                GitHub
+              </a>
+            `;
+          }
+          
+          if (personalInfo.linkedin) {
+            heroContent += `
+              <a href="${personalInfo.linkedin}" target="_blank" rel="noopener noreferrer" class="social-link">
+                <span class="social-icon">💼</span>
+                LinkedIn
+              </a>
+            `;
+          }
+          
+          heroContent += '</div>';
+        }
+        
         heroText.innerHTML = heroContent;
 
         // Update profile image
@@ -922,6 +1139,16 @@
           updateSkillsSection(profile.skills);
         } else {
           showSkillsError();
+        }
+
+        // Update languages section
+        if (profile.languages) {
+          updateLanguagesSection(profile.languages);
+        }
+
+        // Update technical stack section
+        if (profile.technicalStack) {
+          updateTechnicalStackSection(profile.technicalStack);
         }
       }
 
@@ -1055,6 +1282,73 @@
       // Format status for display
       function formatStatus(status) {
         return status.replace(/-/g, " ").toUpperCase();
+      }
+
+      // Update languages section
+      function updateLanguagesSection(languages) {
+        const languagesGrid = document.getElementById('languages-grid');
+        if (!languagesGrid) return;
+
+        if (!languages || languages.length === 0) {
+          languagesGrid.innerHTML = '<div class="loading">No languages data available</div>';
+          return;
+        }
+
+        const languageFlags = {
+          'Portuguese': '🇧🇷',
+          'Spanish': '🇪🇸', 
+          'English': '🇺🇸',
+          'Italian': '🇮🇹',
+          'French': '🇫🇷'
+        };
+
+        languagesGrid.innerHTML = languages
+          .map(lang => {
+            const flag = languageFlags[lang.language] || '🌐';
+            return `
+              <div class="language-item">
+                <div class="language-flag">${flag}</div>
+                <div class="language-info">
+                  <div class="language-name">${lang.language}</div>
+                  <div class="language-level">${lang.level}</div>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      // Update technical stack section
+      function updateTechnicalStackSection(technicalStack) {
+        const techContainer = document.getElementById('tech-categories');
+        if (!techContainer) return;
+
+        if (!technicalStack || Object.keys(technicalStack).length === 0) {
+          techContainer.innerHTML = '<div class="loading">No technical stack data available</div>';
+          return;
+        }
+
+        const categoryNames = {
+          'backend': 'Backend Technologies',
+          'databases': 'Databases',
+          'devops': 'DevOps & Infrastructure',
+          'cloud': 'Cloud Platforms'
+        };
+
+        techContainer.innerHTML = Object.entries(technicalStack)
+          .filter(([key, technologies]) => technologies && technologies.length > 0)
+          .map(([category, technologies]) => {
+            const categoryTitle = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
+            return `
+              <div class="tech-category">
+                <h4>${categoryTitle}</h4>
+                <div class="tech-items">
+                  ${technologies.map(tech => `<span class="tech-item">${tech}</span>`).join('')}
+                </div>
+              </div>
+            `;
+          })
+          .join('');
       }
 
       // Debug functions
