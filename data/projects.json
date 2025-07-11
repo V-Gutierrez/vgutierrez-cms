@@ -16,7 +16,7 @@
     "metrics": {
       "usersImpacted": "3+ million",
       "scope": "Country-wide retail operations",
-      "teamSize": "5 developers"
+      "teamSize": "5+ developers"
     },
     "highlights": [
       "Coordinate international stakeholder alignment with ADEO France headquarters",
@@ -75,29 +75,6 @@
       "Successful delivery of crucial company initiatives"
     ],
     "featured": true
-  },
-  {
-    "id": 4,
-    "title": "NLP Content Classification System",
-    "slug": "nlp-content-classification-system",
-    "description": "Led research and development of Natural Language Processing solution for automated content cataloging and classification, enhancing platform's ability to deliver personalized educational experiences.",
-    "category": "Machine Learning",
-    "technologies": ["Machine Learning", "NLP", "Python"],
-    "status": "completed",
-    "startDate": "2021-10-01",
-    "endDate": "2023-10-01",
-    "metrics": {
-      "automationLevel": "Fully automated",
-      "contentTypes": "Educational content",
-      "personalização": "Enhanced personalization"
-    },
-    "highlights": [
-      "Research and development of NLP solution",
-      "Automated content cataloging and classification",
-      "Enhanced personalized educational experiences",
-      "Drove adoption of modern development practices"
-    ],
-    "featured": false
   },
   {
     "id": 5,
@@ -167,4 +144,3 @@
     "featured": true
   }
 ]
-
