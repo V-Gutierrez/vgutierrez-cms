@@ -316,6 +316,14 @@
         align-items: center;
         justify-content: center;
         color: #999;
+        overflow: hidden;
+      }
+
+      .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
       }
 
       .project-content {
@@ -1132,9 +1140,26 @@
           const featuredProjects = projects.filter(project => project.featured);
           const projectsToShow = featuredProjects.length > 0 ? featuredProjects : projects;
           
-          console.log("Projects to display:", projectsToShow.length);
+          // Sort projects: in-progress first, then completed, then planned
+          const statusOrder = { 'in-progress': 0, 'completed': 1, 'planned': 2 };
+          const sortedProjects = projectsToShow.sort((a, b) => {
+            const orderA = statusOrder[a.status] !== undefined ? statusOrder[a.status] : 3;
+            const orderB = statusOrder[b.status] !== undefined ? statusOrder[b.status] : 3;
+            
+            console.log(`Comparing: "${a.title}" (${a.status}, order: ${orderA}) vs "${b.title}" (${b.status}, order: ${orderB})`);
+            
+            // Primary sort by status priority
+            if (orderA !== orderB) {
+              return orderA - orderB;
+            }
+            
+            // Secondary sort by title for stable ordering within same status
+            return a.title.localeCompare(b.title);
+          });
+          
+          console.log("Projects to display:", sortedProjects.length);
 
-          renderProjects(projectsToShow);
+          renderProjects(sortedProjects);
         } catch (error) {
           console.error("Error loading projects:", error);
           

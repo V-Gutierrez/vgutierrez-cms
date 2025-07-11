@@ -10,7 +10,7 @@
       "Team Leadership",
       "International Collaboration"
     ],
-    "status": "in progress",
+    "status": "in-progress",
     "startDate": "2025-06-01",
     "endDate": "ongoing",
     "metrics": {
@@ -151,7 +151,7 @@
     "description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks.",
     "category": "Developer Tooling",
     "technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
-    "status": "in progress",
+    "status": "in-progress",
     "startDate": "2024-07-01",
     "endDate": "2024-07-10",
     "metrics": {
@@ -175,7 +175,7 @@
     "description": "Built a complete performance testing suite. Vivant enables realistic load simulations with an interactive CLI, environment presets, and real-time monitoring via Grafana and InfluxDB.",
     "category": "Performance Engineering",
     "technologies": ["Node.js", "k6", "Grafana", "InfluxDB", "CLI"],
-    "status": "in progress",
+    "status": "in-progress",
     "startDate": "2024-06-10",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vivant-exp.png",
     "endDate": "2024-06-20",
