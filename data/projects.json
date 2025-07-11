@@ -123,7 +123,7 @@
   },
   {
     "id": 7,
-    "title": "Developer Portfolio CMS (GitHub Pages)",
+    "title": "V-Gutierrez CMS - Developer Portfolio CMS",
     "slug": "developer-portfolio-cms",
     "description": "Built a minimalist, Git-based CMS for showcasing technical achievements and impact metrics. Designed with simplicity, low maintenance, and pragmatic deployment using GitHub Pages.",
     "category": "Personal Project",
@@ -131,6 +131,7 @@
     "status": "completed",
     "startDate": "2024-05-01",
     "endDate": "2024-05-20",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vgutierrez-cms.jpeg",
     "metrics": {
       "maintenance": "Zero backend, low ops footprint",
       "performance": "Fast loading with static rendering",

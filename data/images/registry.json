@@ -12,5 +12,12 @@
     "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vivant-exp.png",
     "description": "Vivant Performance Testing Suite Screenshot",
     "createdAt": "2025-07-11T01:25:37.638Z"
+  },
+  {
+    "type": "projects",
+    "filename": "vgutierrez-cms.jpeg",
+    "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vgutierrez-cms.jpeg",
+    "description": "ss of the site",
+    "createdAt": "2025-07-11T13:27:46.881Z"
   }
 ]
