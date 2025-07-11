@@ -8,9 +8,9 @@
   },
   {
     "type": "project",
-    "filename": "vivant",
-    "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/project/vivant-exp.png",
-    "description": "vivant-exp",
+    "filename": "vivant-exp.png",
+    "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vivant-exp.png",
+    "description": "Vivant Performance Testing Suite Screenshot",
     "createdAt": "2025-07-11T01:25:37.638Z"
   }
 ]

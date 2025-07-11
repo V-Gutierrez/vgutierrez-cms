@@ -177,7 +177,7 @@
     "technologies": ["Node.js", "k6", "Grafana", "InfluxDB", "CLI"],
     "status": "in progress",
     "startDate": "2024-06-10",
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/project/vivant-exp.png",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vivant-exp.png",
     "endDate": "2024-06-20",
     "metrics": {
       "scenarioCoverage": "12+ built-in scenarios (smoke, stress, spike, soak, CRUD variants)",
@@ -193,4 +193,3 @@
     "featured": true
   }
 ]
-
