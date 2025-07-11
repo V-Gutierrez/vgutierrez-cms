@@ -65,19 +65,31 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
+        padding: 1.5rem 0;
+        min-height: 64px;
       }
 
       .logo {
         font-size: 1.5rem;
         font-weight: 700;
         color: #ffd700;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .logo:hover {
+        color: #ffed4a;
       }
 
       .nav-links {
         display: flex;
         list-style: none;
         gap: 2rem;
+        align-items: center;
+        margin: 0;
       }
 
       .nav-links a {
@@ -86,6 +98,9 @@
         font-weight: 500;
         transition: color 0.3s ease;
         cursor: pointer;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
       }
 
       .nav-links a:hover,
@@ -96,11 +111,11 @@
       /* Main Content */
       main {
         /* Fallback for browsers without safe-area support */
-        margin-top: 80px;
-        min-height: calc(100vh - 80px);
+        margin-top: 96px;
+        min-height: calc(100vh - 96px);
         /* Safe area support for devices with notch */
-        margin-top: calc(80px + env(safe-area-inset-top, 0));
-        min-height: calc(100vh - 80px - env(safe-area-inset-top, 0));
+        margin-top: calc(96px + env(safe-area-inset-top, 0));
+        min-height: calc(100vh - 96px - env(safe-area-inset-top, 0));
         position: relative;
         overflow: hidden;
         padding-left: env(safe-area-inset-left, 0);
@@ -967,7 +982,7 @@
   <body>
     <header>
       <nav class="container">
-        <div class="logo">Victor Gutierrez</div>
+        <div class="logo" onclick="showTab('home')">Victor Gutierrez</div>
         <ul class="nav-links">
           <li><a href="#" data-tab="home" class="active">Home</a></li>
           <li><a href="#" data-tab="portfolio">Portfolio</a></li>
