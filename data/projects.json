@@ -153,6 +153,7 @@
     "category": "Developer Tooling",
     "technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
     "status": "in-progress",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/canaryo.png",
     "startDate": "2024-07-01",
     "endDate": "2024-07-10",
     "metrics": {

@@ -73,7 +73,7 @@ async function listImages() {
 async function addImageReference() {
   console.log("\n=== Add Image Reference ===\n");
 
-  const type = await question("Image type (profile/project/blog): ");
+  const type = await question("Image type (profile/projects/blog): ");
   const name = await question("Image filename (with extension): ");
   const description = await question("Image description: ");
 
@@ -264,4 +264,3 @@ async function main() {
 }
 
 main().catch(console.error);
-

@@ -19,5 +19,13 @@
     "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vgutierrez-cms.jpeg",
     "description": "ss of the site",
     "createdAt": "2025-07-11T13:27:46.881Z"
+  },
+  {
+    "type": "project",
+    "filename": "canaryo.jpg",
+    "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/canaryo.png",
+    "description": "canaryo ss",
+    "createdAt": "2025-07-11T14:05:30.717Z"
   }
 ]
+
