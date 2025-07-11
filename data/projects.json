@@ -149,7 +149,7 @@
     "id": 9,
     "title": "Canaryo CLI – Local Kubernetes Deployment Tool",
     "slug": "canaryo-cli-kubernetes-deployment",
-    "description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks. Code available at: https://github.com/V-Gutierrez/canaryo",
+    "description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks. <a href=\"https://github.com/V-Gutierrez/canaryo\"> Code available</a>",
     "category": "Developer Tooling",
     "technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
     "status": "in-progress",
