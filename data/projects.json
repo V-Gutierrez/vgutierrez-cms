@@ -128,7 +128,7 @@
     "description": "Built a minimalist, Git-based CMS for showcasing technical achievements and impact metrics. Designed with simplicity, low maintenance, and pragmatic deployment using GitHub Pages.",
     "category": "Personal Project",
     "technologies": ["HTML", "CSS", "JavaScript", "GitHub Pages"],
-    "status": "completed",
+    "status": "in-progress",
     "startDate": "2024-05-01",
     "endDate": "2024-05-20",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vgutierrez-cms.jpeg",
