@@ -151,7 +151,7 @@
     "description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks.",
     "category": "Developer Tooling",
     "technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
-    "status": "completed",
+    "status": "in progress",
     "startDate": "2024-07-01",
     "endDate": "2024-07-10",
     "metrics": {
