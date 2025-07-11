@@ -16,8 +16,9 @@
     
     <!-- PWA Theme Colors -->
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <style>
       * {
         margin: 0;
@@ -51,10 +52,13 @@
         top: 0;
         left: 0;
         right: 0;
-        background: rgba(10, 10, 10, 0.95);
-        backdrop-filter: blur(10px);
+        background: linear-gradient(180deg, rgba(10, 10, 10, 0.98) 0%, rgba(10, 10, 10, 0.95) 70%, rgba(10, 10, 10, 0.8) 100%);
+        backdrop-filter: blur(15px);
         z-index: 1000;
-        border-bottom: 1px solid #333;
+        /* Safe area support for devices with notch */
+        padding-top: env(safe-area-inset-top, 0);
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
       }
 
       nav {
@@ -91,10 +95,16 @@
 
       /* Main Content */
       main {
+        /* Fallback for browsers without safe-area support */
         margin-top: 80px;
         min-height: calc(100vh - 80px);
+        /* Safe area support for devices with notch */
+        margin-top: calc(80px + env(safe-area-inset-top, 0));
+        min-height: calc(100vh - 80px - env(safe-area-inset-top, 0));
         position: relative;
         overflow: hidden;
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
       }
 
       .tab-content {
@@ -158,6 +168,61 @@
         }
       }
 
+      @keyframes slideInFromLeftHero {
+        from {
+          opacity: 0;
+          transform: translateX(-100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInFromRightHero {
+        from {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInStaggered {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInSection {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInGridItem {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
       .tab-content.slide-right {
         animation: slideInFromRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
@@ -203,11 +268,18 @@
         z-index: 1;
       }
 
+      .hero-text {
+        opacity: 0;
+        animation: slideInFromLeftHero 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+      }
+
       .hero-text h1 {
         font-size: 3.5rem;
         font-weight: 800;
         margin-bottom: 1rem;
         line-height: 1.1;
+        opacity: 0;
+        animation: fadeInStaggered 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
       }
 
       .hero-text h1 span {
@@ -218,6 +290,8 @@
         font-size: 1.2rem;
         color: #cccccc;
         margin-bottom: 2rem;
+        opacity: 0;
+        animation: fadeInStaggered 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.1s forwards;
       }
 
       .hero-text .description {
@@ -225,6 +299,8 @@
         color: #999999;
         margin-bottom: 3rem;
         max-width: 500px;
+        opacity: 0;
+        animation: fadeInStaggered 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.4s forwards;
       }
 
       .cta-button {
@@ -239,6 +315,8 @@
         cursor: pointer;
         border: none;
         font-size: 1rem;
+        opacity: 0;
+        animation: fadeInStaggered 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.7s forwards;
       }
 
       .cta-button:hover {
@@ -251,6 +329,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        opacity: 0;
+        animation: slideInFromRightHero 1s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
       }
 
       .profile-placeholder {
@@ -272,6 +352,14 @@
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
         margin: 4rem 0;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .skills-grid.animate {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .skill-category {
@@ -279,6 +367,14 @@
         padding: 2rem;
         border-radius: 12px;
         border: 1px solid #333;
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .skill-category.animate {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
 
       .skill-category h3 {
@@ -441,6 +537,14 @@
         border-radius: 12px;
         border: 1px solid #333;
         margin: 2rem 0;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .languages-section.animate {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .languages-grid {
@@ -458,7 +562,14 @@
         background: rgba(255, 215, 0, 0.05);
         border: 1px solid rgba(255, 215, 0, 0.2);
         border-radius: 8px;
-        transition: all 0.3s ease;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+
+      .language-item.animate {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
 
       .language-item:hover {
@@ -497,6 +608,8 @@
         margin-top: 2rem;
         align-items: center;
         justify-content: flex-start;
+        opacity: 0;
+        animation: fadeInStaggered 0.8s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards;
       }
 
       .social-link {
@@ -531,6 +644,14 @@
         border-radius: 12px;
         border: 1px solid #333;
         margin: 2rem 0;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .education-section.animate {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .education-timeline {
@@ -548,8 +669,15 @@
         background: rgba(255, 215, 0, 0.05);
         border: 1px solid rgba(255, 215, 0, 0.2);
         border-radius: 8px;
-        transition: all 0.3s ease;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+
+      .education-item.animate {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
 
       .education-item:hover {
@@ -604,6 +732,14 @@
       /* Technical Stack Section */
       .tech-stack-section {
         margin: 4rem 0;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .tech-stack-section.animate {
+        opacity: 1;
+        transform: translateY(0);
       }
       
       .tech-stack-section .container {
@@ -626,6 +762,14 @@
         border-radius: 12px;
         border: 1px solid #333;
         height: fit-content;
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .tech-category.animate {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
 
       .tech-category h4 {
@@ -715,6 +859,14 @@
       .section-header {
         text-align: center;
         margin: 4rem 0;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .section-header.animate {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .section-title {
@@ -1004,6 +1156,12 @@
         
         // Update current tab reference
         currentTab = tabName;
+
+        // Scroll to top of page smoothly
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
 
         // Update nav links
         const navLinks = document.querySelectorAll(".nav-links a");
@@ -1652,10 +1810,85 @@
         };
       }
 
+      // Intersection Observer for scroll-triggered animations
+      function setupScrollAnimations() {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const element = entry.target;
+              
+              // Add animate class to trigger animation
+              element.classList.add('animate');
+              
+              // Handle staggered animations for child elements
+              if (element.classList.contains('skills-grid')) {
+                const skillCategories = element.querySelectorAll('.skill-category');
+                skillCategories.forEach((category, index) => {
+                  setTimeout(() => {
+                    category.classList.add('animate');
+                  }, index * 100);
+                });
+              }
+              
+              if (element.classList.contains('languages-section')) {
+                const languageItems = element.querySelectorAll('.language-item');
+                languageItems.forEach((item, index) => {
+                  setTimeout(() => {
+                    item.classList.add('animate');
+                  }, index * 100);
+                });
+              }
+              
+              if (element.classList.contains('education-section')) {
+                const educationItems = element.querySelectorAll('.education-item');
+                educationItems.forEach((item, index) => {
+                  setTimeout(() => {
+                    item.classList.add('animate');
+                  }, index * 150);
+                });
+              }
+              
+              if (element.classList.contains('tech-stack-section')) {
+                const techCategories = element.querySelectorAll('.tech-category');
+                techCategories.forEach((category, index) => {
+                  setTimeout(() => {
+                    category.classList.add('animate');
+                  }, index * 100);
+                });
+              }
+              
+              // Stop observing once animated
+              observer.unobserve(element);
+            }
+          });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        const animatableElements = document.querySelectorAll(`
+          .section-header,
+          .skills-grid,
+          .languages-section,
+          .education-section,
+          .tech-stack-section
+        `);
+
+        animatableElements.forEach(element => {
+          observer.observe(element);
+        });
+      }
+
       // Initialize the site when page loads
       document.addEventListener('DOMContentLoaded', function() {
         // Show easter egg for console users
         showEasterEgg();
+        
+        // Setup scroll-triggered animations
+        setupScrollAnimations();
         
         // Load content from GitHub or use fallbacks
         loadProfile();
