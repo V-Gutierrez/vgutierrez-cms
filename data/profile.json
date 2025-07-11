@@ -7,7 +7,7 @@
     "email": "victorgutierrezgomes@gmail.com",
     "linkedin": "https://www.linkedin.com/in/victtorgutierrez/",
     "github": "https://github.com/V-Gutierrez",
-    "description": "Technical Leader & Solutions Architect with expertise in scaling enterprise systems and developing high-performing engineering teams. Specializes in crisis resolution, performance optimization, and cross-domain architecture (backend, frontend, infrastructure). Multilingual professional with proven ability to lead technical transformations across various sectors while building collaborative team cultures.",
+    "description": "Technical Leader & Solutions Architect with a track record of scaling enterprise systems and elevating engineering performance. Expert in turning around critical systems under pressure, optimizing performance, and architecting across the stack — backend, frontend, and infrastructure. Multilingual and cross-functional, leads high-stakes transformations by bridging business goals with technical execution and fostering resilient, high-trust teams.",
     "profileImage": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/victor-photo.jpeg"
   },
   "languages": [
@@ -33,36 +33,25 @@
     }
   ],
   "skills": {
-    "businessAndProduct": [
-      "Product Strategy & Technical Requirements Translation",
-      "Cost Optimization",
-      "Vendor Management & Technology Evaluation",
-      "Data-Driven Decision Making & Analytics"
-    ],
     "leadershipAndStrategy": [
-      "Technical Leadership & Team Management",
-      "System Architecture & Design",
-      "Technical Strategy & Roadmap Planning",
-      "Cross-functional Collaboration",
-      "Hiring, Mentorship & Team Development",
-      "Technical Decision Making & Risk Assessment",
-      "Agile Transformation & Process Improvement"
+      "Led high-impact teams, aligning architecture with product vision",
+      "Defined technical roadmaps, managed risks & trade-offs",
+      "Coached engineers, scaled agile practices across squads"
     ],
     "architectureAndSystems": [
-      "Distributed Systems",
-      "Event-Driven Architecture",
-      "Cloud Architecture",
-      "API Design & Integration Patterns",
-      "Database Architecture",
-      "Performance Engineering & Scalability Planning",
-      "Enterprise Integrations & Master Data Management"
+      "Designed resilient cloud & event-driven systems",
+      "Built APIs, data platforms, and master data integrations",
+      "Scaled distributed architectures with performance in mind"
     ],
     "engineeringExcellence": [
-      "Code Quality & Review Processes",
-      "Testing Strategy",
-      "Observability & Monitoring",
-      "Technical Debt Management & Refactoring Strategy",
-      "Quality Gates & Automated Testing Pipelines"
+      "Drove test automation & CI/CD pipelines with quality gates",
+      "Reduced technical debt via refactoring strategies",
+      "Enabled observability & production-grade monitoring"
+    ],
+    "businessAndProduct": [
+      "Translated business goals into scalable technical strategies",
+      "Balanced cost, speed, and quality through data-driven decisions",
+      "Evaluated vendors, led make-vs-buy and tech adoption analysis"
     ]
   },
   "technicalStack": {
