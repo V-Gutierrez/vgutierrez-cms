@@ -14,12 +14,12 @@
     "startDate": "2025-06-01",
     "endDate": "ongoing",
     "metrics": {
-      "usersImpacted": "3+ million",
+      "usersImpacted": "6+ million",
       "scope": "Country-wide retail operations",
       "teamSize": "5+ developers"
     },
     "highlights": [
-      "Coordinate international stakeholder alignment with ADEO France headquarters",
+      "Coordinate international stakeholder alignment",
       "Conduct technical negotiations in English with global teams",
       "Define technical roadmaps through ADR processes",
       "Drive cross-functional collaboration between local and international teams"
@@ -42,8 +42,8 @@
     "endDate": "2023-08-01",
     "metrics": {
       "latencyReduction": "80%",
-      "SLACompliance": "Maintained",
-      "systemType": "High-traffic customer journey"
+      "Service Level Agreement": "Achieved",
+      "systemType": "High-traffic crucial customer journey"
     },
     "highlights": [
       "Redesigned queue system architecture for primary service",
