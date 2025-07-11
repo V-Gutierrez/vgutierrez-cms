@@ -7,7 +7,8 @@
     "email": "victorgutierrezgomes@gmail.com",
     "linkedin": "https://www.linkedin.com/in/victtorgutierrez/",
     "github": "https://github.com/victorgutierrez",
-    "description": "Technical Leader & Solutions Architect with expertise in scaling enterprise systems and developing high-performing engineering teams. Specializes in crisis resolution, performance optimization, and cross-domain architecture (backend, frontend, infrastructure). Multilingual professional with proven ability to lead technical transformations across various sectors while building collaborative team cultures."
+    "description": "Technical Leader & Solutions Architect with expertise in scaling enterprise systems and developing high-performing engineering teams. Specializes in crisis resolution, performance optimization, and cross-domain architecture (backend, frontend, infrastructure). Multilingual professional with proven ability to lead technical transformations across various sectors while building collaborative team cultures.",
+    "profileImage": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/victor-photo.jpg"
   },
   "languages": [
     {
@@ -65,10 +66,31 @@
     ]
   },
   "technicalStack": {
-    "databases": ["PostgreSQL", "MongoDB", "Redis", "InfluxDB"],
-    "backend": ["TypeScript", "Python", "Java", "Rust", "Ruby", "Go"],
-    "devops": ["Docker", "Kubernetes", "Terraform", "Ansible"],
-    "cloud": ["AWS", "GCP", "Serverless Architectures"]
+    "databases": [
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "InfluxDB"
+    ],
+    "backend": [
+      "TypeScript",
+      "Python",
+      "Java",
+      "Rust",
+      "Ruby",
+      "Go"
+    ],
+    "devops": [
+      "Docker",
+      "Kubernetes",
+      "Terraform",
+      "Ansible"
+    ],
+    "cloud": [
+      "AWS",
+      "GCP",
+      "Serverless Architectures"
+    ]
   },
   "assets": [
     "Multi-Industry Technical Perspective",
@@ -96,6 +118,13 @@
     "textColor": "#ffffff",
     "siteTitle": "Victor Gutierrez - Technical Leader & Solutions Architect",
     "siteDescription": "Personal website and blog of Victor Gutierrez, Technical Leader & Solutions Architect specializing in enterprise systems and high-performing engineering teams.",
-    "keywords": ["Victor Gutierrez", "Technical Leader", "Solutions Architect", "Software Engineering", "Team Leadership", "System Architecture"]
+    "keywords": [
+      "Victor Gutierrez",
+      "Technical Leader",
+      "Solutions Architect",
+      "Software Engineering",
+      "Team Leadership",
+      "System Architecture"
+    ]
   }
 }

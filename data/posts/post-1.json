@@ -4,14 +4,22 @@
   "slug": "building-high-performance-engineering-teams",
   "date": "2025-01-15",
   "author": "Victor Gutierrez",
-  "tags": ["leadership", "team-management", "engineering-culture"],
+  "tags": [
+    "leadership",
+    "team-management",
+    "engineering-culture"
+  ],
   "published": true,
   "excerpt": "How to transform underperforming teams into organizational references through culture, process, and technical excellence.",
   "content": "<h2>The Challenge</h2><p>When I joined the team at Leroy Merlin, we were known as the \"major offender\" - a team that consistently delivered late, had quality issues, and was avoided by other departments. The transformation that followed teaches us valuable lessons about leadership, culture, and technical excellence.</p><h2>The Strategy</h2><p>The transformation wasn't about individual heroics; it was about systematic change across three key areas:</p><p><strong>1. Culture and Ownership:</strong> We established a culture where every team member felt ownership of the codebase and the business outcomes. This meant understanding not just the \"how\" but the \"why\" behind every feature.</p><p><strong>2. Process and Standards:</strong> We implemented rigorous code review standards and established traceability between tickets and code development. This wasn't about bureaucracy - it was about creating predictable, quality outcomes.</p><p><strong>3. Technical Excellence:</strong> We focused on reducing technical debt, improving testing coverage, and establishing proper deployment processes using Semantic Versioning methodology.</p><h2>The Results</h2><p>The transformation was measurable: 70% increase in Deployment Frequency, 74% reduction in Change Failure Rate, and 64% reduction in production incidents. More importantly, we became the team that other departments wanted to work with.</p><p>The key insight? High-performance teams aren't built on individual talent alone - they're built on systems, culture, and shared commitment to excellence.</p>",
-  "readingTime": 3,
+  "readingTime": 1,
   "seo": {
     "metaTitle": "Building High-Performance Engineering Teams - Victor Gutierrez",
-    "metaDescription": "Learn how to transform underperforming engineering teams into organizational references through systematic culture, process, and technical excellence improvements.",
-    "keywords": ["engineering leadership", "team transformation", "software engineering", "technical management"]
+    "metaDescription": "How to transform underperforming teams into organizational references through culture, process, and technical excellence.",
+    "keywords": [
+      "leadership",
+      "team-management",
+      "engineering-culture"
+    ]
   }
 }

@@ -1,12 +1,16 @@
 [
   {
     "id": 1,
-    "title": "ADEO Group Digital Transformation",
-    "slug": "adeo-group-digital-transformation",
+    "title": "Digital Transformation",
+    "slug": "digital-transformation",
     "description": "Led strategic technical initiatives for enterprise-wide digital transformation, driving adoption of ADEO Group's core Loyalty and Master Data platforms across Brazil operations, impacting 3+ million users.",
     "category": "Enterprise Architecture",
-    "technologies": ["Enterprise Architecture", "Team Leadership", "International Collaboration"],
-    "status": "completed",
+    "technologies": [
+      "Enterprise Architecture",
+      "Team Leadership",
+      "International Collaboration"
+    ],
+    "status": "in progress",
     "startDate": "2025-06-01",
     "endDate": "ongoing",
     "metrics": {
@@ -28,7 +32,11 @@
     "slug": "high-traffic-system-optimization",
     "description": "Optimized high-traffic customer journey performance by redesigning queue system architecture, achieving 80% latency reduction and maintaining SLA/SLO compliance for critical metrics.",
     "category": "Performance Engineering",
-    "technologies": ["Performance Engineering", "System Architecture", "Queue Systems"],
+    "technologies": [
+      "Performance Engineering",
+      "System Architecture",
+      "Queue Systems"
+    ],
     "status": "completed",
     "startDate": "2023-03-01",
     "endDate": "2023-08-01",
@@ -51,7 +59,11 @@
     "slug": "team-performance-transformation",
     "description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate.",
     "category": "Team Leadership",
-    "technologies": ["Team Leadership", "DevOps", "Code Quality"],
+    "technologies": [
+      "Team Leadership",
+      "DevOps",
+      "Code Quality"
+    ],
     "status": "completed",
     "startDate": "2022-11-01",
     "endDate": "2024-06-01",
@@ -74,7 +86,11 @@
     "slug": "nlp-content-classification-system",
     "description": "Led research and development of Natural Language Processing solution for automated content cataloging and classification, enhancing platform's ability to deliver personalized educational experiences.",
     "category": "Machine Learning",
-    "technologies": ["Machine Learning", "NLP", "Python"],
+    "technologies": [
+      "Machine Learning",
+      "NLP",
+      "Python"
+    ],
     "status": "completed",
     "startDate": "2021-10-01",
     "endDate": "2023-10-01",
@@ -97,7 +113,11 @@
     "slug": "critical-system-recovery",
     "description": "Resolved critical architectural issues in PubSub implementation causing transactional problems, designing ADR-backed solutions that reduced production incidents by 64%.",
     "category": "System Recovery",
-    "technologies": ["System Recovery", "Architecture", "Problem Solving"],
+    "technologies": [
+      "System Recovery",
+      "Architecture",
+      "Problem Solving"
+    ],
     "status": "completed",
     "startDate": "2023-01-01",
     "endDate": "2023-06-01",
@@ -120,7 +140,11 @@
     "slug": "military-it-infrastructure-management",
     "description": "Led IT infrastructure management for military organization, overseeing network administration, inventory management, and telecommunications systems with 99%+ uptime in high-compliance environment.",
     "category": "Infrastructure",
-    "technologies": ["Infrastructure", "Network Administration", "Security"],
+    "technologies": [
+      "Infrastructure",
+      "Network Administration",
+      "Security"
+    ],
     "status": "completed",
     "startDate": "2017-12-01",
     "endDate": "2019-12-01",
