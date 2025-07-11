@@ -139,8 +139,58 @@
     "highlights": [
       "Created a simple, maintainable CMS powered by Git and Markdown",
       "Focused on performance, clarity e impacto técnico direto",
-      "Served as public-facing evidence of engineering leadership"
+      "Served as public-facing evidence of engineering leadership",
+      "Code available at https://github.com/V-Gutierrez/vgutierrez-cms"
+    ],
+    "featured": true
+  },
+  {
+    "id": 9,
+    "title": "Canaryo CLI – Local Kubernetes Deployment Tool",
+    "slug": "canaryo-cli-kubernetes-deployment",
+    "description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks.",
+    "category": "Developer Tooling",
+    "technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
+    "status": "completed",
+    "startDate": "2024-07-01",
+    "endDate": "2024-07-10",
+    "metrics": {
+      "runtimeSupport": "Auto-detects Node.js, Python, Java, Go, Nginx",
+      "setupTime": "Ready in <10 minutes",
+      "developerEfficiency": "Boosts local testing & deployment speed"
+    },
+    "highlights": [
+      "Auto-generates optimized manifests based on Dockerfile analysis",
+      "Supports full lifecycle: deploy, scale, monitor, and delete apps",
+      "Interactive interface designed for fast iteration and feedback",
+      "Helps developers focus on code, not infrastructure scripts",
+      "Code available at: https://github.com/V-Gutierrez/canaryo"
+    ],
+    "featured": true
+  },
+  {
+    "id": 10,
+    "title": "Vivant",
+    "slug": "vivant-performance-suite",
+    "description": "Built a complete performance testing suite. Vivant enables realistic load simulations with an interactive CLI, environment presets, and real-time monitoring via Grafana and InfluxDB.",
+    "category": "Performance Engineering",
+    "technologies": ["Node.js", "k6", "Grafana", "InfluxDB", "CLI"],
+    "status": "in progress",
+    "startDate": "2024-06-10",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/project/vivant-exp.png",
+    "endDate": "2024-06-20",
+    "metrics": {
+      "scenarioCoverage": "12+ built-in scenarios (smoke, stress, spike, soak, CRUD variants)",
+      "observability": "Custom Grafana dashboards with real-time metrics (P95, error rates, throughput)"
+    },
+    "highlights": [
+      "Developed an interactive CLI for managing realistic API load tests",
+      "Enabled test presets, auto data generation",
+      "Integrated with InfluxDB and Grafana for detailed observability",
+      "Supported operational workflows with environment switching and backups",
+      "Designed for high-confidence testing before production deployments"
     ],
     "featured": true
   }
 ]
+
