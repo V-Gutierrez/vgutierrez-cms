@@ -143,6 +143,28 @@
       "Provided technical mentorship to junior team members"
     ],
     "featured": true
+  },
+  {
+    "id": 7,
+    "title": "Developer Portfolio CMS (GitHub Pages)",
+    "slug": "developer-portfolio-cms",
+    "description": "Built a minimalist, Git-based CMS for showcasing technical achievements and impact metrics. Designed with simplicity, low maintenance, and pragmatic deployment using GitHub Pages.",
+    "category": "Personal Project",
+    "technologies": ["HTML", "CSS", "JavaScript", "GitHub Pages"],
+    "status": "completed",
+    "startDate": "2024-05-01",
+    "endDate": "2024-05-20",
+    "metrics": {
+      "maintenance": "Zero backend, low ops footprint",
+      "performance": "Fast loading with static rendering",
+      "visibility": "Public portfolio with SEO-friendly structure"
+    },
+    "highlights": [
+      "Created a simple, maintainable CMS powered by Git and Markdown",
+      "Focused on performance, clarity e impacto técnico direto",
+      "Served as public-facing evidence of engineering leadership"
+    ],
+    "featured": true
   }
 ]
 

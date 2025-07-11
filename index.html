@@ -79,26 +79,81 @@
       main {
         margin-top: 80px;
         min-height: calc(100vh - 80px);
+        position: relative;
+        overflow: hidden;
       }
 
       .tab-content {
-        display: none;
-        animation: fadeIn 0.5s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        transform: translateY(30px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+        will-change: transform, opacity;
+        backface-visibility: hidden;
       }
 
       .tab-content.active {
-        display: block;
+        opacity: 1;
+        visibility: visible;
+        position: relative;
+        transform: translateY(0);
+        z-index: 2;
       }
 
-      @keyframes fadeIn {
+      .tab-content.fade-out {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes slideInFromRight {
         from {
           opacity: 0;
-          transform: translateY(20px);
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInFromLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
         }
+      }
+
+      .tab-content.slide-right {
+        animation: slideInFromRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .tab-content.slide-left {
+        animation: slideInFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .tab-content.fade-up {
+        animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       /* Hero Section */
@@ -771,14 +826,59 @@
     </main>
 
     <script>
-      // Tab Navigation
-      function showTab(tabName) {
-        // Hide all tabs
-        const tabs = document.querySelectorAll(".tab-content");
-        tabs.forEach((tab) => tab.classList.remove("active"));
+      // Tab Navigation with animations
+      let currentTab = 'home';
+      let isTransitioning = false;
 
-        // Show selected tab
-        document.getElementById(tabName).classList.add("active");
+      function showTab(tabName) {
+        if (isTransitioning || tabName === currentTab) return;
+        
+        isTransitioning = true;
+        const tabs = document.querySelectorAll(".tab-content");
+        const currentTabElement = document.getElementById(currentTab);
+        const newTabElement = document.getElementById(tabName);
+        
+        // Determine animation direction
+        const tabOrder = ['home', 'portfolio', 'blog', 'post-detail'];
+        const currentIndex = tabOrder.indexOf(currentTab);
+        const newIndex = tabOrder.indexOf(tabName);
+        
+        let animationClass = 'fade-up';
+        if (newIndex > currentIndex) {
+          animationClass = 'slide-right';
+        } else if (newIndex < currentIndex) {
+          animationClass = 'slide-left';
+        }
+        
+        // Fade out current tab
+        if (currentTabElement) {
+          currentTabElement.classList.add('fade-out');
+          
+          setTimeout(() => {
+            // Hide current tab
+            currentTabElement.classList.remove('active', 'fade-out');
+            
+            // Show new tab with animation
+            newTabElement.classList.add('active', animationClass);
+            
+            // Clean up animation classes
+            setTimeout(() => {
+              newTabElement.classList.remove(animationClass);
+              isTransitioning = false;
+            }, 500);
+            
+          }, 300);
+        } else {
+          // No current tab, just show the new one
+          newTabElement.classList.add('active', animationClass);
+          setTimeout(() => {
+            newTabElement.classList.remove(animationClass);
+            isTransitioning = false;
+          }, 500);
+        }
+        
+        // Update current tab reference
+        currentTab = tabName;
 
         // Update nav links
         const navLinks = document.querySelectorAll(".nav-links a");
@@ -794,6 +894,7 @@
       document.querySelectorAll(".nav-links a").forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
+          if (isTransitioning) return; // Prevent clicks during transition
           const tab = e.target.dataset.tab;
           showTab(tab);
         });
