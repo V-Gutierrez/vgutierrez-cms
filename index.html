@@ -1962,8 +1962,8 @@
               return orderA - orderB;
             }
 
-            // Secondary sort by title for stable ordering within same status
-            return a.title.localeCompare(b.title);
+            // Secondary sort: randomize within same status group
+            return Math.random() - 0.5;
           });
 
           // Store all projects for progressive loading
