@@ -245,5 +245,34 @@
       "Used successfully with real-world backends (e.g. Genesis App)"
     ],
     "featured": true
-  }
+  },
+  {
+  "id": 18,
+  "title": "Talk: Why Does ChatGPT Seem Smarter Than You?",
+  "slug": "talk-why-chatgpt-seems-smarter",
+  "description": "Delivered an invited talk at DevSummit 2025 (ADEO, Ronchin – France), exploring the intersections of Artificial Intelligence, Language, and Human Behavior. Shared practical insights and ethical considerations for critically engaging with generative AI technologies like ChatGPT.",
+  "category": "Public Speaking",
+  "technologies": [
+    "Generative AI",
+    "Large Language Models",
+    "Cognitive Biases",
+    "Human-Computer Interaction"
+  ],
+  "status": "completed",
+  "startDate": "2025-06-03",
+  "endDate": "2025-06-05",
+  "metrics": {
+    "event": "DevSummit 2025 (ADEO)",
+    "location": "Ronchin, France",
+    "audience": "International tech and product teams"
+  },
+  "highlights": [
+    "Explained LLMs using everyday metaphors and critical reasoning",
+    "Connected AI behavior with human cognitive biases and perception",
+    "Encouraged ethical, conscious adoption of generative technologies",
+    "Reconnected with peers from Leroy Merlin Brazil and across ADEO",
+    "Represented Brazil in a global, cross-cultural innovation event"
+  ],
+  "featured": true
+}
 ]
