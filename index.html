@@ -1105,6 +1105,22 @@
         transform: none;
       }
 
+      /* Blog Controls */
+      .blog-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 3rem;
+        padding: 2rem;
+      }
+
+      .blog-counter {
+        color: #999;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
       /* Loading State */
       .loading {
         text-align: center;
@@ -1569,30 +1585,51 @@
 
       // Blog functionality
       let blogPosts = [];
+      const MAX_POSTS_INITIAL = 5;
+      let allBlogPosts = [];
+      let displayedPostsCount = 0;
 
       // Sample blog posts (replace with your GitHub API endpoint)
       const samplePosts = [];
 
       // Initialize blog posts
       function initializeBlog() {
-        blogPosts = samplePosts;
-        renderBlogPosts();
+        allBlogPosts = samplePosts;
+        displayedPostsCount = 0;
+        renderBlogPostsWithLimit();
+      }
+
+      // Render blog posts with progressive loading
+      function renderBlogPostsWithLimit() {
+        const container = document.getElementById("blog-posts");
+        if (!container) return;
+
+        if (!allBlogPosts || allBlogPosts.length === 0) {
+          container.innerHTML = '<div class="loading">No blog posts available.</div>';
+          return;
+        }
+
+        // Calculate how many posts to show
+        const postsToShow = Math.min(displayedPostsCount + MAX_POSTS_INITIAL, allBlogPosts.length);
+        const postsSlice = allBlogPosts.slice(0, postsToShow);
+
+        // Clear container and render posts
+        container.innerHTML = '';
+        renderBlogPosts(postsSlice);
+
+        // Update displayed count
+        displayedPostsCount = postsToShow;
+
+        // Add blog controls
+        addBlogControls(container);
       }
 
       // Render blog posts
-      function renderBlogPosts() {
+      function renderBlogPosts(posts) {
         const container = document.getElementById("blog-posts");
-        if (!container) {
-          return;
-        }
+        if (!container) return;
 
-        if (blogPosts.length === 0) {
-          container.innerHTML =
-            '<div class="loading">No blog posts available.</div>';
-          return;
-        }
-
-        const postsHtml = blogPosts
+        const postsHtml = posts
           .map((post) => {
             return `
                     <article class="blog-post" onclick="showPost(${post.id})">
@@ -1620,12 +1657,174 @@
           })
           .join("");
 
-        container.innerHTML = postsHtml;
+        if (displayedPostsCount === 0) {
+          container.innerHTML = postsHtml;
+        } else {
+          container.innerHTML += postsHtml;
+        }
+      }
+
+      // Add blog counter and load more button
+      function addBlogControls(container) {
+        const blogSection = container.closest('section');
+        if (!blogSection) return;
+
+        // Remove existing controls
+        const existingControls = blogSection.querySelector('.blog-controls');
+        if (existingControls) {
+          existingControls.remove();
+        }
+
+        // Create controls container
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'blog-controls';
+        
+        // Post counter
+        const counter = document.createElement('div');
+        counter.className = 'blog-counter';
+        counter.innerHTML = `Showing ${displayedPostsCount} of ${allBlogPosts.length} posts`;
+        
+        // Load more button (only if there are more posts)
+        if (displayedPostsCount < allBlogPosts.length) {
+          const loadMoreBtn = document.createElement('button');
+          loadMoreBtn.className = 'load-more-btn';
+          loadMoreBtn.innerHTML = `Load More Posts (+${Math.min(MAX_POSTS_INITIAL, allBlogPosts.length - displayedPostsCount)})`;
+          loadMoreBtn.onclick = loadMoreBlogPosts;
+          controlsDiv.appendChild(loadMoreBtn);
+        }
+
+        controlsDiv.appendChild(counter);
+        blogSection.appendChild(controlsDiv);
+      }
+
+      // Load more blog posts function
+      async function loadMoreBlogPosts() {
+        const newPostsStart = displayedPostsCount;
+        const newPostsEnd = Math.min(displayedPostsCount + MAX_POSTS_INITIAL, allBlogPosts.length);
+        const newPosts = allBlogPosts.slice(newPostsStart, newPostsEnd);
+
+        // Render new posts with animation
+        const container = document.getElementById("blog-posts");
+        if (container) {
+          const newPostsHtml = newPosts.map(post => generateBlogPostHTML(post)).join('');
+          
+          // Create temporary container for new posts
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = newPostsHtml;
+          
+          // Add new posts with fade-in animation
+          Array.from(tempDiv.children).forEach((postElement, index) => {
+            postElement.style.opacity = '0';
+            postElement.style.transform = 'translateY(20px)';
+            container.appendChild(postElement);
+            
+            // Trigger animation after a small delay for each post
+            setTimeout(() => {
+              postElement.style.transition = 'all 0.5s ease';
+              postElement.style.opacity = '1';
+              postElement.style.transform = 'translateY(0)';
+            }, index * 100);
+          });
+        }
+
+        // Update displayed count
+        displayedPostsCount = newPostsEnd;
+
+        // Load full content for new posts
+        await loadFullContentForNewPosts(newPosts);
+
+        // Update controls
+        const blogSection = container.closest('section');
+        if (blogSection) {
+          addBlogControls(container);
+        }
+
+        // Smooth scroll to new posts
+        setTimeout(() => {
+          const firstNewPost = container.children[newPostsStart];
+          if (firstNewPost) {
+            firstNewPost.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'nearest' 
+            });
+          }
+        }, 200);
+      }
+
+      // Generate HTML for a single blog post
+      function generateBlogPostHTML(post) {
+        return `
+          <article class="blog-post" onclick="showPost(${post.id})">
+            <h3 class="blog-post-title">${post.title}</h3>
+            <div class="blog-post-date">${new Date(
+              post.date,
+            ).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}</div>
+            <p class="blog-post-excerpt">${post.excerpt}</p>
+            ${
+              post.tags
+                ? `
+                <div class="blog-post-tags">
+                    ${post.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+                </div>
+            `
+                : ""
+            }
+            ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
+          </article>
+        `;
+      }
+
+      // Load full content for displayed posts only
+      async function loadFullContentForDisplayedPosts() {
+        const displayedPosts = allBlogPosts.slice(0, displayedPostsCount);
+        
+        for (let i = 0; i < displayedPosts.length; i++) {
+          const post = displayedPosts[i];
+          if (!post.content) { // Only load if not already loaded
+            try {
+              const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
+              const contentResponse = await fetch(contentUrl);
+              if (contentResponse.ok) {
+                const fullPost = await contentResponse.json();
+                post.content = fullPost.content;
+                post.readingTime = fullPost.readingTime;
+                post.author = fullPost.author;
+              }
+            } catch (error) {
+              console.warn(`Failed to load full content for post ${post.id}:`, error);
+            }
+          }
+        }
+      }
+
+      // Load full content for new posts
+      async function loadFullContentForNewPosts(newPosts) {
+        for (let i = 0; i < newPosts.length; i++) {
+          const post = newPosts[i];
+          if (!post.content) {
+            try {
+              const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
+              const contentResponse = await fetch(contentUrl);
+              if (contentResponse.ok) {
+                const fullPost = await contentResponse.json();
+                post.content = fullPost.content;
+                post.readingTime = fullPost.readingTime;
+                post.author = fullPost.author;
+              }
+            } catch (error) {
+              console.warn(`Failed to load full content for post ${post.id}:`, error);
+            }
+          }
+        }
       }
 
       // Show individual post
       function showPost(postId) {
-        const post = blogPosts.find((p) => p.id === postId);
+        const post = allBlogPosts.find((p) => p.id === postId);
         if (!post) return;
 
         document.getElementById("post-content").innerHTML = `
@@ -1672,29 +1871,20 @@
 
           const posts = await response.json();
 
-          blogPosts = posts.filter((post) => post.published);
+          const publishedPosts = posts.filter((post) => post.published);
 
-          // Load full content for each post
-          for (let i = 0; i < blogPosts.length; i++) {
-            const post = blogPosts[i];
-            try {
-              const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
+          // Store all posts for progressive loading
+          allBlogPosts = publishedPosts;
+          displayedPostsCount = 0;
 
-              const contentResponse = await fetch(contentUrl);
-              if (contentResponse.ok) {
-                const fullPost = await contentResponse.json();
-                post.content = fullPost.content;
-                post.readingTime = fullPost.readingTime;
-                post.author = fullPost.author;
-              } else {
-              }
-            } catch (error) {}
-          }
+          // Initially show limited number of posts
+          renderBlogPostsWithLimit();
 
-          renderBlogPosts();
+          // Load full content for displayed posts only (performance optimization)
+          await loadFullContentForDisplayedPosts();
 
           // Update easter egg data
-          if (window.vg) window.vg.blogPosts = blogPosts;
+          if (window.vg) window.vg.blogPosts = allBlogPosts;
         } catch (error) {
           console.error("Error loading blog posts:", error);
 
