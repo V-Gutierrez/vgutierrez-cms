@@ -57,8 +57,8 @@
   "technicalStack": {
     "databases": ["PostgreSQL", "MongoDB", "Redis", "InfluxDB"],
     "backend": ["TypeScript", "Python", "Java", "Rust", "Ruby", "Go"],
-    "devops": ["Docker", "Kubernetes", "Terraform", "Ansible"],
-    "cloud": ["AWS", "GCP", "Serverless Architectures"]
+    "devops": ["Docker", "Kubernetes", "Terraform", "Serverless Architectures"],
+    "cloud": ["AWS", "GCP"]
   },
   "assets": [
     "Multi-Industry Technical Perspective",
