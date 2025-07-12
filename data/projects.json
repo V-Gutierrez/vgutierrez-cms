@@ -216,7 +216,7 @@
   },
   {
     "id": 17,
-    "title": "LLM Codebase Expert – Natural Language Codebase Explorer",
+    "title": "Codebase Expert – Natural Language Codebase Explorer",
     "slug": "llm-codebase-expert",
     "description": "Developed a CLI-based tool that allows developers to query codebases using natural language, powered by Retrieval-Augmented Generation (RAG), embeddings, and open-source LLMs. Bridges human understanding and complex systems through intelligent contextual search.",
     "category": "AI Developer Tools",
