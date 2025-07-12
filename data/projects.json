@@ -140,8 +140,7 @@
     "highlights": [
       "Created a simple, maintainable CMS powered by Git and Markdown",
       "Focused on performance, clarity e impacto técnico direto",
-      "Served as public-facing evidence of engineering leadership",
-      "Code available at https://github.com/V-Gutierrez/vgutierrez-cms"
+      "Served as public-facing evidence of engineering leadership"
     ],
     "featured": true
   },
@@ -205,15 +204,13 @@
     "endDate": "2023-04-30",
     "metrics": {
       "platformCoverage": "PWA + API for end-to-end experience",
-      "userEngagement": "Event registration, news updates, push alerts",
+      "userEngagement": "More than 1000 users engaging in event registration, news updates, push alerts",
       "resilience": "Offline mode and auto-updating frontend"
     },
     "highlights": [
       "Developed a responsive PWA for community access across devices",
       "Built a RESTful backend API with secure auth and admin roles",
-      "Received more than 1k users in peak dates",
-      "Integrated event management, news publishing, and user registration",
-      "Used Google Maps for location-aware features and navigation"
+      "Received more than 1k users in peak dates"
     ],
     "featured": true
   }
