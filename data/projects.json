@@ -213,5 +213,37 @@
       "Received more than 1k users in peak dates"
     ],
     "featured": true
+  },
+  {
+    "id": 17,
+    "title": "LLM Codebase Expert – Natural Language Codebase Explorer",
+    "slug": "llm-codebase-expert",
+    "description": "Developed a CLI-based tool that allows developers to query codebases using natural language, powered by Retrieval-Augmented Generation (RAG), embeddings, and open-source LLMs. Bridges human understanding and complex systems through intelligent contextual search.",
+    "category": "AI Developer Tools",
+    "technologies": [
+      "LangChain",
+      "HuggingFace Transformers",
+      "Chroma Vector Store",
+      "RAG",
+      "Python",
+      "LLM Embeddings"
+    ],
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/codebase-expert.png",
+    "status": "completed",
+    "startDate": "2024-12-01",
+    "endDate": "2025-01-15",
+    "metrics": {
+      "queryType": "Natural language over code",
+      "architecture": "RAG + ConversationalRetrievalChain",
+      "modelBackbone": "Stable Code 3B, Sentence-T5"
+    },
+    "highlights": [
+      "Built a developer tool for querying codebases with plain English",
+      "Integrated LangChain with HuggingFace and Chroma DB",
+      "Implemented full Retrieval-Augmented Generation workflow",
+      "Supports dynamic embedding generation for new codebases",
+      "Used successfully with real-world backends (e.g. Genesis App)"
+    ],
+    "featured": false
   }
 ]
