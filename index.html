@@ -1128,7 +1128,6 @@
         color: #999;
       }
 
-
       /* Tab Progress Dots */
       .tab-progress {
         position: fixed;
@@ -1205,8 +1204,13 @@
       }
 
       @keyframes swipeDemo {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(30px); }
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(30px);
+        }
       }
 
       .tutorial-text {
@@ -1535,32 +1539,31 @@
 
         // Update progress dots
         updateProgressDots(tabName);
-
       }
 
       // Update progress dots
       function updateProgressDots(activeTab) {
-        const dots = document.querySelectorAll('.progress-dot');
-        dots.forEach(dot => {
-          dot.classList.remove('active');
+        const dots = document.querySelectorAll(".progress-dot");
+        dots.forEach((dot) => {
+          dot.classList.remove("active");
           if (dot.dataset.tab === activeTab) {
-            dot.classList.add('active');
+            dot.classList.add("active");
           }
         });
       }
 
       // First visit tutorial
       function showSwipeTutorial() {
-        const hasSeenTutorial = localStorage.getItem('hasSeenSwipeTutorial');
+        const hasSeenTutorial = localStorage.getItem("hasSeenSwipeTutorial");
         if (!hasSeenTutorial && window.innerWidth < 1025) {
-          const tutorial = document.getElementById('swipe-tutorial');
+          const tutorial = document.getElementById("swipe-tutorial");
           setTimeout(() => {
-            tutorial.classList.add('show');
-            
+            tutorial.classList.add("show");
+
             // Auto-hide after 3 seconds
             setTimeout(() => {
-              tutorial.classList.remove('show');
-              localStorage.setItem('hasSeenSwipeTutorial', 'true');
+              tutorial.classList.remove("show");
+              localStorage.setItem("hasSeenSwipeTutorial", "true");
             }, 3000);
           }, 2000); // Show after 2 seconds
         }
@@ -1568,9 +1571,9 @@
 
       // Handle tutorial dismissal
       function dismissTutorial() {
-        const tutorial = document.getElementById('swipe-tutorial');
-        tutorial.classList.remove('show');
-        localStorage.setItem('hasSeenSwipeTutorial', 'true');
+        const tutorial = document.getElementById("swipe-tutorial");
+        tutorial.classList.remove("show");
+        localStorage.setItem("hasSeenSwipeTutorial", "true");
       }
 
       // Add click event listeners to nav links
@@ -1605,16 +1608,20 @@
         if (!container) return;
 
         if (!allBlogPosts || allBlogPosts.length === 0) {
-          container.innerHTML = '<div class="loading">No blog posts available.</div>';
+          container.innerHTML =
+            '<div class="loading">No blog posts available.</div>';
           return;
         }
 
         // Calculate how many posts to show
-        const postsToShow = Math.min(displayedPostsCount + MAX_POSTS_INITIAL, allBlogPosts.length);
+        const postsToShow = Math.min(
+          displayedPostsCount + MAX_POSTS_INITIAL,
+          allBlogPosts.length,
+        );
         const postsSlice = allBlogPosts.slice(0, postsToShow);
 
         // Clear container and render posts
-        container.innerHTML = '';
+        container.innerHTML = "";
         renderBlogPosts(postsSlice);
 
         // Update displayed count
@@ -1666,28 +1673,28 @@
 
       // Add blog counter and load more button
       function addBlogControls(container) {
-        const blogSection = container.closest('section');
+        const blogSection = container.closest("section");
         if (!blogSection) return;
 
         // Remove existing controls
-        const existingControls = blogSection.querySelector('.blog-controls');
+        const existingControls = blogSection.querySelector(".blog-controls");
         if (existingControls) {
           existingControls.remove();
         }
 
         // Create controls container
-        const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'blog-controls';
-        
+        const controlsDiv = document.createElement("div");
+        controlsDiv.className = "blog-controls";
+
         // Post counter
-        const counter = document.createElement('div');
-        counter.className = 'blog-counter';
+        const counter = document.createElement("div");
+        counter.className = "blog-counter";
         counter.innerHTML = `Showing ${displayedPostsCount} of ${allBlogPosts.length} posts`;
-        
+
         // Load more button (only if there are more posts)
         if (displayedPostsCount < allBlogPosts.length) {
-          const loadMoreBtn = document.createElement('button');
-          loadMoreBtn.className = 'load-more-btn';
+          const loadMoreBtn = document.createElement("button");
+          loadMoreBtn.className = "load-more-btn";
           loadMoreBtn.innerHTML = `Load More Posts (+${Math.min(MAX_POSTS_INITIAL, allBlogPosts.length - displayedPostsCount)})`;
           loadMoreBtn.onclick = loadMoreBlogPosts;
           controlsDiv.appendChild(loadMoreBtn);
@@ -1700,29 +1707,34 @@
       // Load more blog posts function
       async function loadMoreBlogPosts() {
         const newPostsStart = displayedPostsCount;
-        const newPostsEnd = Math.min(displayedPostsCount + MAX_POSTS_INITIAL, allBlogPosts.length);
+        const newPostsEnd = Math.min(
+          displayedPostsCount + MAX_POSTS_INITIAL,
+          allBlogPosts.length,
+        );
         const newPosts = allBlogPosts.slice(newPostsStart, newPostsEnd);
 
         // Render new posts with animation
         const container = document.getElementById("blog-posts");
         if (container) {
-          const newPostsHtml = newPosts.map(post => generateBlogPostHTML(post)).join('');
-          
+          const newPostsHtml = newPosts
+            .map((post) => generateBlogPostHTML(post))
+            .join("");
+
           // Create temporary container for new posts
-          const tempDiv = document.createElement('div');
+          const tempDiv = document.createElement("div");
           tempDiv.innerHTML = newPostsHtml;
-          
+
           // Add new posts with fade-in animation
           Array.from(tempDiv.children).forEach((postElement, index) => {
-            postElement.style.opacity = '0';
-            postElement.style.transform = 'translateY(20px)';
+            postElement.style.opacity = "0";
+            postElement.style.transform = "translateY(20px)";
             container.appendChild(postElement);
-            
+
             // Trigger animation after a small delay for each post
             setTimeout(() => {
-              postElement.style.transition = 'all 0.5s ease';
-              postElement.style.opacity = '1';
-              postElement.style.transform = 'translateY(0)';
+              postElement.style.transition = "all 0.5s ease";
+              postElement.style.opacity = "1";
+              postElement.style.transform = "translateY(0)";
             }, index * 100);
           });
         }
@@ -1734,7 +1746,7 @@
         await loadFullContentForNewPosts(newPosts);
 
         // Update controls
-        const blogSection = container.closest('section');
+        const blogSection = container.closest("section");
         if (blogSection) {
           addBlogControls(container);
         }
@@ -1743,9 +1755,9 @@
         setTimeout(() => {
           const firstNewPost = container.children[newPostsStart];
           if (firstNewPost) {
-            firstNewPost.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'nearest' 
+            firstNewPost.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
             });
           }
         }, 200);
@@ -1781,10 +1793,11 @@
       // Load full content for displayed posts only
       async function loadFullContentForDisplayedPosts() {
         const displayedPosts = allBlogPosts.slice(0, displayedPostsCount);
-        
+
         for (let i = 0; i < displayedPosts.length; i++) {
           const post = displayedPosts[i];
-          if (!post.content) { // Only load if not already loaded
+          if (!post.content) {
+            // Only load if not already loaded
             try {
               const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
               const contentResponse = await fetch(contentUrl);
@@ -1795,7 +1808,10 @@
                 post.author = fullPost.author;
               }
             } catch (error) {
-              console.warn(`Failed to load full content for post ${post.id}:`, error);
+              console.warn(
+                `Failed to load full content for post ${post.id}:`,
+                error,
+              );
             }
           }
         }
@@ -1816,7 +1832,10 @@
                 post.author = fullPost.author;
               }
             } catch (error) {
-              console.warn(`Failed to load full content for post ${post.id}:`, error);
+              console.warn(
+                `Failed to load full content for post ${post.id}:`,
+                error,
+              );
             }
           }
         }
@@ -1949,22 +1968,8 @@
           const projectsToShow =
             featuredProjects.length > 0 ? featuredProjects : projects;
 
-          // Sort projects: in-progress first, then completed, then planned
-          const statusOrder = { "in-progress": 0, completed: 1, planned: 2 };
-          const sortedProjects = projectsToShow.sort((a, b) => {
-            const orderA =
-              statusOrder[a.status] !== undefined ? statusOrder[a.status] : 3;
-            const orderB =
-              statusOrder[b.status] !== undefined ? statusOrder[b.status] : 3;
-
-            // Primary sort by status priority
-            if (orderA !== orderB) {
-              return orderA - orderB;
-            }
-
-            // Secondary sort: randomize within same status group
-            return Math.random() - 0.5;
-          });
+          // Randomize project order
+          const sortedProjects = projectsToShow.sort(() => Math.random() - 0.5);
 
           // Store all projects for progressive loading
           allProjects = sortedProjects;
@@ -1996,16 +2001,20 @@
         if (!container) return;
 
         if (!allProjects || allProjects.length === 0) {
-          container.innerHTML = '<div class="loading">No projects available</div>';
+          container.innerHTML =
+            '<div class="loading">No projects available</div>';
           return;
         }
 
         // Calculate how many projects to show
-        const projectsToShow = Math.min(displayedProjectsCount + MAX_PROJECTS_INITIAL, allProjects.length);
+        const projectsToShow = Math.min(
+          displayedProjectsCount + MAX_PROJECTS_INITIAL,
+          allProjects.length,
+        );
         const projectsSlice = allProjects.slice(0, projectsToShow);
 
         // Clear container and render projects
-        container.innerHTML = '';
+        container.innerHTML = "";
         renderProjects(projectsSlice);
 
         // Update displayed count
@@ -2017,28 +2026,29 @@
 
       // Add project counter and load more button
       function addProjectControls(container) {
-        const portfolioSection = container.closest('section');
+        const portfolioSection = container.closest("section");
         if (!portfolioSection) return;
 
         // Remove existing controls
-        const existingControls = portfolioSection.querySelector('.project-controls');
+        const existingControls =
+          portfolioSection.querySelector(".project-controls");
         if (existingControls) {
           existingControls.remove();
         }
 
         // Create controls container
-        const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'project-controls';
-        
+        const controlsDiv = document.createElement("div");
+        controlsDiv.className = "project-controls";
+
         // Project counter
-        const counter = document.createElement('div');
-        counter.className = 'project-counter';
+        const counter = document.createElement("div");
+        counter.className = "project-counter";
         counter.innerHTML = `Showing ${displayedProjectsCount} of ${allProjects.length} projects`;
-        
+
         // Load more button (only if there are more projects)
         if (displayedProjectsCount < allProjects.length) {
-          const loadMoreBtn = document.createElement('button');
-          loadMoreBtn.className = 'load-more-btn';
+          const loadMoreBtn = document.createElement("button");
+          loadMoreBtn.className = "load-more-btn";
           loadMoreBtn.innerHTML = `Load More Projects (+${Math.min(MAX_PROJECTS_INITIAL, allProjects.length - displayedProjectsCount)})`;
           loadMoreBtn.onclick = loadMoreProjects;
           controlsDiv.appendChild(loadMoreBtn);
@@ -2053,21 +2063,24 @@
         return `
           <div class="project-card">
             <div class="project-image ${project.image ? "" : "no-image"}">
-              ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : (project.category || "Project")}
+              ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
             </div>
             <div class="project-content">
-              <h3 class="project-title">${project.title || 'Untitled Project'}</h3>
-              <p class="project-description">${project.description || 'No description available'}</p>
-              ${project.technologies && project.technologies.length > 0 ? `
+              <h3 class="project-title">${project.title || "Untitled Project"}</h3>
+              <p class="project-description">${project.description || "No description available"}</p>
+              ${
+                project.technologies && project.technologies.length > 0
+                  ? `
               <div class="project-tech">
                 ${project.technologies
-                  .map(tech => `<span class="tech-tag">${tech}</span>`)
+                  .map((tech) => `<span class="tech-tag">${tech}</span>`)
                   .join("")}
               </div>
-              ` : ''}
+              `
+                  : ""
+              }
               ${
-                project.metrics &&
-                Object.keys(project.metrics).length > 0
+                project.metrics && Object.keys(project.metrics).length > 0
                   ? `
                   <div class="project-metrics">
                     ${Object.entries(project.metrics)
@@ -2080,7 +2093,7 @@
               `
                   : ""
               }
-              ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ''}
+              ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ""}
             </div>
           </div>
         `;
@@ -2089,29 +2102,34 @@
       // Load more projects function
       function loadMoreProjects() {
         const newProjectsStart = displayedProjectsCount;
-        const newProjectsEnd = Math.min(displayedProjectsCount + MAX_PROJECTS_INITIAL, allProjects.length);
+        const newProjectsEnd = Math.min(
+          displayedProjectsCount + MAX_PROJECTS_INITIAL,
+          allProjects.length,
+        );
         const newProjects = allProjects.slice(newProjectsStart, newProjectsEnd);
 
         // Render new projects with animation
         const container = document.querySelector(".portfolio-grid");
         if (container) {
-          const newProjectsHtml = newProjects.map(project => generateProjectHTML(project)).join('');
-          
+          const newProjectsHtml = newProjects
+            .map((project) => generateProjectHTML(project))
+            .join("");
+
           // Create temporary container for new projects
-          const tempDiv = document.createElement('div');
+          const tempDiv = document.createElement("div");
           tempDiv.innerHTML = newProjectsHtml;
-          
+
           // Add new projects with fade-in animation
           Array.from(tempDiv.children).forEach((projectElement, index) => {
-            projectElement.style.opacity = '0';
-            projectElement.style.transform = 'translateY(20px)';
+            projectElement.style.opacity = "0";
+            projectElement.style.transform = "translateY(20px)";
             container.appendChild(projectElement);
-            
+
             // Trigger animation after a small delay for each project
             setTimeout(() => {
-              projectElement.style.transition = 'all 0.5s ease';
-              projectElement.style.opacity = '1';
-              projectElement.style.transform = 'translateY(0)';
+              projectElement.style.transition = "all 0.5s ease";
+              projectElement.style.opacity = "1";
+              projectElement.style.transform = "translateY(0)";
             }, index * 100);
           });
         }
@@ -2120,7 +2138,7 @@
         displayedProjectsCount = newProjectsEnd;
 
         // Update controls
-        const portfolioSection = container.closest('section');
+        const portfolioSection = container.closest("section");
         if (portfolioSection) {
           addProjectControls(container);
         }
@@ -2129,9 +2147,9 @@
         setTimeout(() => {
           const firstNewProject = container.children[newProjectsStart];
           if (firstNewProject) {
-            firstNewProject.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'nearest' 
+            firstNewProject.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
             });
           }
         }, 200);
@@ -2794,9 +2812,9 @@
 
       // Setup progress dots click functionality
       function setupProgressDots() {
-        const dots = document.querySelectorAll('.progress-dot');
-        dots.forEach(dot => {
-          dot.addEventListener('click', (e) => {
+        const dots = document.querySelectorAll(".progress-dot");
+        dots.forEach((dot) => {
+          dot.addEventListener("click", (e) => {
             if (isTransitioning) return;
             const tabName = e.target.dataset.tab;
             if (tabName && tabName !== currentTab) {
@@ -2808,8 +2826,8 @@
 
       // Setup tutorial click to dismiss
       function setupTutorial() {
-        const tutorial = document.getElementById('swipe-tutorial');
-        tutorial.addEventListener('click', dismissTutorial);
+        const tutorial = document.getElementById("swipe-tutorial");
+        tutorial.addEventListener("click", dismissTutorial);
       }
 
       // Setup scroll detection to show progress dots at end of all pages
@@ -2817,7 +2835,7 @@
         if (window.innerWidth >= 1025) return; // Only on mobile and tablets
 
         let isProgressVisible = false;
-        
+
         function checkScrollPosition() {
           const scrollPosition = window.scrollY + window.innerHeight;
           const documentHeight = document.documentElement.scrollHeight;
@@ -2833,11 +2851,13 @@
           }
         }
 
-        window.addEventListener('scroll', checkScrollPosition, { passive: true });
-        
+        window.addEventListener("scroll", checkScrollPosition, {
+          passive: true,
+        });
+
         // Override the showTab function to reset scroll detection
         const originalShowTab = window.showTab;
-        window.showTab = function(tabName) {
+        window.showTab = function (tabName) {
           originalShowTab.call(this, tabName);
           // Reset progress dots visibility and recheck position
           setTimeout(() => {
@@ -2849,30 +2869,30 @@
       }
 
       function showProgressDots() {
-        const progressDots = document.querySelector('.tab-progress');
-        const header = document.querySelector('header');
-        
+        const progressDots = document.querySelector(".tab-progress");
+        const header = document.querySelector("header");
+
         if (progressDots) {
-          progressDots.classList.add('show');
+          progressDots.classList.add("show");
         }
-        
+
         // Hide header on touch devices to avoid redundancy
         if (header && window.innerWidth < 1025) {
-          header.classList.add('hide-for-dots');
+          header.classList.add("hide-for-dots");
         }
       }
 
       function hideProgressDots() {
-        const progressDots = document.querySelector('.tab-progress');
-        const header = document.querySelector('header');
-        
+        const progressDots = document.querySelector(".tab-progress");
+        const header = document.querySelector("header");
+
         if (progressDots) {
-          progressDots.classList.remove('show');
+          progressDots.classList.remove("show");
         }
-        
+
         // Show header again
         if (header) {
-          header.classList.remove('hide-for-dots');
+          header.classList.remove("hide-for-dots");
         }
       }
     </script>
