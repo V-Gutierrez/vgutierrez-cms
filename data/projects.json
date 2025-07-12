@@ -229,7 +229,7 @@
       "LLM Embeddings"
     ],
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/codebase-expert.png",
-    "status": "completed",
+    "status": "planned",
     "startDate": "2024-12-01",
     "endDate": "2025-01-15",
     "metrics": {
@@ -244,6 +244,6 @@
       "Supports dynamic embedding generation for new codebases",
       "Used successfully with real-world backends (e.g. Genesis App)"
     ],
-    "featured": true 
+    "featured": true
   }
 ]

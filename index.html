@@ -1059,6 +1059,52 @@
         color: #9ca3af;
       }
 
+      /* Project Controls */
+      .project-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 3rem;
+        padding: 2rem;
+      }
+
+      .project-counter {
+        color: #999;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .load-more-btn {
+        background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+        color: #0a0a0a;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .load-more-btn:hover {
+        background: linear-gradient(135deg, #ffed4a 0%, #ffd700 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+      }
+
+      .load-more-btn:active {
+        transform: translateY(0);
+      }
+
+      .load-more-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
       /* Loading State */
       .loading {
         text-align: center;
@@ -1681,6 +1727,11 @@
         }
       }
 
+      // Project display configuration
+      const MAX_PROJECTS_INITIAL = 6;
+      let allProjects = [];
+      let displayedProjectsCount = 0;
+
       // Load portfolio projects from GitHub
       async function loadProjects() {
         const container = document.querySelector(".portfolio-grid");
@@ -1725,7 +1776,12 @@
             return a.title.localeCompare(b.title);
           });
 
-          renderProjects(sortedProjects);
+          // Store all projects for progressive loading
+          allProjects = sortedProjects;
+          displayedProjectsCount = 0;
+
+          // Initially show limited number of projects
+          renderProjectsWithLimit();
 
           // Update easter egg data
           if (window.vg) window.vg.projects = sortedProjects;
@@ -1742,6 +1798,153 @@
             `;
           }
         }
+      }
+
+      // Render projects with progressive loading
+      function renderProjectsWithLimit() {
+        const container = document.querySelector(".portfolio-grid");
+        if (!container) return;
+
+        if (!allProjects || allProjects.length === 0) {
+          container.innerHTML = '<div class="loading">No projects available</div>';
+          return;
+        }
+
+        // Calculate how many projects to show
+        const projectsToShow = Math.min(displayedProjectsCount + MAX_PROJECTS_INITIAL, allProjects.length);
+        const projectsSlice = allProjects.slice(0, projectsToShow);
+
+        // Clear container and render projects
+        container.innerHTML = '';
+        renderProjects(projectsSlice);
+
+        // Update displayed count
+        displayedProjectsCount = projectsToShow;
+
+        // Add project counter and load more button
+        addProjectControls(container);
+      }
+
+      // Add project counter and load more button
+      function addProjectControls(container) {
+        const portfolioSection = container.closest('section');
+        if (!portfolioSection) return;
+
+        // Remove existing controls
+        const existingControls = portfolioSection.querySelector('.project-controls');
+        if (existingControls) {
+          existingControls.remove();
+        }
+
+        // Create controls container
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'project-controls';
+        
+        // Project counter
+        const counter = document.createElement('div');
+        counter.className = 'project-counter';
+        counter.innerHTML = `Showing ${displayedProjectsCount} of ${allProjects.length} projects`;
+        
+        // Load more button (only if there are more projects)
+        if (displayedProjectsCount < allProjects.length) {
+          const loadMoreBtn = document.createElement('button');
+          loadMoreBtn.className = 'load-more-btn';
+          loadMoreBtn.innerHTML = `Load More Projects (+${Math.min(MAX_PROJECTS_INITIAL, allProjects.length - displayedProjectsCount)})`;
+          loadMoreBtn.onclick = loadMoreProjects;
+          controlsDiv.appendChild(loadMoreBtn);
+        }
+
+        controlsDiv.appendChild(counter);
+        portfolioSection.appendChild(controlsDiv);
+      }
+
+      // Generate HTML for a single project
+      function generateProjectHTML(project) {
+        return `
+          <div class="project-card">
+            <div class="project-image ${project.image ? "" : "no-image"}">
+              ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : (project.category || "Project")}
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">${project.title || 'Untitled Project'}</h3>
+              <p class="project-description">${project.description || 'No description available'}</p>
+              ${project.technologies && project.technologies.length > 0 ? `
+              <div class="project-tech">
+                ${project.technologies
+                  .map(tech => `<span class="tech-tag">${tech}</span>`)
+                  .join("")}
+              </div>
+              ` : ''}
+              ${
+                project.metrics &&
+                Object.keys(project.metrics).length > 0
+                  ? `
+                  <div class="project-metrics">
+                    ${Object.entries(project.metrics)
+                      .map(
+                        ([key, value]) =>
+                          `<div class="metric"><strong>${formatMetricKey(key)}:</strong> ${value}</div>`,
+                      )
+                      .join("")}
+                  </div>
+              `
+                  : ""
+              }
+              ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      // Load more projects function
+      function loadMoreProjects() {
+        const newProjectsStart = displayedProjectsCount;
+        const newProjectsEnd = Math.min(displayedProjectsCount + MAX_PROJECTS_INITIAL, allProjects.length);
+        const newProjects = allProjects.slice(newProjectsStart, newProjectsEnd);
+
+        // Render new projects with animation
+        const container = document.querySelector(".portfolio-grid");
+        if (container) {
+          const newProjectsHtml = newProjects.map(project => generateProjectHTML(project)).join('');
+          
+          // Create temporary container for new projects
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = newProjectsHtml;
+          
+          // Add new projects with fade-in animation
+          Array.from(tempDiv.children).forEach((projectElement, index) => {
+            projectElement.style.opacity = '0';
+            projectElement.style.transform = 'translateY(20px)';
+            container.appendChild(projectElement);
+            
+            // Trigger animation after a small delay for each project
+            setTimeout(() => {
+              projectElement.style.transition = 'all 0.5s ease';
+              projectElement.style.opacity = '1';
+              projectElement.style.transform = 'translateY(0)';
+            }, index * 100);
+          });
+        }
+
+        // Update displayed count
+        displayedProjectsCount = newProjectsEnd;
+
+        // Update controls
+        const portfolioSection = container.closest('section');
+        if (portfolioSection) {
+          addProjectControls(container);
+        }
+
+        // Smooth scroll to new projects
+        setTimeout(() => {
+          const firstNewProject = container.children[newProjectsStart];
+          if (firstNewProject) {
+            firstNewProject.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'nearest' 
+            });
+          }
+        }, 200);
       }
 
       // Load profile data from GitHub
