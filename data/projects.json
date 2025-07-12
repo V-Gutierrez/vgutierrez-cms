@@ -194,22 +194,12 @@
   },
   {
     "id": 16,
-    "title": "Genesis Church App – Full-Stack Community Platform",
+    "title": "Genesis Church App – Community Platform",
     "slug": "genesis-church-app-fullstack",
-    "description": "Designed and developed a full-stack church community platform for Genesis Church in Argentina, integrating a mobile-friendly PWA frontend with a scalable backend API. Combined modern web technologies with real-world needs like offline access, event scheduling, push notifications, and Google Maps integration. ",
+    "description": "Designed and developed a full-stack church community platform for Genesis Church in Argentina, integrating a mobile-friendly PWA frontend with a scalable backend API. Combined modern web technologies with real-world needs like offline access, event scheduling, push notifications, and Google Maps integration.",
     "category": "Full-Stack Development",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/genesis.png",
-    "technologies": [
-      "PWA",
-      "Push Notifications",
-      "Google Maps API",
-      "Node.js",
-      "Express",
-      "MongoDB",
-      "Service Workers",
-      "Authentication",
-      "Role-Based Access"
-    ],
+    "technologies": ["PWA", "Node.js", "Express", "MongoDB", "Service Workers"],
     "status": "completed",
     "startDate": "2023-01-01",
     "endDate": "2023-04-30",
@@ -221,7 +211,7 @@
     "highlights": [
       "Developed a responsive PWA for community access across devices",
       "Built a RESTful backend API with secure auth and admin roles",
-      "Enabled push notifications and offline-first experience",
+      "Received more than 1k users in peak dates",
       "Integrated event management, news publishing, and user registration",
       "Used Google Maps for location-aware features and navigation"
     ],

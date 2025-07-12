@@ -1058,49 +1058,6 @@
         color: #999;
       }
 
-      /* Mobile Swipe Indicators */
-      .swipe-indicators {
-        position: fixed;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 500;
-        pointer-events: none;
-        opacity: 0.6;
-        transition: opacity 0.3s ease;
-      }
-
-      .swipe-indicator-left {
-        left: 10px;
-        animation: pulseLeft 2s infinite;
-      }
-
-      .swipe-indicator-right {
-        right: 10px;
-        animation: pulseRight 2s infinite;
-      }
-
-      .swipe-indicator {
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 215, 0, 0.3);
-        border: 2px solid rgba(255, 215, 0, 0.6);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        color: #ffd700;
-      }
-
-      @keyframes pulseLeft {
-        0%, 50%, 100% { opacity: 0.6; transform: translateX(0); }
-        25% { opacity: 1; transform: translateX(-5px); }
-      }
-
-      @keyframes pulseRight {
-        0%, 50%, 100% { opacity: 0.6; transform: translateX(0); }
-        25% { opacity: 1; transform: translateX(5px); }
-      }
 
       /* Tab Progress Dots */
       .tab-progress {
@@ -1115,6 +1072,14 @@
         padding: 12px 20px;
         border-radius: 25px;
         backdrop-filter: blur(10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .tab-progress.show {
+        opacity: 1;
+        visibility: visible;
       }
 
       .progress-dot {
@@ -1184,9 +1149,8 @@
         color: #ccc;
       }
 
-      /* Hide indicators on desktop */
-      @media (min-width: 769px) {
-        .swipe-indicators,
+      /* Hide indicators on desktop only */
+      @media (min-width: 1025px) {
         .tab-progress,
         .swipe-tutorial {
           display: none;
@@ -1414,14 +1378,6 @@
       </div>
     </main>
 
-    <!-- Mobile Swipe Indicators -->
-    <div class="swipe-indicators swipe-indicator-left">
-      <div class="swipe-indicator">‹</div>
-    </div>
-    <div class="swipe-indicators swipe-indicator-right">
-      <div class="swipe-indicator">›</div>
-    </div>
-
     <!-- Tab Progress Dots -->
     <div class="tab-progress">
       <div class="progress-dot active" data-tab="home"></div>
@@ -1510,8 +1466,6 @@
         // Update progress dots
         updateProgressDots(tabName);
 
-        // Update swipe indicators visibility
-        updateSwipeIndicators(tabName);
       }
 
       // Update progress dots
@@ -1525,32 +1479,10 @@
         });
       }
 
-      // Update swipe indicators based on current tab
-      function updateSwipeIndicators(currentTab) {
-        const leftIndicator = document.querySelector('.swipe-indicator-left');
-        const rightIndicator = document.querySelector('.swipe-indicator-right');
-        const tabOrder = ['home', 'portfolio', 'blog'];
-        const currentIndex = tabOrder.indexOf(currentTab);
-
-        // Hide left indicator if on first tab
-        if (currentIndex === 0) {
-          leftIndicator.style.opacity = '0.2';
-        } else {
-          leftIndicator.style.opacity = '0.6';
-        }
-
-        // Hide right indicator if on last tab
-        if (currentIndex === tabOrder.length - 1) {
-          rightIndicator.style.opacity = '0.2';
-        } else {
-          rightIndicator.style.opacity = '0.6';
-        }
-      }
-
       // First visit tutorial
       function showSwipeTutorial() {
         const hasSeenTutorial = localStorage.getItem('hasSeenSwipeTutorial');
-        if (!hasSeenTutorial && window.innerWidth <= 768) {
+        if (!hasSeenTutorial && window.innerWidth < 1025) {
           const tutorial = document.getElementById('swipe-tutorial');
           setTimeout(() => {
             tutorial.classList.add('show');
@@ -2450,8 +2382,8 @@
         // Show swipe tutorial for first-time mobile users
         showSwipeTutorial();
 
-        // Initialize indicators
-        updateSwipeIndicators(currentTab);
+        // Setup scroll detection for progress dots
+        setupScrollDetection();
 
         // Load content from GitHub or use fallbacks
         loadProfile();
@@ -2477,6 +2409,56 @@
       function setupTutorial() {
         const tutorial = document.getElementById('swipe-tutorial');
         tutorial.addEventListener('click', dismissTutorial);
+      }
+
+      // Setup scroll detection to show progress dots at end of all pages
+      function setupScrollDetection() {
+        if (window.innerWidth >= 1025) return; // Only on mobile and tablets
+
+        let isProgressVisible = false;
+        
+        function checkScrollPosition() {
+          const scrollPosition = window.scrollY + window.innerHeight;
+          const documentHeight = document.documentElement.scrollHeight;
+          const scrollPercentage = (scrollPosition / documentHeight) * 100;
+
+          // Show progress dots when user reaches 70% of any page
+          if (scrollPercentage > 70 && !isProgressVisible) {
+            showProgressDots();
+            isProgressVisible = true;
+          } else if (scrollPercentage <= 50 && isProgressVisible) {
+            hideProgressDots();
+            isProgressVisible = false;
+          }
+        }
+
+        window.addEventListener('scroll', checkScrollPosition, { passive: true });
+        
+        // Override the showTab function to reset scroll detection
+        const originalShowTab = window.showTab;
+        window.showTab = function(tabName) {
+          originalShowTab.call(this, tabName);
+          // Reset progress dots visibility and recheck position
+          setTimeout(() => {
+            isProgressVisible = false;
+            hideProgressDots();
+            checkScrollPosition();
+          }, 100);
+        };
+      }
+
+      function showProgressDots() {
+        const progressDots = document.querySelector('.tab-progress');
+        if (progressDots) {
+          progressDots.classList.add('show');
+        }
+      }
+
+      function hideProgressDots() {
+        const progressDots = document.querySelector('.tab-progress');
+        if (progressDots) {
+          progressDots.classList.remove('show');
+        }
       }
     </script>
   </body>
