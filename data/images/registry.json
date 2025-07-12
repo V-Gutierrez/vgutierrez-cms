@@ -40,5 +40,12 @@
     "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/codebase-expert.png",
     "description": "",
     "createdAt": "2025-07-12T00:33:03.647Z"
+  },
+  {
+    "type": "projects",
+    "filename": "wdcs.jpeg",
+    "url": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/wdcs.jpeg",
+    "description": "",
+    "createdAt": "2025-07-12T14:34:40.088Z"
   }
 ]
