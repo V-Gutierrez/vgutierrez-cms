@@ -1,0 +1,77 @@
+{
+  "pages": [
+    {
+      "url": "/",
+      "title": "Home",
+      "lastModified": "2025-07-14T23:21:46.113Z"
+    },
+    {
+      "url": "/portfolio",
+      "title": "Portfolio",
+      "lastModified": "2025-07-14T23:21:46.114Z"
+    },
+    {
+      "url": "/blog",
+      "title": "Blog",
+      "lastModified": "2025-07-14T23:21:46.114Z"
+    }
+  ],
+  "posts": [],
+  "projects": [
+    {
+      "url": "/portfolio/digital-transformation",
+      "title": "Digital Transformation",
+      "lastModified": "2025-07-14T23:21:46.114Z"
+    },
+    {
+      "url": "/portfolio/high-traffic-system-optimization",
+      "title": "High-Traffic System Optimization",
+      "lastModified": "2023-08-01"
+    },
+    {
+      "url": "/portfolio/team-performance-transformation",
+      "title": "Team Performance Transformation",
+      "lastModified": "2024-06-01"
+    },
+    {
+      "url": "/portfolio/critical-system-recovery",
+      "title": "Critical System Recovery",
+      "lastModified": "2023-06-01"
+    },
+    {
+      "url": "/portfolio/military-it-infrastructure-management",
+      "title": "Military IT Infrastructure Management",
+      "lastModified": "2019-12-01"
+    },
+    {
+      "url": "/portfolio/developer-portfolio-cms",
+      "title": "V-Gutierrez CMS - Developer Portfolio CMS",
+      "lastModified": "2024-05-20"
+    },
+    {
+      "url": "/portfolio/canaryo-cli-kubernetes-deployment",
+      "title": "Canaryo CLI – Local Kubernetes Deployment Tool",
+      "lastModified": "2024-07-10"
+    },
+    {
+      "url": "/portfolio/vivant-performance-suite",
+      "title": "Vivant",
+      "lastModified": "2024-06-20"
+    },
+    {
+      "url": "/portfolio/genesis-church-app-fullstack",
+      "title": "Genesis Church App – Community Platform",
+      "lastModified": "2023-04-30"
+    },
+    {
+      "url": "/portfolio/llm-codebase-expert",
+      "title": "Codebase Expert – Natural Language Codebase Explorer",
+      "lastModified": "2025-01-15"
+    },
+    {
+      "url": "/portfolio/talk-why-chatgpt-seems-smarter",
+      "title": "Talk: Why Does ChatGPT Seem Smarter Than You?",
+      "lastModified": "2025-06-05"
+    }
+  ]
+}
