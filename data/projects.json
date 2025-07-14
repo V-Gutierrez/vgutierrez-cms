@@ -57,7 +57,7 @@
     "id": 3,
     "title": "Team Performance Transformation",
     "slug": "team-performance-transformation",
-    "description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate.",
+    "description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate in 6 months.",
     "category": "Team Leadership",
     "technologies": ["Team Leadership", "DevOps", "Code Quality"],
     "status": "completed",
@@ -66,7 +66,7 @@
     "metrics": {
       "deploymentFrequencyIncrease": "70%",
       "changeFailureRateReduction": "74%",
-      "teamTransformation": "From 'major offender' to company reference"
+      "teamTransformation": "From 'major offender' to company reference in 6 months"
     },
     "highlights": [
       "Implemented rigorous code review standards",

@@ -193,6 +193,39 @@
         transition: color 0.3s ease;
       }
 
+
+      /* Hamburger Menu */
+      .hamburger-menu {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        width: 30px;
+        height: 24px;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.3s ease;
+      }
+
+      .hamburger-menu span {
+        width: 100%;
+        height: 3px;
+        background-color: #ffd700;
+        transition: all 0.3s ease;
+        transform-origin: center;
+      }
+
+      .hamburger-menu.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburger-menu.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger-menu.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+      }
+
       .logo:hover {
         color: #ffed4a;
       }
@@ -1262,6 +1295,58 @@
         }
       }
 
+      /* Mobile Menu */
+      @media (max-width: 768px) {
+        .hamburger-menu {
+          display: flex;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 64px;
+          left: 0;
+          right: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 10, 0.98) 0%,
+            rgba(10, 10, 10, 0.95) 100%
+          );
+          backdrop-filter: blur(15px);
+          flex-direction: column;
+          padding: 1rem 0;
+          margin: 0;
+          transform: translateY(-100%);
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s ease;
+          border-bottom: 1px solid #333;
+          z-index: 999;
+        }
+
+        .nav-links.active {
+          transform: translateY(0);
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .nav-links li {
+          margin: 0;
+          text-align: center;
+        }
+
+        .nav-links a {
+          display: block;
+          padding: 1rem 2rem;
+          font-size: 1.1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a:last-child {
+          border-bottom: none;
+        }
+      }
+
+
       /* Small Mobile Devices (<390px) */
       @media (max-width: 390px) {
         .logo {
@@ -1317,6 +1402,11 @@
     <header>
       <nav class="container">
         <div class="logo" onclick="showTab('home')">Victor Gutierrez</div>
+        <div class="hamburger-menu" onclick="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <ul class="nav-links">
           <li><a href="#" data-tab="home" class="active">Home</a></li>
           <li><a href="#" data-tab="portfolio">Portfolio</a></li>
@@ -1577,12 +1667,29 @@
       }
 
       // Add click event listeners to nav links
+      // Mobile Menu Toggle
+      function toggleMobileMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        const hamburger = document.querySelector('.hamburger-menu');
+        
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+      }
+
       document.querySelectorAll(".nav-links a").forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
           if (isTransitioning) return; // Prevent clicks during transition
           const tab = e.target.dataset.tab;
           showTab(tab);
+          
+          // Close mobile menu when a link is clicked
+          const navLinks = document.querySelector('.nav-links');
+          const hamburger = document.querySelector('.hamburger-menu');
+          if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('active');
+          }
         });
       });
 
