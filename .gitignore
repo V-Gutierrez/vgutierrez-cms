@@ -48,6 +48,7 @@ backups/
 # Cache
 .cache/
 .parcel-cache/
+.claude
 
 # Coverage reports
 coverage/
