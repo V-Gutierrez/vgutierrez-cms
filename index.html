@@ -119,6 +119,14 @@
       rel="canonical"
       href="https://v-gutierrez.github.io/vgutierrez-cms/"
     />
+
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://raw.githubusercontent.com" />
+    <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
+    <link rel="preload" href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json" as="fetch" crossorigin="anonymous" />
+    <link rel="preload" href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json" as="fetch" crossorigin="anonymous" />
+    
+    <!-- Critical CSS -->
     <style>
       * {
         margin: 0;
@@ -144,6 +152,24 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 20px;
+      }
+
+      /* Skip link for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: #000;
+        color: #fff;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 10000;
+        border-radius: 4px;
+        transition: top 0.3s;
+      }
+
+      .skip-link:focus {
+        top: 6px;
       }
 
       /* Header */
@@ -1399,25 +1425,28 @@
     </style>
   </head>
   <body>
+    <!-- Skip navigation for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <header>
-      <nav class="container">
-        <div class="logo" onclick="showTab('home')">Victor Gutierrez</div>
-        <div class="hamburger-menu" onclick="toggleMobileMenu()">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <ul class="nav-links">
-          <li><a href="#" data-tab="home" class="active">Home</a></li>
-          <li><a href="#" data-tab="portfolio">Portfolio</a></li>
-          <li><a href="#" data-tab="blog">Blog</a></li>
+      <nav class="container" role="navigation" aria-label="Main navigation">
+        <div class="logo" onclick="showTab('home')" role="button" tabindex="0" aria-label="Go to home page" onkeydown="if(event.key==='Enter'||event.key===' ')showTab('home')">Victor Gutierrez</div>
+        <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="nav-links">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+        <ul class="nav-links" id="nav-links" role="menubar">
+          <li role="none"><a href="#" data-tab="home" class="active" role="menuitem" aria-current="page">Home</a></li>
+          <li role="none"><a href="#" data-tab="portfolio" role="menuitem">Portfolio</a></li>
+          <li role="none"><a href="#" data-tab="blog" role="menuitem">Blog</a></li>
         </ul>
       </nav>
     </header>
 
-    <main>
+    <main role="main" id="main-content">
       <!-- Home Tab -->
-      <div id="home" class="tab-content active">
+      <div id="home" class="tab-content active" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
         <section class="hero">
           <div class="container">
             <div class="hero-content">
@@ -1671,6 +1700,9 @@
       function toggleMobileMenu() {
         const navLinks = document.querySelector('.nav-links');
         const hamburger = document.querySelector('.hamburger-menu');
+        
+        const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+        hamburger.setAttribute('aria-expanded', !isExpanded);
         
         navLinks.classList.toggle('active');
         hamburger.classList.toggle('active');
@@ -1983,7 +2015,7 @@
           // Show loading state
           if (blogContainer) {
             blogContainer.innerHTML =
-              '<div class="loading">🔄 Loading blog posts from GitHub...</div>';
+              '<div class="loading" role="status" aria-live="polite" aria-label="Loading blog posts"><span aria-hidden="true">🔄</span> Loading blog posts from GitHub...</div>';
           }
 
           const postsUrl =
@@ -2017,8 +2049,8 @@
           // Show user-friendly error message
           if (blogContainer) {
             blogContainer.innerHTML = `
-                        <div class="loading" style="color: #ff6b6b;">
-                            <h3>⚠️ Unable to load blog posts</h3>
+                        <div class="loading" style="color: #ff6b6b;" role="alert" aria-live="assertive" aria-label="Error loading blog posts">
+                            <h3><span aria-hidden="true">⚠️</span> Unable to load blog posts</h3>
                             <p><strong>Error:</strong> ${error.message}</p>
                             <p>This usually means:</p>
                             <ul style="text-align: left; margin: 1rem 0;">
@@ -2055,7 +2087,7 @@
         try {
           if (container) {
             container.innerHTML =
-              '<div class="loading">Loading projects...</div>';
+              '<div class="loading" role="status" aria-live="polite" aria-label="Loading projects">Loading projects...</div>';
           }
 
           const response = await fetch(
@@ -2092,8 +2124,8 @@
 
           if (container) {
             container.innerHTML = `
-              <div class="loading" style="color: #ff6b6b;">
-                <h3>⚠️ Unable to load projects</h3>
+              <div class="loading" style="color: #ff6b6b;" role="alert" aria-live="assertive" aria-label="Error loading projects">
+                <h3><span aria-hidden="true">⚠️</span> Unable to load projects</h3>
                 <p><strong>Error:</strong> ${error.message}</p>
                 <p>Check if the GitHub repository and data files exist</p>
               </div>
