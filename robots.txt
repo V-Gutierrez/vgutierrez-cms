@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /.git/
-Disallow: /.github/
-Disallow: /.claude/
+
 
 
 Sitemap: https://www.victorgutierrez.com.br/sitemap.xml
