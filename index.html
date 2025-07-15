@@ -55,7 +55,7 @@
     <meta name="author" content="Victor Gutierrez" />
 
     <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="profile" />
     <meta
       property="og:url"
       content="https://v-gutierrez.github.io/vgutierrez-cms/"
@@ -66,7 +66,7 @@
     />
     <meta
       property="og:description"
-      content="Technical Leader & Solutions Architect with a track record of scaling enterprise systems and elevating engineering performance. Expert in turning around critical systems under pressure, optimizing performance, and architecting across the stack."
+      content="Technical Leader & Solutions Architect with expertise in scaling enterprise systems, performance optimization, and full-stack architecture. Multilingual professional leading high-stakes technical transformations."
     />
     <meta
       property="og:image"
@@ -74,12 +74,19 @@
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta
       property="og:image:alt"
       content="Victor Gutierrez - Technical Leader & Solutions Architect"
     />
     <meta property="og:site_name" content="Victor Gutierrez Portfolio" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="profile:first_name" content="Victor" />
+    <meta property="profile:last_name" content="Gutierrez" />
+    <meta property="profile:username" content="v-gutierrez" />
+    <meta property="profile:gender" content="male" />
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -126,6 +133,43 @@
     <link rel="preload" href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json" as="fetch" crossorigin="anonymous" />
     <link rel="preload" href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json" as="fetch" crossorigin="anonymous" />
     
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Victor Gutierrez",
+      "jobTitle": "Technical Leader & Solutions Architect",
+      "description": "Technical Leader & Solutions Architect with expertise in scaling enterprise systems, performance optimization, and full-stack architecture",
+      "url": "https://v-gutierrez.github.io/vgutierrez-cms/",
+      "sameAs": [
+        "https://linkedin.com/in/vgutierrez",
+        "https://github.com/V-Gutierrez"
+      ],
+      "knowsAbout": [
+        "Software Architecture",
+        "Team Leadership",
+        "Performance Optimization",
+        "Enterprise Systems",
+        "Full-Stack Development",
+        "Technical Leadership"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Independent Consultant"
+      }
+    }
+    </script>
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="rating" content="general" />
+    <meta name="distribution" content="global" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="geo.region" content="BR" />
+    <meta name="geo.placename" content="Brazil" />
+    
     <!-- Critical CSS -->
     <style>
       * {
@@ -170,6 +214,26 @@
 
       .skip-link:focus {
         top: 6px;
+      }
+
+      /* Lazy loading optimization */
+      .lazy-image {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        background: linear-gradient(90deg, #f0f0f0 25%, transparent 37%, #f0f0f0 63%);
+        background-size: 400% 100%;
+        animation: shimmer 1.5s ease-in-out infinite;
+      }
+
+      .lazy-image.loaded {
+        opacity: 1;
+        background: none;
+        animation: none;
+      }
+
+      @keyframes shimmer {
+        0% { background-position: 100% 0; }
+        100% { background-position: -100% 0; }
       }
 
       /* Header */
@@ -1588,12 +1652,239 @@
     </div>
 
     <script>
-      // Tab Navigation with animations
-      let currentTab = "home";
-      let isTransitioning = false;
+      // ============================================================================
+      // PERFORMANCE & UTILITY MODULES
+      // ============================================================================
+      
+      // Performance optimization utilities
+      const PerformanceUtils = {
+        debounce(func, wait) {
+          let timeout;
+          return function executedFunction(...args) {
+            const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        },
+        
+        throttle(func, limit) {
+          let inThrottle;
+          return function(...args) {
+            if (!inThrottle) {
+              func.apply(this, args);
+              inThrottle = true;
+              setTimeout(() => inThrottle = false, limit);
+            }
+          };
+        }
+      };
 
-      function showTab(tabName) {
-        if (isTransitioning || tabName === currentTab) return;
+      // API utilities with caching
+      const ApiUtils = {
+        cache: new Map(),
+        
+        async fetchWithCache(url, options = {}) {
+          const cacheKey = `${url}_${JSON.stringify(options)}`;
+          
+          if (this.cache.has(cacheKey)) {
+            return this.cache.get(cacheKey);
+          }
+          
+          try {
+            const response = await fetch(url, options);
+            
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            this.cache.set(cacheKey, data);
+            return data;
+          } catch (error) {
+            console.error(`API Error for ${url}:`, error);
+            throw error;
+          }
+        },
+        
+        clearCache() {
+          this.cache.clear();
+        }
+      };
+
+      // ============================================================================
+      // LAZY LOADING MODULE
+      // ============================================================================
+      
+      const LazyLoadingModule = {
+        init() {
+          this.setupIntersectionObserver();
+        },
+        
+        setupIntersectionObserver() {
+          if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  this.loadImage(entry.target);
+                  observer.unobserve(entry.target);
+                }
+              });
+            }, {
+              root: null,
+              rootMargin: '50px',
+              threshold: 0.1
+            });
+            
+            // Observe all lazy images
+            document.querySelectorAll('.lazy-image').forEach(img => {
+              observer.observe(img);
+            });
+          } else {
+            // Fallback for browsers without IntersectionObserver
+            document.querySelectorAll('.lazy-image').forEach(img => {
+              this.loadImage(img);
+            });
+          }
+        },
+        
+        loadImage(img) {
+          const src = img.dataset.src;
+          if (src) {
+            const image = new Image();
+            image.onload = () => {
+              img.src = src;
+              img.classList.add('loaded');
+            };
+            image.onerror = () => {
+              img.style.display = 'none';
+              img.parentElement.innerHTML = img.dataset.fallback || 'Image unavailable';
+            };
+            image.src = src;
+          }
+        },
+        
+        createLazyImage(src, alt, fallback = 'Image') {
+          return `<img class="lazy-image" data-src="${src}" alt="${alt}" data-fallback="${fallback}" style="width: 100%; height: 100%; object-fit: cover;">`;
+        }
+      };
+
+      // ============================================================================
+      // NAVIGATION MODULE
+      // ============================================================================
+      
+      const NavigationModule = {
+        currentTab: "home",
+        isTransitioning: false,
+        
+        init() {
+          this.setupEventListeners();
+          this.setupProgressDots();
+        },
+        
+        setupEventListeners() {
+          // Navigation links
+          document.querySelectorAll(".nav-links a").forEach((link) => {
+            link.addEventListener("click", (e) => {
+              e.preventDefault();
+              if (this.isTransitioning) return;
+              
+              const tab = e.target.dataset.tab;
+              this.showTab(tab);
+              
+              // Close mobile menu
+              const navLinks = document.querySelector('.nav-links');
+              const hamburger = document.querySelector('.hamburger-menu');
+              navLinks.classList.remove('active');
+              hamburger.classList.remove('active');
+              hamburger.setAttribute('aria-expanded', 'false');
+            });
+          });
+          
+          // Update active states
+          document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", (e) => {
+              document.querySelectorAll(".nav-links a").forEach(l => {
+                l.classList.remove("active");
+                l.removeAttribute("aria-current");
+              });
+              e.target.classList.add("active");
+              e.target.setAttribute("aria-current", "page");
+            });
+          });
+        },
+        
+        showTab(tabName) {
+          if (this.isTransitioning || tabName === this.currentTab) return;
+
+          this.isTransitioning = true;
+          const tabs = document.querySelectorAll(".tab-content");
+          const currentTabElement = document.getElementById(this.currentTab);
+          const newTabElement = document.getElementById(tabName);
+
+          // Determine animation direction
+          const tabOrder = ["home", "portfolio", "blog", "post-detail"];
+          const currentIndex = tabOrder.indexOf(this.currentTab);
+          const newIndex = tabOrder.indexOf(tabName);
+
+          let animationClass = "fade-up";
+          if (newIndex > currentIndex) {
+            animationClass = "slide-right";
+          } else if (newIndex < currentIndex) {
+            animationClass = "slide-left";
+          }
+
+          // Fade out current tab
+          if (currentTabElement) {
+            currentTabElement.classList.add("fade-out");
+
+            setTimeout(() => {
+              // Hide current tab
+              currentTabElement.classList.remove("active", "fade-out");
+
+              // Show new tab with animation
+              newTabElement.classList.add("active", animationClass);
+
+              // Clean up animation classes
+              setTimeout(() => {
+                newTabElement.classList.remove(animationClass);
+                this.isTransitioning = false;
+              }, 500);
+            }, 300);
+          } else {
+            // No current tab, just show the new one
+            newTabElement.classList.add("active", animationClass);
+            setTimeout(() => {
+              newTabElement.classList.remove(animationClass);
+              this.isTransitioning = false;
+            }, 500);
+          }
+
+          // Update progress dots
+          this.updateProgressDots(tabName);
+          this.currentTab = tabName;
+        },
+        
+        updateProgressDots(activeTab) {
+          const dots = document.querySelectorAll(".progress-dot");
+          dots.forEach((dot, index) => {
+            const tabNames = ["home", "portfolio", "blog"];
+            dot.classList.toggle("active", tabNames[index] === activeTab);
+          });
+        },
+        
+        setupProgressDots() {
+          const dots = document.querySelectorAll(".progress-dot");
+          dots.forEach((dot, index) => {
+            const tabNames = ["home", "portfolio", "blog"];
+            dot.addEventListener("click", () => {
+              this.showTab(tabNames[index]);
+            });
+          });
+        }
+      };
 
         isTransitioning = true;
         const tabs = document.querySelectorAll(".tab-content");
@@ -2202,7 +2493,7 @@
         return `
           <div class="project-card">
             <div class="project-image ${project.image ? "" : "no-image"}">
-              ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
+              ${project.image ? LazyLoadingModule.createLazyImage(project.image, project.title, project.category || "Project") : project.category || "Project"}
             </div>
             <div class="project-content">
               <h3 class="project-title">${project.title || "Untitled Project"}</h3>
@@ -2386,7 +2677,9 @@
         );
         if (profilePlaceholder) {
           if (personalInfo.profileImage) {
-            profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || "Profile"}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
+            profilePlaceholder.innerHTML = LazyLoadingModule.createLazyImage(personalInfo.profileImage, personalInfo.name || "Profile", "Profile Image");
+            // Re-initialize lazy loading for new image
+            LazyLoadingModule.init();
           } else {
             profilePlaceholder.innerHTML = "Profile Image";
           }
@@ -2501,7 +2794,7 @@
             (project) => `
                 <div class="project-card">
                     <div class="project-image ${project.image ? "" : "no-image"}">
-                        ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
+                        ${project.image ? LazyLoadingModule.createLazyImage(project.image, project.title, project.category || "Project") : project.category || "Project"}
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">${project.title || "Untitled Project"}</h3>
@@ -2922,6 +3215,10 @@
 
       // Initialize the site when page loads
       document.addEventListener("DOMContentLoaded", function () {
+        // Initialize optimized modules
+        NavigationModule.init();
+        LazyLoadingModule.init();
+        
         // Show easter egg for console users
         showEasterEgg();
 
@@ -2947,6 +3244,23 @@
         loadProfile();
         loadProjects();
         loadBlogPosts();
+        
+        // Global function for backwards compatibility
+        window.showTab = function(tabName) {
+          NavigationModule.showTab(tabName);
+        };
+        
+        // Global mobile menu toggle
+        window.toggleMobileMenu = function() {
+          const navLinks = document.querySelector('.nav-links');
+          const hamburger = document.querySelector('.hamburger-menu');
+          
+          const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+          hamburger.setAttribute('aria-expanded', !isExpanded);
+          
+          navLinks.classList.toggle('active');
+          hamburger.classList.toggle('active');
+        };
       });
 
       // Setup progress dots click functionality
