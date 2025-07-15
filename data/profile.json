@@ -75,6 +75,14 @@
       "startDate": "2024-07-01",
       "endDate": "2029-07-01",
       "status": "in-progress"
+    },
+    {
+      "degree": "Technical Military Training in Naval Electroelectronics",
+      "institution": "Brazilian Navy – EAMCE",
+      "location": "Fortaleza, CE, Brazil",
+      "startDate": "2017-01-01",
+      "endDate": "2017-12-31",
+      "status": "completed"
     }
   ],
   "siteSettings": {
