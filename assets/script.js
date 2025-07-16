@@ -1430,4 +1430,3 @@ function hideProgressDots() {
     header.classList.remove("hide-for-dots");
   }
 }
-

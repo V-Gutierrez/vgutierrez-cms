@@ -1074,7 +1074,13 @@ main {
 }
 
 /* Hide progress dots on post detail page */
-#post-detail.active ~ .tab-progress {
+#post-detail.active ~ .tab-progress,
+.tab-progress:has(~ #post-detail.active) {
+  display: none !important;
+}
+
+/* Alternative approach - hide when post-detail is active */
+body:has(#post-detail.active) .tab-progress {
   display: none !important;
 }
 
