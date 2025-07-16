@@ -5,10 +5,18 @@
     "slug": "ok",
     "date": "2025-07-12",
     "excerpt": "OK",
-    "tags": [
-      "Leadership"
-    ],
+    "tags": ["Leadership"],
     "published": false,
     "contentFile": "posts/post-1.json"
+  },
+  {
+    "id": 2,
+    "title": "Optimist as a Driving Force in Development Teams",
+    "slug": "optimist-as-a-driving-force-in-development-teams",
+    "date": "2025-07-16",
+    "excerpt": "Optimism is not naivety: it's strategy. In this personal reflection, I share how choosing optimism as a leadership mindset has shaped outcomes, culture, and trust in technical environments.", "tags": ["Leadership", "Mindset", "Culture"],
+    "published": true,
+    "contentFile": "posts/post-2.json"
   }
 ]
+
