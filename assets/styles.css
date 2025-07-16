@@ -1057,6 +1057,11 @@ main {
   transition: all 0.3s ease;
 }
 
+/* Hide progress dots on post detail page */
+#post-detail.active ~ .tab-progress {
+  display: none !important;
+}
+
 .tab-progress.show {
   opacity: 1;
   visibility: visible;

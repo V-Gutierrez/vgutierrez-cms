@@ -1289,6 +1289,16 @@ function handleTouchEnd(e) {
   const minVelocity = 0.3;
 
   if (Math.abs(deltaX) > minDistance || velocity > minVelocity) {
+    // Special handling for post detail page
+    if (currentTab === "post-detail") {
+      // On post detail page, only allow swipe right (back to blog)
+      if (deltaX > 0) {
+        triggerHapticFeedback();
+        showTab("blog");
+      }
+      return;
+    }
+
     const tabOrder = ["home", "portfolio", "blog"];
     const currentIndex = tabOrder.indexOf(currentTab);
 
