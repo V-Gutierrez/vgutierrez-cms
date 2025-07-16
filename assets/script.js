@@ -108,11 +108,11 @@ function dismissTutorial() {
 // Add click event listeners to nav links
 // Mobile Menu Toggle
 function toggleMobileMenu() {
-  const navLinks = document.querySelector('.nav-links');
-  const hamburger = document.querySelector('.hamburger-menu');
-  
-  navLinks.classList.toggle('active');
-  hamburger.classList.toggle('active');
+  const navLinks = document.querySelector(".nav-links");
+  const hamburger = document.querySelector(".hamburger-menu");
+
+  navLinks.classList.toggle("active");
+  hamburger.classList.toggle("active");
 }
 
 document.querySelectorAll(".nav-links a").forEach((link) => {
@@ -121,13 +121,13 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
     if (isTransitioning) return; // Prevent clicks during transition
     const tab = e.target.dataset.tab;
     showTab(tab);
-    
+
     // Close mobile menu when a link is clicked
-    const navLinks = document.querySelector('.nav-links');
-    const hamburger = document.querySelector('.hamburger-menu');
-    if (navLinks.classList.contains('active')) {
-      navLinks.classList.remove('active');
-      hamburger.classList.remove('active');
+    const navLinks = document.querySelector(".nav-links");
+    const hamburger = document.querySelector(".hamburger-menu");
+    if (navLinks.classList.contains("active")) {
+      navLinks.classList.remove("active");
+      hamburger.classList.remove("active");
     }
   });
 });
@@ -154,8 +154,7 @@ function renderBlogPostsWithLimit() {
   if (!container) return;
 
   if (!allBlogPosts || allBlogPosts.length === 0) {
-    container.innerHTML =
-      '<div class="loading">No blog posts available.</div>';
+    container.innerHTML = '<div class="loading">No blog posts available.</div>';
     return;
   }
 
@@ -314,13 +313,14 @@ function generateBlogPostHTML(post) {
   return `
     <article class="blog-post" onclick="showPost(${post.id})">
       <h3 class="blog-post-title">${post.title}</h3>
-      <div class="blog-post-date">${new Date(
-        post.date,
-      ).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })}</div>
+      <div class="blog-post-date">${new Date(post.date).toLocaleDateString(
+        "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        },
+      )}</div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
       ${
         post.tags
@@ -354,10 +354,7 @@ async function loadFullContentForDisplayedPosts() {
           post.author = fullPost.author;
         }
       } catch (error) {
-        console.warn(
-          `Failed to load full content for post ${post.id}:`,
-          error,
-        );
+        console.warn(`Failed to load full content for post ${post.id}:`, error);
       }
     }
   }
@@ -378,10 +375,7 @@ async function loadFullContentForNewPosts(newPosts) {
           post.author = fullPost.author;
         }
       } catch (error) {
-        console.warn(
-          `Failed to load full content for post ${post.id}:`,
-          error,
-        );
+        console.warn(`Failed to load full content for post ${post.id}:`, error);
       }
     }
   }
@@ -493,8 +487,7 @@ async function loadProjects() {
 
   try {
     if (container) {
-      container.innerHTML =
-        '<div class="loading">Loading projects...</div>';
+      container.innerHTML = '<div class="loading">Loading projects...</div>';
     }
 
     const response = await fetch(
@@ -508,9 +501,7 @@ async function loadProjects() {
     const projects = await response.json();
 
     // Show only featured projects or all projects if no featured ones
-    const featuredProjects = projects.filter(
-      (project) => project.featured,
-    );
+    const featuredProjects = projects.filter((project) => project.featured);
     const projectsToShow =
       featuredProjects.length > 0 ? featuredProjects : projects;
 
@@ -547,8 +538,7 @@ function renderProjectsWithLimit() {
   if (!container) return;
 
   if (!allProjects || allProjects.length === 0) {
-    container.innerHTML =
-      '<div class="loading">No projects available</div>';
+    container.innerHTML = '<div class="loading">No projects available</div>';
     return;
   }
 
@@ -576,8 +566,7 @@ function addProjectControls(container) {
   if (!portfolioSection) return;
 
   // Remove existing controls
-  const existingControls =
-    portfolioSection.querySelector(".project-controls");
+  const existingControls = portfolioSection.querySelector(".project-controls");
   if (existingControls) {
     existingControls.remove();
   }
@@ -760,37 +749,41 @@ function updateProfileData(profile) {
   heroContent +=
     '<button class="cta-button" onclick="showTab(\'portfolio\')">View My Work</button>';
 
-  // Add social links if available
-  if (personalInfo.github || personalInfo.linkedin) {
-    heroContent += '<div class="social-links">';
+  // Add social links and CV download
+  heroContent += '<div class="social-links">';
 
-    if (personalInfo.github) {
-      heroContent += `
-        <a href="${personalInfo.github}" target="_blank" rel="noopener noreferrer" class="social-link">
-          <span class="social-icon">🔗</span>
-          GitHub
-        </a>
-      `;
-    }
-
-    if (personalInfo.linkedin) {
-      heroContent += `
-        <a href="${personalInfo.linkedin}" target="_blank" rel="noopener noreferrer" class="social-link">
-          <span class="social-icon">💼</span>
-          LinkedIn
-        </a>
-      `;
-    }
-
-    heroContent += "</div>";
+  if (personalInfo.github) {
+    heroContent += `
+      <a href="${personalInfo.github}" target="_blank" rel="noopener noreferrer" class="social-link">
+        <span class="social-icon">🔗</span>
+        GitHub
+      </a>
+    `;
   }
+
+  if (personalInfo.linkedin) {
+    heroContent += `
+      <a href="${personalInfo.linkedin}" target="_blank" rel="noopener noreferrer" class="social-link">
+        <span class="social-icon">💼</span>
+        LinkedIn
+      </a>
+    `;
+  }
+
+  // Add CV download button (always available)
+  heroContent += `
+    <a href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/assets/Victor_Gutierrez_CV_2025_EN.pdf" download="Victor_Gutierrez_CV_2025_EN.pdf" class="social-link cv-download">
+      <span class="social-icon">📄</span>
+      CV
+    </a>
+  `;
+
+  heroContent += "</div>";
 
   heroText.innerHTML = heroContent;
 
   // Update profile image
-  const profilePlaceholder = document.querySelector(
-    ".profile-placeholder",
-  );
+  const profilePlaceholder = document.querySelector(".profile-placeholder");
   if (profilePlaceholder) {
     if (personalInfo.profileImage) {
       profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || "Profile"}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
@@ -859,8 +852,7 @@ function updateSkillsSection(skills) {
   );
 
   if (!hasAnySkills) {
-    skillsGrid.innerHTML =
-      '<div class="loading">No skills available</div>';
+    skillsGrid.innerHTML = '<div class="loading">No skills available</div>';
     return;
   }
 
@@ -898,8 +890,7 @@ function renderProjects(projects) {
   if (!container) return;
 
   if (!projects || projects.length === 0) {
-    container.innerHTML =
-      '<div class="loading">No projects available</div>';
+    container.innerHTML = '<div class="loading">No projects available</div>';
     return;
   }
 
@@ -914,23 +905,18 @@ function renderProjects(projects) {
                   <h3 class="project-title">${project.title || "Untitled Project"}</h3>
                   <p class="project-description">${project.description || "No description available"}</p>
                   ${
-                    project.technologies &&
-                    project.technologies.length > 0
+                    project.technologies && project.technologies.length > 0
                       ? `
                   <div class="project-tech">
                       ${project.technologies
-                        .map(
-                          (tech) =>
-                            `<span class="tech-tag">${tech}</span>`,
-                        )
+                        .map((tech) => `<span class="tech-tag">${tech}</span>`)
                         .join("")}
                   </div>
                   `
                       : ""
                   }
                   ${
-                    project.metrics &&
-                    Object.keys(project.metrics).length > 0
+                    project.metrics && Object.keys(project.metrics).length > 0
                       ? `
                       <div class="project-metrics">
                           ${Object.entries(project.metrics)
@@ -1001,8 +987,7 @@ function updateLanguagesSection(languages) {
 
 // Update education section
 function updateEducationSection(education) {
-  const educationContainer =
-    document.getElementById("education-timeline");
+  const educationContainer = document.getElementById("education-timeline");
   if (!educationContainer) return;
 
   if (!education || education.length === 0) {
@@ -1080,9 +1065,7 @@ function updateTechnicalStackSection(technicalStack) {
   };
 
   techContainer.innerHTML = Object.entries(technicalStack)
-    .filter(
-      ([key, technologies]) => technologies && technologies.length > 0,
-    )
+    .filter(([key, technologies]) => technologies && technologies.length > 0)
     .map(([category, technologies]) => {
       const categoryTitle =
         categoryNames[category] ||
@@ -1161,8 +1144,7 @@ function setupScrollAnimations() {
 
         // Handle staggered animations for child elements
         if (element.classList.contains("skills-grid")) {
-          const skillCategories =
-            element.querySelectorAll(".skill-category");
+          const skillCategories = element.querySelectorAll(".skill-category");
           skillCategories.forEach((category, index) => {
             setTimeout(() => {
               category.classList.add("animate");
@@ -1171,8 +1153,7 @@ function setupScrollAnimations() {
         }
 
         if (element.classList.contains("languages-section")) {
-          const languageItems =
-            element.querySelectorAll(".language-item");
+          const languageItems = element.querySelectorAll(".language-item");
           languageItems.forEach((item, index) => {
             setTimeout(() => {
               item.classList.add("animate");
@@ -1181,8 +1162,7 @@ function setupScrollAnimations() {
         }
 
         if (element.classList.contains("education-section")) {
-          const educationItems =
-            element.querySelectorAll(".education-item");
+          const educationItems = element.querySelectorAll(".education-item");
           educationItems.forEach((item, index) => {
             setTimeout(() => {
               item.classList.add("animate");
@@ -1191,8 +1171,7 @@ function setupScrollAnimations() {
         }
 
         if (element.classList.contains("tech-stack-section")) {
-          const techCategories =
-            element.querySelectorAll(".tech-category");
+          const techCategories = element.querySelectorAll(".tech-category");
           techCategories.forEach((category, index) => {
             setTimeout(() => {
               category.classList.add("animate");
@@ -1451,3 +1430,4 @@ function hideProgressDots() {
     header.classList.remove("hide-for-dots");
   }
 }
+

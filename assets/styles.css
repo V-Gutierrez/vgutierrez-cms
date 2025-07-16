@@ -682,6 +682,22 @@ main {
   font-size: 1.2rem;
 }
 
+/* CV Download Button */
+.cv-download {
+  background: #ffd700 !important;
+  color: #0a0a0a !important;
+  border-color: #ffd700 !important;
+  font-weight: 600;
+}
+
+.cv-download:hover {
+  background: #ffed4e !important;
+  color: #0a0a0a !important;
+  border-color: #ffed4e !important;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
 /* Education Section */
 .education-section {
   background: #1a1a1a;
