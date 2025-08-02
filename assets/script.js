@@ -755,8 +755,7 @@ function updateProfileData(profile) {
   if (personalInfo.github) {
     heroContent += `
       <a href="${personalInfo.github}" target="_blank" rel="noopener noreferrer" class="social-link">
-        <span class="social-icon">🔗</span>
-        GitHub
+        <span class="social-icon"><img src="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/github.png" alt="GitHub" style="width: 20px; height: 20px;"></span>
       </a>
     `;
   }
@@ -764,8 +763,20 @@ function updateProfileData(profile) {
   if (personalInfo.linkedin) {
     heroContent += `
       <a href="${personalInfo.linkedin}" target="_blank" rel="noopener noreferrer" class="social-link">
-        <span class="social-icon">💼</span>
-        LinkedIn
+        <span class="social-icon">
+<img src="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/linkedin.png" alt="LinkedIn" style="width: 20px; height: 20px;">
+</span>
+      </a>
+    `;
+  }
+
+  if (personalInfo.whatsApp) {
+    heroContent += `
+      <a href="${personalInfo.whatsApp}" target="_blank" rel="noopener noreferrer" class="social-link">
+        <span class="social-icon">
+<img src="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/whatsapp.png" alt="WhatsApp" style="width: 20px; height: 20px;">
+</span>
+
       </a>
     `;
   }
