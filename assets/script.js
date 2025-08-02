@@ -783,7 +783,7 @@ function updateProfileData(profile) {
 
   // Add CV download button (always available)
   heroContent += `
-    <a href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/assets/Victor_Gutierrez_CV_2025_EN.pdf" download="Victor_Gutierrez_CV_2025_EN.pdf" class="social-link cv-download">
+    <a href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/assets/Victor_Gutierrez_CV_2025_EN.pdf" download="Victor_Gutierrez_CV_2025_EN.pdf" class="social-link">
       <span class="social-icon">📄</span>
       CV
     </a>
