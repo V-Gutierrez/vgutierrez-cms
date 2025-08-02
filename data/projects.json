@@ -277,7 +277,7 @@
 	},
 	{
 		"id": 19,
-		"title": "MDM Migration – Strategic Data Migration",
+		"title": "Strategic Data Migration",
 		"slug": "mdm-migration-strategy",
 		"description": "Co-led the strategic migration of 17.5 million customer records from the legacy system to the Master Data Management (MDM) platform. Ensured high-integrity, high-volume data transfer within tight deadlines, enabling unified customer profiles across enterprise systems.",
 		"category": "Enterprise Data Migration",
