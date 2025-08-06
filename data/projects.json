@@ -1,305 +1,350 @@
 [
-	{
-		"id": 1,
-		"title": "Digital Transformation",
-		"slug": "digital-transformation",
-		"description": "Led strategic technical initiatives for enterprise-wide digital transformation, driving adoption of ADEO Group's core Loyalty and Master Data platforms across Brazil operations, impacting more than 17 million users.",
-		"category": "Enterprise Architecture",
-		"technologies": [
-			"Enterprise Architecture",
-			"Team Leadership",
-			"International Collaboration"
-		],
-		"status": "in-progress",
-		"startDate": "2025-06-01",
-		"endDate": "ongoing",
-		"metrics": {
-			"usersImpacted": "17+ million",
-			"scope": "Country-wide retail operations"
-		},
-		"highlights": [
-			"Coordinate international stakeholder alignment",
-			"Conduct technical negotiations in English with global teams",
-			"Define technical roadmaps through ADR processes",
-			"Drive cross-functional collaboration between local and international teams"
-		],
-		"featured": true
-	},
-	{
-		"id": 2,
-		"title": "High-Traffic System Optimization",
-		"slug": "high-traffic-system-optimization",
-		"description": "Optimized high-traffic customer journey performance by redesigning queue system architecture, achieving 80% latency reduction and maintaining SLA/SLO compliance for critical metrics.",
-		"category": "Performance Engineering",
-		"technologies": [
-			"Performance Engineering",
-			"System Architecture",
-			"Queue Systems"
-		],
-		"status": "completed",
-		"startDate": "2023-03-01",
-		"endDate": "2023-08-01",
-		"metrics": {
-			"latencyReduction": "80%",
-			"Service Level Agreement": "Achieved",
-			"systemType": "High-traffic crucial customer journey"
-		},
-		"highlights": [
-			"Redesigned queue system architecture for primary service",
-			"Achieved 80% latency reduction",
-			"Maintained SLA/SLO compliance for Availability and APDEX metrics",
-			"Improved overall system performance and user experience"
-		],
-		"featured": true
-	},
-	{
-		"id": 3,
-		"title": "Team Performance Transformation",
-		"slug": "team-performance-transformation",
-		"description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate in 6 months.",
-		"category": "Team Leadership",
-		"technologies": ["Team Leadership", "DevOps", "Code Quality"],
-		"status": "completed",
-		"startDate": "2022-11-01",
-		"endDate": "2024-06-01",
-		"metrics": {
-			"deploymentFrequencyIncrease": "70%",
-			"changeFailureRateReduction": "74%",
-			"teamTransformation": "From 'major offender' to company reference in 6 months"
-		},
-		"highlights": [
-			"Implemented rigorous code review standards",
-			"Established traceability between tickets and code development",
-			"Elevated team reputation from 'major offender' status",
-			"Successful delivery of crucial company initiatives"
-		],
-		"featured": true
-	},
-	{
-		"id": 5,
-		"title": "Critical System Recovery",
-		"slug": "critical-system-recovery",
-		"description": "Resolved critical architectural issues in PubSub implementation causing transactional problems, designing ADR-backed solutions that reduced production incidents by 64%.",
-		"category": "System Recovery",
-		"technologies": ["System Recovery", "Architecture", "Problem Solving"],
-		"status": "completed",
-		"startDate": "2023-01-01",
-		"endDate": "2023-06-01",
-		"metrics": {
-			"incidentReduction": "64%",
-			"systemReliability": "Significantly improved",
-			"architecturalIssues": "Fully resolved"
-		},
-		"highlights": [
-			"Resolved critical PubSub implementation issues",
-			"Designed ADR-backed solutions",
-			"Reduced production incidents by 64%",
-			"Significantly improved system reliability"
-		],
-		"featured": true
-	},
-	{
-		"id": 6,
-		"title": "Military IT Infrastructure Management",
-		"slug": "military-it-infrastructure-management",
-		"description": "Led IT infrastructure management for military organization, overseeing network administration, inventory management, and telecommunications systems with 99%+ uptime in high-compliance environment.",
-		"category": "Infrastructure",
-		"technologies": ["Infrastructure", "Network Administration", "Security"],
-		"status": "completed",
-		"startDate": "2017-12-01",
-		"endDate": "2019-12-01",
-		"metrics": {
-			"uptime": "99%+",
-			"complianceLevel": "High-compliance environment",
-			"systemsCovered": "Network, inventory, telecommunications"
-		},
-		"highlights": [
-			"Led IT infrastructure for military organization",
-			"Managed critical mission systems",
-			"Provided technical mentorship to junior team members"
-		],
-		"featured": true
-	},
-	{
-		"id": 7,
-		"title": "V-Gutierrez CMS - Developer Portfolio CMS",
-		"slug": "developer-portfolio-cms",
-		"description": "Built a minimalist, Git-based CMS for showcasing technical achievements and impact metrics. Designed with simplicity, low maintenance, and pragmatic deployment using GitHub Pages.",
-		"category": "Personal Project",
-		"technologies": ["HTML", "CSS", "JavaScript", "GitHub Pages"],
-		"status": "in-progress",
-		"startDate": "2024-05-01",
-		"endDate": "2024-05-20",
-		"image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vgutierrez-cms.jpeg",
-		"metrics": {
-			"maintenance": "Zero backend, low ops footprint",
-			"performance": "Fast loading with static rendering",
-			"visibility": "Public portfolio with SEO-friendly structure"
-		},
-		"highlights": [
-			"Created a simple, maintainable CMS powered by Git and Markdown",
-			"Focused on performance, clarity e impacto técnico direto",
-			"Served as public-facing evidence of engineering leadership"
-		],
-		"featured": true
-	},
-	{
-		"id": 9,
-		"title": "Canaryo CLI – Local Kubernetes Deployment Tool",
-		"slug": "canaryo-cli-kubernetes-deployment",
-		"description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks. <a href=\"https://github.com/V-Gutierrez/canaryo\"> Code available</a>",
-		"category": "Developer Tooling",
-		"technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
-		"status": "in-progress",
-		"image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/canaryo.png",
-		"startDate": "2024-07-01",
-		"endDate": "2024-07-10",
-		"metrics": {
-			"runtimeSupport": "Auto-detects Node.js, Python, Java, Go, Nginx",
-			"setupTime": "Ready in <10 minutes",
-			"developerEfficiency": "Boosts local testing & deployment speed"
-		},
-		"highlights": [
-			"Auto-generates optimized manifests based on Dockerfile analysis",
-			"Supports full lifecycle: deploy, scale, monitor, and delete apps",
-			"Interactive interface designed for fast iteration and feedback"
-		],
-		"featured": true
-	},
-	{
-		"id": 10,
-		"title": "Vivant",
-		"slug": "vivant-performance-suite",
-		"description": "Built a complete performance testing suite. Vivant enables realistic load simulations with an interactive CLI, environment presets, and real-time monitoring via Grafana and InfluxDB. Vivant is closed-source for now",
-		"category": "Performance Engineering",
-		"technologies": ["Node.js", "k6", "Grafana", "InfluxDB", "CLI"],
-		"status": "in-progress",
-		"startDate": "2024-06-10",
-		"image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vivant-exp.png",
-		"endDate": "2024-06-20",
-		"metrics": {
-			"scenarioCoverage": "12+ built-in scenarios (smoke, stress, spike, soak, CRUD variants)",
-			"observability": "Custom Grafana dashboards with real-time metrics (P95, error rates, throughput)"
-		},
-		"highlights": [
-			"Developed an interactive CLI for managing realistic API load tests",
-			"Enabled test presets, auto data generation",
-			"Integrated with InfluxDB and Grafana for detailed observability",
-			"Supported operational workflows with environment switching and backups",
-			"Designed for high-confidence testing before production deployments"
-		],
-		"featured": true
-	},
-	{
-		"id": 16,
-		"title": "Genesis Church App – Community Platform",
-		"slug": "genesis-church-app-fullstack",
-		"description": "Designed and developed a full-stack church community platform for Genesis Church in Argentina, integrating a mobile-friendly PWA frontend with a scalable backend API. Combined modern web technologies with real-world needs like offline access, event scheduling, push notifications, and Google Maps integration.",
-		"category": "Full-Stack Development",
-		"image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/genesis.png",
-		"technologies": ["PWA", "Node.js", "Express", "MongoDB", "Service Workers"],
-		"status": "completed",
-		"startDate": "2023-01-01",
-		"endDate": "2023-04-30",
-		"metrics": {
-			"platformCoverage": "PWA + API for end-to-end experience",
-			"userEngagement": "More than 1000 users engaging in event registration, news updates, push alerts",
-			"resilience": "Offline mode and auto-updating frontend"
-		},
-		"highlights": [
-			"Developed a responsive PWA for community access across devices",
-			"Built a RESTful backend API with secure auth and admin roles",
-			"Received more than 1k users in peak dates"
-		],
-		"featured": true
-	},
-	{
-		"id": 17,
-		"title": "Codebase Expert – Natural Language Codebase Explorer",
-		"slug": "llm-codebase-expert",
-		"description": "Developed a CLI-based tool that allows developers to query codebases using natural language, powered by Retrieval-Augmented Generation (RAG), embeddings, and open-source LLMs. Bridges human understanding and complex systems through intelligent contextual search.",
-		"category": "AI Developer Tools",
-		"technologies": [
-			"LangChain",
-			"HuggingFace Transformers",
-			"Chroma Vector Store",
-			"RAG",
-			"Python",
-			"LLM Embeddings"
-		],
-		"image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/codebase-expert.png",
-		"status": "planned",
-		"startDate": "2024-12-01",
-		"endDate": "2025-01-15",
-		"metrics": {
-			"queryType": "Natural language over code",
-			"architecture": "RAG + ConversationalRetrievalChain",
-			"modelBackbone": "Stable Code 3B, Sentence-T5"
-		},
-		"highlights": [
-			"Built a developer tool for querying codebases with plain English",
-			"Integrated LangChain with HuggingFace and Chroma DB",
-			"Implemented full Retrieval-Augmented Generation workflow",
-			"Supports dynamic embedding generation for new codebases",
-			"Used successfully with real-world backends (e.g. Genesis App)"
-		],
-		"featured": true
-	},
-	{
-		"id": 18,
-		"title": "Talk: Why Does ChatGPT Seem Smarter Than You?",
-		"slug": "talk-why-chatgpt-seems-smarter",
-		"description": "Delivered an invited talk at DevSummit 2025 (ADEO, Ronchin – France), exploring the intersections of Artificial Intelligence, Language, and Human Behavior. Shared practical insights and ethical considerations for critically engaging with generative AI technologies like ChatGPT.",
-		"category": "Public Speaking",
-		"technologies": [
-			"Generative AI",
-			"Large Language Models",
-			"Cognitive Biases",
-			"Human-Computer Interaction"
-		],
-		"image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/wdcs.jpeg",
-		"status": "completed",
-		"startDate": "2025-06-03",
-		"endDate": "2025-06-05",
-		"metrics": {
-			"event": "DevSummit 2025 (ADEO)",
-			"location": "Ronchin, France",
-			"audience": "International tech and product teams"
-		},
-		"highlights": [
-			"Explained LLMs using everyday metaphors and critical reasoning",
-			"Connected AI behavior with human cognitive biases and perception",
-			"Encouraged ethical, conscious adoption of generative technologies",
-			"Reconnected with peers from Leroy Merlin Brazil and across ADEO",
-			"Represented Brazil in a global, cross-cultural innovation event"
-		],
-		"featured": true
-	},
-	{
-		"id": 19,
-		"title": "Strategic Data Migration",
-		"slug": "mdm-migration-strategy",
-		"description": "Co-led the strategic migration of 17.5 million customer records from the legacy system to the Master Data Management (MDM) platform. Ensured high-integrity, high-volume data transfer within tight deadlines, enabling unified customer profiles across enterprise systems.",
-		"category": "Enterprise Data Migration",
-		"technologies": [
-			"Data Migration",
-			"Master Data Management",
-			"System Integration"
-		],
-		"status": "in-progress",
-		"startDate": "2025-07-01",
-		"endDate": "2025-10-10",
-		"metrics": {
-			"recordsMigrated": "17.5 million",
-			"migrationDuration": "10-17 days",
-			"cutoverStrategy": "Full + Delta Import",
-			"integrationLayer": "Existing FACADE reused as transformation layer"
-		},
-		"highlights": [
-			"Co-led large-scale migration of 17.5M customer records from legacy systems to MDM",
-			"Reused existing FACADE integration to streamline implementation and reduce risk",
-			"Established Go-Live plan with minimal downtime and risk"
-		],
-		"featured": true
-	}
+  {
+    "id": 1,
+    "title": "Digital Transformation",
+    "slug": "digital-transformation",
+    "description": "Led strategic technical initiatives for enterprise-wide digital transformation, driving adoption of ADEO Group's core Loyalty and Master Data platforms across Brazil operations, impacting more than 17 million users.",
+    "category": "Enterprise Architecture",
+    "technologies": [
+      "Enterprise Architecture",
+      "Team Leadership",
+      "International Collaboration"
+    ],
+    "status": "in-progress",
+    "startDate": "2025-06-01",
+    "endDate": "ongoing",
+    "metrics": {
+      "usersImpacted": "17+ million",
+      "scope": "Country-wide retail operations"
+    },
+    "highlights": [
+      "Coordinate international stakeholder alignment",
+      "Conduct technical negotiations in English with global teams",
+      "Define technical roadmaps through ADR processes",
+      "Drive cross-functional collaboration between local and international teams"
+    ],
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "High-Traffic System Optimization",
+    "slug": "high-traffic-system-optimization",
+    "description": "Optimized high-traffic customer journey performance by redesigning queue system architecture, achieving 80% latency reduction and maintaining SLA/SLO compliance for critical metrics.",
+    "category": "Performance Engineering",
+    "technologies": [
+      "Performance Engineering",
+      "System Architecture",
+      "Queue Systems"
+    ],
+    "status": "completed",
+    "startDate": "2023-03-01",
+    "endDate": "2023-08-01",
+    "metrics": {
+      "latencyReduction": "80%",
+      "Service Level Agreement": "Achieved",
+      "systemType": "High-traffic crucial customer journey"
+    },
+    "highlights": [
+      "Redesigned queue system architecture for primary service",
+      "Achieved 80% latency reduction",
+      "Maintained SLA/SLO compliance for Availability and APDEX metrics",
+      "Improved overall system performance and user experience"
+    ],
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "Team Performance Transformation",
+    "slug": "team-performance-transformation",
+    "description": "Transformed underperforming team into company reference by implementing rigorous code review standards, resulting in 70% increase in Deployment Frequency and 74% reduction in Change Failure Rate in 6 months.",
+    "category": "Team Leadership",
+    "technologies": ["Team Leadership", "DevOps", "Code Quality"],
+    "status": "completed",
+    "startDate": "2022-11-01",
+    "endDate": "2024-06-01",
+    "metrics": {
+      "deploymentFrequencyIncrease": "70%",
+      "changeFailureRateReduction": "74%",
+      "teamTransformation": "From 'major offender' to company reference in 6 months"
+    },
+    "highlights": [
+      "Implemented rigorous code review standards",
+      "Established traceability between tickets and code development",
+      "Elevated team reputation from 'major offender' status",
+      "Successful delivery of crucial company initiatives"
+    ],
+    "featured": true
+  },
+  {
+    "id": 5,
+    "title": "Critical System Recovery",
+    "slug": "critical-system-recovery",
+    "description": "Resolved critical architectural issues in PubSub implementation causing transactional problems, designing ADR-backed solutions that reduced production incidents by 64%.",
+    "category": "System Recovery",
+    "technologies": ["System Recovery", "Architecture", "Problem Solving"],
+    "status": "completed",
+    "startDate": "2023-01-01",
+    "endDate": "2023-06-01",
+    "metrics": {
+      "incidentReduction": "64%",
+      "systemReliability": "Significantly improved",
+      "architecturalIssues": "Fully resolved"
+    },
+    "highlights": [
+      "Resolved critical PubSub implementation issues",
+      "Designed ADR-backed solutions",
+      "Reduced production incidents by 64%",
+      "Significantly improved system reliability"
+    ],
+    "featured": true
+  },
+  {
+    "id": 6,
+    "title": "Military IT Infrastructure Management",
+    "slug": "military-it-infrastructure-management",
+    "description": "Led IT infrastructure management for military organization, overseeing network administration, inventory management, and telecommunications systems with 99%+ uptime in high-compliance environment.",
+    "category": "Infrastructure",
+    "technologies": ["Infrastructure", "Network Administration", "Security"],
+    "status": "completed",
+    "startDate": "2017-12-01",
+    "endDate": "2019-12-01",
+    "metrics": {
+      "uptime": "99%+",
+      "complianceLevel": "High-compliance environment",
+      "systemsCovered": "Network, inventory, telecommunications"
+    },
+    "highlights": [
+      "Led IT infrastructure for military organization",
+      "Managed critical mission systems",
+      "Provided technical mentorship to junior team members"
+    ],
+    "featured": true
+  },
+  {
+    "id": 7,
+    "title": "V-Gutierrez CMS - Developer Portfolio CMS",
+    "slug": "developer-portfolio-cms",
+    "description": "Built a minimalist, Git-based CMS for showcasing technical achievements and impact metrics. Designed with simplicity, low maintenance, and pragmatic deployment using GitHub Pages.",
+    "category": "Personal Project",
+    "technologies": ["HTML", "CSS", "JavaScript", "GitHub Pages"],
+    "status": "in-progress",
+    "startDate": "2024-05-01",
+    "endDate": "2024-05-20",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vgutierrez-cms.jpeg",
+    "metrics": {
+      "maintenance": "Zero backend, low ops footprint",
+      "performance": "Fast loading with static rendering",
+      "visibility": "Public portfolio with SEO-friendly structure"
+    },
+    "highlights": [
+      "Created a simple, maintainable CMS powered by Git and Markdown",
+      "Focused on performance, clarity e impacto técnico direto",
+      "Served as public-facing evidence of engineering leadership"
+    ],
+    "featured": true
+  },
+  {
+    "id": 9,
+    "title": "Canaryo CLI – Local Kubernetes Deployment Tool",
+    "slug": "canaryo-cli-kubernetes-deployment",
+    "description": "Designed and implemented a developer-friendly CLI for deploying applications to local Kubernetes clusters with minimal configuration. Canaryo auto-detects runtime settings, simplifies manifest generation, and streamlines management tasks. <a href=\"https://github.com/V-Gutierrez/canaryo\"> Code available</a>",
+    "category": "Developer Tooling",
+    "technologies": ["Node.js", "Kubernetes", "Docker", "CLI"],
+    "status": "in-progress",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/canaryo.png",
+    "startDate": "2024-07-01",
+    "endDate": "2024-07-10",
+    "metrics": {
+      "runtimeSupport": "Auto-detects Node.js, Python, Java, Go, Nginx",
+      "setupTime": "Ready in <10 minutes",
+      "developerEfficiency": "Boosts local testing & deployment speed"
+    },
+    "highlights": [
+      "Auto-generates optimized manifests based on Dockerfile analysis",
+      "Supports full lifecycle: deploy, scale, monitor, and delete apps",
+      "Interactive interface designed for fast iteration and feedback"
+    ],
+    "featured": true
+  },
+  {
+    "id": 10,
+    "title": "Vivant",
+    "slug": "vivant-performance-suite",
+    "description": "Built a complete performance testing suite. Vivant enables realistic load simulations with an interactive CLI, environment presets, and real-time monitoring via Grafana and InfluxDB. Vivant is closed-source for now",
+    "category": "Performance Engineering",
+    "technologies": ["Node.js", "k6", "Grafana", "InfluxDB", "CLI"],
+    "status": "in-progress",
+    "startDate": "2024-06-10",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/vivant-exp.png",
+    "endDate": "2024-06-20",
+    "metrics": {
+      "scenarioCoverage": "12+ built-in scenarios (smoke, stress, spike, soak, CRUD variants)",
+      "observability": "Custom Grafana dashboards with real-time metrics (P95, error rates, throughput)"
+    },
+    "highlights": [
+      "Developed an interactive CLI for managing realistic API load tests",
+      "Enabled test presets, auto data generation",
+      "Integrated with InfluxDB and Grafana for detailed observability",
+      "Supported operational workflows with environment switching and backups",
+      "Designed for high-confidence testing before production deployments"
+    ],
+    "featured": true
+  },
+  {
+    "id": 16,
+    "title": "Genesis Church App – Community Platform",
+    "slug": "genesis-church-app-fullstack",
+    "description": "Designed and developed a full-stack church community platform for Genesis Church in Argentina, integrating a mobile-friendly PWA frontend with a scalable backend API. Combined modern web technologies with real-world needs like offline access, event scheduling, push notifications, and Google Maps integration.",
+    "category": "Full-Stack Development",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/genesis.png",
+    "technologies": ["PWA", "Node.js", "Express", "MongoDB", "Service Workers"],
+    "status": "completed",
+    "startDate": "2023-01-01",
+    "endDate": "2023-04-30",
+    "metrics": {
+      "platformCoverage": "PWA + API for end-to-end experience",
+      "userEngagement": "More than 1000 users engaging in event registration, news updates, push alerts",
+      "resilience": "Offline mode and auto-updating frontend"
+    },
+    "highlights": [
+      "Developed a responsive PWA for community access across devices",
+      "Built a RESTful backend API with secure auth and admin roles",
+      "Received more than 1k users in peak dates"
+    ],
+    "featured": true
+  },
+  {
+    "id": 17,
+    "title": "Codebase Expert – Natural Language Codebase Explorer",
+    "slug": "llm-codebase-expert",
+    "description": "Developed a CLI-based tool that allows developers to query codebases using natural language, powered by Retrieval-Augmented Generation (RAG), embeddings, and open-source LLMs. Bridges human understanding and complex systems through intelligent contextual search.",
+    "category": "AI Developer Tools",
+    "technologies": [
+      "LangChain",
+      "HuggingFace Transformers",
+      "Chroma Vector Store",
+      "RAG",
+      "Python",
+      "LLM Embeddings"
+    ],
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/codebase-expert.png",
+    "status": "planned",
+    "startDate": "2024-12-01",
+    "endDate": "2025-01-15",
+    "metrics": {
+      "queryType": "Natural language over code",
+      "architecture": "RAG + ConversationalRetrievalChain",
+      "modelBackbone": "Stable Code 3B, Sentence-T5"
+    },
+    "highlights": [
+      "Built a developer tool for querying codebases with plain English",
+      "Integrated LangChain with HuggingFace and Chroma DB",
+      "Implemented full Retrieval-Augmented Generation workflow",
+      "Supports dynamic embedding generation for new codebases",
+      "Used successfully with real-world backends (e.g. Genesis App)"
+    ],
+    "featured": true
+  },
+  {
+    "id": 18,
+    "title": "Talk: Why Does ChatGPT Seem Smarter Than You?",
+    "slug": "talk-why-chatgpt-seems-smarter",
+    "description": "Delivered an invited talk at DevSummit 2025 (ADEO, Ronchin – France), exploring the intersections of Artificial Intelligence, Language, and Human Behavior. Shared practical insights and ethical considerations for critically engaging with generative AI technologies like ChatGPT.",
+    "category": "Public Speaking",
+    "technologies": [
+      "Generative AI",
+      "Large Language Models",
+      "Cognitive Biases",
+      "Human-Computer Interaction"
+    ],
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/projects/wdcs.jpeg",
+    "status": "completed",
+    "startDate": "2025-06-03",
+    "endDate": "2025-06-05",
+    "metrics": {
+      "event": "DevSummit 2025 (ADEO)",
+      "location": "Ronchin, France",
+      "audience": "International tech and product teams"
+    },
+    "highlights": [
+      "Explained LLMs using everyday metaphors and critical reasoning",
+      "Connected AI behavior with human cognitive biases and perception",
+      "Encouraged ethical, conscious adoption of generative technologies",
+      "Reconnected with peers from Leroy Merlin Brazil and across ADEO",
+      "Represented Brazil in a global, cross-cultural innovation event"
+    ],
+    "featured": true
+  },
+  {
+    "id": 19,
+    "title": "Strategic Data Migration",
+    "slug": "mdm-migration-strategy",
+    "description": "Co-led the strategic migration of 17.5 million customer records from the legacy system to the Master Data Management (MDM) platform. Ensured high-integrity, high-volume data transfer within tight deadlines, enabling unified customer profiles across enterprise systems.",
+    "category": "Enterprise Data Migration",
+    "technologies": [
+      "Data Migration",
+      "Master Data Management",
+      "System Integration"
+    ],
+    "status": "in-progress",
+    "startDate": "2025-07-01",
+    "endDate": "2025-10-10",
+    "metrics": {
+      "recordsMigrated": "17.5 million",
+      "migrationDuration": "10-17 days",
+      "cutoverStrategy": "Full + Delta Import",
+      "integrationLayer": "Existing FACADE reused as transformation layer"
+    },
+    "highlights": [
+      "Co-led large-scale migration of 17.5M customer records from legacy systems to MDM",
+      "Reused existing FACADE integration to streamline implementation and reduce risk",
+      "Established Go-Live plan with minimal downtime and risk"
+    ],
+    "featured": true
+  },
+  {
+    "id": 21,
+    "title": "Technical Hiring Process Design",
+    "slug": "technical-hiring-precision",
+    "description": "Designed and executed a highly effective technical hiring process tailored for a lean, high-performing engineering team. The process emphasized signal over noise, reducing false positives and accurately identifying real-world engineering skill through custom interviews and assessments.",
+    "category": "People Engineering",
+    "technologies": ["System Design Interviews", "Live Coding"],
+    "status": "completed",
+    "startDate": "2022-09-01",
+    "endDate": "2022-11-15",
+    "metrics": {
+      "interviewSteps": "3",
+      "hiringSuccess": "Successful hire aligned with expectations"
+    },
+    "highlights": [
+      "Created a 3-stage technical funnel to assess backend engineering skills in real-world scenarios",
+      "Designed system design and live coding challenges focused on system thinking",
+      "Calibrated interviewers to evaluate clarity of thought, not just correctness",
+      "Ensured strong predictive power: the hired candidate performed as expected post-onboarding",
+      "Streamlined the process to avoid fatigue and reduce candidate drop-off"
+    ],
+    "featured": true
+  },
+  {
+    "id": 20,
+    "title": "Architecting Reliability in Loyalty System",
+    "slug": "loyalty-consistency-architecture",
+    "description": "Architected and implemented a more resilient balance management flow in a distributed loyalty platform.",
+    "category": "Distributed Systems",
+    "technologies": ["Event-driven Architecture"],
+    "status": "completed",
+    "startDate": "2025-07-20",
+    "endDate": "2025-07-27",
+    "metrics": {
+      "latencyImpact": "Negligible",
+      "consistencyGuarantees": "Improved across services",
+      "architecturalDebt": "Reduced"
+    },
+    "highlights": [
+      "Reinforced consistency boundaries in a high-throughput loyalty platform",
+      "Minimized stale reads and ensured atomicity in cross-service interactions",
+      "Documented system-wide consistency strategy and implemented observability around it"
+    ],
+    "featured": true
+  }
 ]
