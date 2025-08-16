@@ -121,6 +121,7 @@
         <ul class="nav-links">
           <li><a href="#" data-tab="home" class="active">Home</a></li>
           <li><a href="#" data-tab="portfolio">Portfolio</a></li>
+          <li><a href="#" data-tab="gallery">Gallery</a></li>
           <li><a href="#" data-tab="blog">Blog</a></li>
         </ul>
       </nav>
@@ -176,6 +177,32 @@
         </section>
       </div>
 
+      <!-- Gallery Tab -->
+      <div id="gallery" class="tab-content">
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">Gallery</h2>
+            <p class="section-subtitle">
+              Photos and drawings from my artistic journey
+            </p>
+          </div>
+
+          <!-- Gallery Filters -->
+          <div class="gallery-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="photography">Photography</button>
+            <button class="filter-btn" data-filter="digital-art">Digital Art</button>
+            <button class="filter-btn" data-filter="drawings">Drawings</button>
+            <button class="filter-btn" data-filter="mixed-media">Mixed Media</button>
+          </div>
+
+          <!-- Gallery Grid -->
+          <div id="gallery-grid" class="gallery-grid">
+            <div class="loading">Loading gallery...</div>
+          </div>
+        </section>
+      </div>
+
       <!-- Blog Tab -->
       <div id="blog" class="tab-content">
         <section class="container">
@@ -210,7 +237,30 @@
     <div class="tab-progress">
       <div class="progress-dot active" data-tab="home"></div>
       <div class="progress-dot" data-tab="portfolio"></div>
+      <div class="progress-dot" data-tab="gallery"></div>
       <div class="progress-dot" data-tab="blog"></div>
+    </div>
+
+    <!-- Gallery Lightbox Modal -->
+    <div class="lightbox-overlay" id="lightbox-overlay">
+      <div class="lightbox-container">
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&#8249;</button>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next">&#8250;</button>
+        <div class="lightbox-content">
+          <img id="lightbox-image" src="" alt="">
+          <div class="lightbox-info">
+            <h3 id="lightbox-title"></h3>
+            <p id="lightbox-description"></p>
+            <div class="lightbox-meta">
+              <span id="lightbox-technique"></span>
+              <span id="lightbox-year"></span>
+              <span id="lightbox-dimensions"></span>
+            </div>
+            <div id="lightbox-tags" class="lightbox-tags"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- First Visit Tutorial -->

@@ -11,7 +11,7 @@ function showTab(tabName) {
   const newTabElement = document.getElementById(tabName);
 
   // Determine animation direction
-  const tabOrder = ["home", "portfolio", "blog", "post-detail"];
+  const tabOrder = ["home", "portfolio", "gallery", "blog", "post-detail"];
   const currentIndex = tabOrder.indexOf(currentTab);
   const newIndex = tabOrder.indexOf(tabName);
 
@@ -690,6 +690,215 @@ function loadMoreProjects() {
   }, 200);
 }
 
+// Gallery functionality
+let allArtworks = [];
+let filteredArtworks = [];
+let currentFilter = 'all';
+let currentLightboxIndex = 0;
+
+// Load gallery data from GitHub
+async function loadGallery() {
+  const galleryContainer = document.getElementById('gallery-grid');
+  
+  try {
+    if (galleryContainer) {
+      galleryContainer.innerHTML = '<div class="loading">Loading gallery...</div>';
+    }
+    
+    const response = await fetch(
+      'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/gallery.json'
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const artworks = await response.json();
+    const publishedArtworks = artworks.filter(artwork => artwork.published);
+    
+    allArtworks = publishedArtworks;
+    filteredArtworks = allArtworks;
+    
+    renderGallery();
+    setupGalleryFilters();
+    setupLightbox();
+    
+    // Update easter egg data
+    if (window.vg) window.vg.gallery = allArtworks;
+  } catch (error) {
+    console.error('Error loading gallery:', error);
+    
+    if (galleryContainer) {
+      galleryContainer.innerHTML = `
+        <div class="loading" style="color: #ff6b6b;">
+          <h3>⚠️ Unable to load gallery</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+          <p>Check if the GitHub repository and gallery data exist</p>
+        </div>
+      `;
+    }
+  }
+}
+
+// Render gallery grid
+function renderGallery() {
+  const galleryContainer = document.getElementById('gallery-grid');
+  if (!galleryContainer || !filteredArtworks) return;
+  
+  if (filteredArtworks.length === 0) {
+    galleryContainer.innerHTML = '<div class="loading">No artworks found for this filter</div>';
+    return;
+  }
+  
+  galleryContainer.innerHTML = filteredArtworks
+    .map((artwork, index) => `
+      <div class="gallery-item" data-index="${allArtworks.indexOf(artwork)}" onclick="openLightbox(${allArtworks.indexOf(artwork)})">
+        <img 
+          src="${artwork.thumbnail || artwork.image}" 
+          alt="${artwork.title}"
+          loading="lazy"
+          onerror="this.src='${artwork.image}'"
+        >
+        <div class="gallery-overlay">
+          <h3>${artwork.title}</h3>
+          <p>${artwork.year} • ${artwork.technique}</p>
+        </div>
+      </div>
+    `)
+    .join('');
+  
+  // Add animation to gallery items
+  const galleryItems = galleryContainer.querySelectorAll('.gallery-item');
+  galleryItems.forEach((item, index) => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      item.style.transition = 'all 0.5s ease';
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
+    }, index * 100);
+  });
+}
+
+// Setup gallery filters
+function setupGalleryFilters() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      
+      // Update active button
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      // Filter artworks
+      currentFilter = filter;
+      if (filter === 'all') {
+        filteredArtworks = allArtworks;
+      } else {
+        filteredArtworks = allArtworks.filter(artwork => artwork.category === filter);
+      }
+      
+      renderGallery();
+    });
+  });
+}
+
+// Setup lightbox functionality
+function setupLightbox() {
+  const lightboxOverlay = document.getElementById('lightbox-overlay');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  
+  // Close lightbox
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxOverlay.addEventListener('click', (e) => {
+    if (e.target === lightboxOverlay) {
+      closeLightbox();
+    }
+  });
+  
+  // Navigation
+  lightboxPrev.addEventListener('click', prevLightboxImage);
+  lightboxNext.addEventListener('click', nextLightboxImage);
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (lightboxOverlay.style.display === 'flex') {
+      switch(e.key) {
+        case 'Escape':
+          closeLightbox();
+          break;
+        case 'ArrowLeft':
+          prevLightboxImage();
+          break;
+        case 'ArrowRight':
+          nextLightboxImage();
+          break;
+      }
+    }
+  });
+}
+
+// Open lightbox
+function openLightbox(index) {
+  currentLightboxIndex = index;
+  const artwork = allArtworks[index];
+  
+  const lightboxOverlay = document.getElementById('lightbox-overlay');
+  const lightboxImage = document.getElementById('lightbox-image');
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxDescription = document.getElementById('lightbox-description');
+  const lightboxTechnique = document.getElementById('lightbox-technique');
+  const lightboxYear = document.getElementById('lightbox-year');
+  const lightboxDimensions = document.getElementById('lightbox-dimensions');
+  const lightboxTags = document.getElementById('lightbox-tags');
+  
+  lightboxImage.src = artwork.image;
+  lightboxImage.alt = artwork.title;
+  lightboxTitle.textContent = artwork.title;
+  lightboxDescription.textContent = artwork.description;
+  lightboxTechnique.textContent = artwork.technique;
+  lightboxYear.textContent = artwork.year;
+  lightboxDimensions.textContent = artwork.dimensions;
+  
+  // Render tags
+  if (artwork.tags && artwork.tags.length > 0) {
+    lightboxTags.innerHTML = artwork.tags
+      .map(tag => `<span class="tag">${tag}</span>`)
+      .join('');
+  } else {
+    lightboxTags.innerHTML = '';
+  }
+  
+  lightboxOverlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  
+  // Trigger haptic feedback on mobile
+  triggerHapticFeedback();
+}
+
+// Close lightbox
+function closeLightbox() {
+  const lightboxOverlay = document.getElementById('lightbox-overlay');
+  lightboxOverlay.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Previous lightbox image
+function prevLightboxImage() {
+  currentLightboxIndex = currentLightboxIndex > 0 ? currentLightboxIndex - 1 : allArtworks.length - 1;
+  openLightbox(currentLightboxIndex);
+}
+
+// Next lightbox image
+function nextLightboxImage() {
+  currentLightboxIndex = currentLightboxIndex < allArtworks.length - 1 ? currentLightboxIndex + 1 : 0;
+  openLightbox(currentLightboxIndex);
+}
+
 // Load profile data from GitHub
 async function loadProfile() {
   try {
@@ -1354,6 +1563,7 @@ document.addEventListener("DOMContentLoaded", function () {
   loadProfile();
   loadProjects();
   loadBlogPosts();
+  loadGallery();
 });
 
 // Setup progress dots click functionality

@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "title": "Sunset Reflection",
+    "description": "Uma captura do pôr do sol refletindo no lago durante uma viagem ao interior.",
+    "category": "photography",
+    "technique": "Digital Photography",
+    "year": 2024,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/sunset-reflection.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/sunset-reflection-thumb.jpg",
+    "tags": ["nature", "landscape", "reflection", "sunset"],
+    "dimensions": "1920x1080",
+    "featured": true,
+    "published": true
+  },
+  {
+    "id": 2,
+    "title": "Abstract Portrait",
+    "description": "Estudo de luz e sombra através de desenho digital, explorando formas geométricas.",
+    "category": "digital-art",
+    "technique": "Digital Drawing",
+    "year": 2024,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/abstract-portrait.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/abstract-portrait-thumb.jpg",
+    "tags": ["portrait", "abstract", "digital", "geometric"],
+    "dimensions": "1080x1350",
+    "featured": true,
+    "published": true
+  },
+  {
+    "id": 3,
+    "title": "Urban Sketch",
+    "description": "Desenho a lápis da arquitetura urbana, capturando a geometria das construções modernas.",
+    "category": "drawings",
+    "technique": "Pencil on Paper",
+    "year": 2023,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/urban-sketch.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/urban-sketch-thumb.jpg",
+    "tags": ["urban", "architecture", "pencil", "sketch"],
+    "dimensions": "297x420",
+    "featured": false,
+    "published": true
+  },
+  {
+    "id": 4,
+    "title": "Color Composition",
+    "description": "Exploração de paletas de cores e composição através de técnicas mistas.",
+    "category": "mixed-media",
+    "technique": "Acrylic and Digital",
+    "year": 2024,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/color-composition.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/color-composition-thumb.jpg",
+    "tags": ["abstract", "color", "composition", "mixed-media"],
+    "dimensions": "800x1000",
+    "featured": true,
+    "published": true
+  }
+]
