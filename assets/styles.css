@@ -65,7 +65,7 @@ nav {
 }
 
 .logo::before {
-  content: "victor@portfolio:~$ ";
+  content: "victor@website:~$ ";
   color: #666;
   margin-right: 0.5rem;
 }
@@ -118,7 +118,7 @@ nav {
 }
 
 .logo:hover {
-  color: #ffed4a;
+  color: #00ff41;
 }
 
 .nav-links {
@@ -143,21 +143,10 @@ nav {
   border-radius: 4px;
 }
 
-.nav-links a::before {
-  content: "cd ";
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
 .nav-links a:hover,
 .nav-links a.active {
   color: #00ff41;
   background: rgba(0, 255, 65, 0.1);
-}
-
-.nav-links a:hover::before,
-.nav-links a.active::before {
-  opacity: 1;
 }
 
 /* Terminal Elements */
@@ -632,7 +621,7 @@ main {
 }
 
 .cta-button:hover {
-  background: #ffed4a;
+  background: #00ff41;
   transform: translateY(-2px);
 }
 
@@ -656,7 +645,7 @@ main {
   justify-content: center;
   color: #999;
   font-size: 1.2rem;
-  border: 2px solid #ffd700;
+  border: 2px solid #00ff41;
 }
 
 /* Skills Section */
@@ -942,7 +931,7 @@ main {
 .social-link:hover {
   background: #00ff41;
   color: #0c0c0c;
-  border-color: #ffd700;
+  border-color: #00ff41;
   transform: translateY(-2px);
 }
 
@@ -952,16 +941,16 @@ main {
 
 /* CV Download Button */
 .cv-download {
-  background: #ffd700 !important;
+  background: #00ff41 !important;
   color: #0a0a0a !important;
-  border-color: #ffd700 !important;
+  border-color: #00ff41 !important;
   font-weight: 600;
 }
 
 .cv-download:hover {
-  background: #ffed4e !important;
+  background: #00ff41 !important;
   color: #0a0a0a !important;
-  border-color: #ffed4e !important;
+  border-color: #00ff41 !important;
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
 }
@@ -1131,7 +1120,7 @@ main {
 .tech-item:hover {
   background: #00ff41;
   color: #0c0c0c;
-  border-color: #ffd700;
+  border-color: #00ff41;
 }
 
 /* Post Detail */
@@ -1246,7 +1235,7 @@ main {
 
 .project-status.in-progress {
   background: rgba(251, 191, 36, 0.2);
-  color: #fbbf24;
+  color: #00ff41;
 }
 
 .project-status.planned {
@@ -1271,7 +1260,7 @@ main {
 }
 
 .load-more-btn {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+  background: linear-gradient(135deg, #00ff41 0%, #00ff41 100%);
   color: #0a0a0a;
   border: none;
   padding: 1rem 2rem;
@@ -1285,7 +1274,7 @@ main {
 }
 
 .load-more-btn:hover {
-  background: linear-gradient(135deg, #ffed4a 0%, #ffd700 100%);
+  background: linear-gradient(135deg, #00ff41 0%, #00ff41 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
 }
@@ -1367,7 +1356,7 @@ body:has(#post-detail.active) .tab-progress {
 }
 
 .progress-dot.active {
-  background: #ffd700;
+  background: #00ff41;
   transform: scale(1.2);
 }
 
@@ -1544,13 +1533,13 @@ body:has(#post-detail.active) .tab-progress {
 .filter-btn:hover {
   background: rgba(255, 215, 0, 0.1);
   border-color: rgba(255, 215, 0, 0.3);
-  color: #ffd700;
+  color: #00ff41;
 }
 
 .filter-btn.active {
-  background: #ffd700;
+  background: #00ff41;
   color: #0a0a0a;
-  border-color: #ffd700;
+  border-color: #00ff41;
 }
 
 .gallery-grid {
@@ -1613,7 +1602,7 @@ body:has(#post-detail.active) .tab-progress {
 }
 
 .gallery-overlay h3 {
-  color: #ffd700;
+  color: #00ff41;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
@@ -1691,7 +1680,7 @@ body:has(#post-detail.active) .tab-progress {
 }
 
 .lightbox-info h3 {
-  color: #ffd700;
+  color: #00ff41;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -1722,7 +1711,7 @@ body:has(#post-detail.active) .tab-progress {
 
 .lightbox-tags .tag {
   background: rgba(255, 215, 0, 0.1);
-  color: #ffd700;
+  color: #00ff41;
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -1748,7 +1737,7 @@ body:has(#post-detail.active) .tab-progress {
 }
 
 .lightbox-close:hover {
-  background: #ffd700;
+  background: #00ff41;
   color: #0a0a0a;
 }
 
@@ -1771,7 +1760,7 @@ body:has(#post-detail.active) .tab-progress {
 }
 
 .lightbox-nav:hover {
-  background: #ffd700;
+  background: #00ff41;
   color: #0a0a0a;
 }
 
@@ -1915,5 +1904,75 @@ body:has(#post-detail.active) .tab-progress {
   .progress-dot {
     width: 6px;
     height: 6px;
+  }
+}
+
+/* Terminal Console Mobile Optimizations */
+@media (max-width: 768px) {
+  .terminal-console {
+    height: 60vh;
+    max-height: none;
+  }
+  
+  .console-header {
+    padding: 0.5rem 1rem;
+  }
+  
+  .console-title {
+    font-size: 0.8rem;
+  }
+  
+  .console-close {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
+  
+  .console-output {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .console-input-line {
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+  
+  .console-prompt {
+    font-size: 0.8rem;
+  }
+  
+  .console-input {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-console {
+    height: 70vh;
+  }
+  
+  .console-title {
+    font-size: 0.7rem;
+  }
+  
+  .console-output {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+  }
+  
+  .console-input-line {
+    padding: 0.5rem;
+  }
+  
+  .console-prompt {
+    font-size: 0.7rem;
+    min-width: auto;
+  }
+  
+  .console-input {
+    font-size: 0.7rem;
+    padding: 0.3rem;
   }
 }
