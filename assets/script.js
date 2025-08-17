@@ -11,7 +11,7 @@ function showTab(tabName) {
   const newTabElement = document.getElementById(tabName);
 
   // Determine animation direction
-  const tabOrder = ["home", "portfolio", "blog", "post-detail"];
+  const tabOrder = ["home", "portfolio", "gallery", "blog", "post-detail"];
   const currentIndex = tabOrder.indexOf(currentTab);
   const newIndex = tabOrder.indexOf(tabName);
 
@@ -1289,7 +1289,7 @@ function handleTouchEnd(e) {
       return;
     }
 
-    const tabOrder = ["home", "portfolio", "blog"];
+    const tabOrder = ["home", "portfolio", "gallery", "blog"];
     const currentIndex = tabOrder.indexOf(currentTab);
 
     if (deltaX > 0 && currentIndex > 0) {
@@ -1350,10 +1350,17 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup scroll detection for progress dots
   setupScrollDetection();
 
+  // Setup terminal commands
+  setupTerminalCommands();
+
   // Load content from GitHub or use fallbacks
   loadProfile();
   loadProjects();
   loadBlogPosts();
+  
+  // Setup gallery
+  setupGalleryFilters();
+  loadGalleryImages();
 });
 
 // Setup progress dots click functionality
@@ -1441,3 +1448,271 @@ function hideProgressDots() {
     header.classList.remove("hide-for-dots");
   }
 }
+
+// Gallery functionality
+let galleryImages = [];
+
+async function loadGalleryImages() {
+  try {
+    // Load gallery images from the existing directory structure
+    const imageFiles = [
+      'ball_path.jpeg', 'bo.jpeg', 'cat.jpeg', 'cld.jpeg', 'cldy.jpeg', 
+      'clty.jpeg', 'cs.jpeg', 'cvr.jpeg', 'football_kick.jpeg', 'hallway.jpeg',
+      'lb.jpeg', 'pr.jpeg', 'sm.jpeg', 'vd.jpeg', 'wv.jpeg'
+    ];
+
+    galleryImages = imageFiles.map(filename => ({
+      name: filename,
+      type: filename.includes('draw') ? 'drawings' : 'photos',
+      path: `data/images/gallery/${filename}`,
+      url: `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${filename}`
+    }));
+
+    renderGallery('all');
+  } catch (error) {
+    console.error('Error loading gallery:', error);
+    const container = document.querySelector('.gallery-grid');
+    if (container) {
+      container.innerHTML = '<div class="loading" style="color: #ff6b6b;">Failed to load gallery images</div>';
+    }
+  }
+}
+
+function renderGallery(filter = 'all') {
+  const container = document.querySelector('.gallery-grid');
+  if (!container) return;
+
+  let filteredImages = galleryImages;
+  if (filter !== 'all') {
+    filteredImages = galleryImages.filter(img => img.type === filter);
+  }
+
+  if (filteredImages.length === 0) {
+    container.innerHTML = '<div class="loading">No images found</div>';
+    return;
+  }
+
+  container.innerHTML = filteredImages.map((image, index) => `
+    <div class="gallery-item" onclick="openGalleryModal('${image.url}', '${image.name}')" 
+         style="animation-delay: ${index * 0.1}s">
+      <img src="${image.url}" alt="${image.name}" loading="lazy" 
+           onerror="this.parentElement.innerHTML='<div class=\\"loading\\">Failed to load</div>'">
+      <div class="gallery-item-info">
+        <div class="gallery-item-name">${image.name}</div>
+        <div class="gallery-item-meta">${image.type}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Update terminal command display
+  const commandSpan = document.querySelector('.gallery-controls .command');
+  if (commandSpan) {
+    const filterText = filter === 'all' ? 'find . -type f' : `ls ${filter}/`;
+    commandSpan.textContent = filterText;
+  }
+}
+
+function openGalleryModal(imageUrl, imageName) {
+  const modal = document.getElementById('gallery-modal');
+  const modalImage = document.getElementById('gallery-modal-image');
+  
+  if (modal && modalImage) {
+    modalImage.src = imageUrl;
+    modalImage.alt = imageName;
+    modal.classList.add('active');
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeGalleryModal() {
+  const modal = document.getElementById('gallery-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+// Setup gallery filter buttons
+function setupGalleryFilters() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Filter gallery
+      const filter = btn.dataset.filter;
+      renderGallery(filter);
+    });
+  });
+}
+
+// Close modal on ESC key or background click
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeGalleryModal();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('gallery-modal')) {
+    closeGalleryModal();
+  }
+});
+
+// Terminal Commands System
+let commandHistory = [];
+let historyIndex = -1;
+
+const commands = {
+  help: () => {
+    return `<div class="command-output">
+Available commands:
+• help - Show this help message
+• ls - List current section contents
+• cd <section> - Navigate to section (home, portfolio, gallery, blog)
+• whoami - Show information about Victor
+• clear - Clear console
+• cat resume - Open CV/resume
+• pwd - Show current location
+• exit - Close terminal</div>`;
+  },
+  
+  ls: () => {
+    const currentSectionContent = {
+      home: 'about.txt  skills/  languages/  education/  contact/',
+      portfolio: 'projects/  achievements/  technologies/',
+      gallery: 'photos/  drawings/',
+      blog: 'posts/  articles/  insights/'
+    };
+    return `<div class="command-output">${currentSectionContent[currentTab] || 'No contents found'}</div>`;
+  },
+  
+  pwd: () => {
+    return `<div class="command-output">/home/victor/${currentTab}</div>`;
+  },
+  
+  whoami: () => {
+    return `<div class="command-output">Victor Gutierrez
+Senior Technical Leader & Solutions Architect
+Passionate about scaling systems, leading teams, and building great products.</div>`;
+  },
+  
+  clear: () => {
+    const output = document.getElementById('console-output');
+    if (output) output.innerHTML = '';
+    return '';
+  },
+  
+  exit: () => {
+    toggleTerminalConsole();
+    return '';
+  }
+};
+
+function setupTerminalCommands() {
+  const input = document.getElementById('console-input');
+  if (!input) return;
+  
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      executeCommand(input.value.trim());
+      input.value = '';
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      navigateHistory(-1);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      navigateHistory(1);
+    } else if (e.key === 'Escape') {
+      toggleTerminalConsole();
+    }
+  });
+}
+
+function executeCommand(command) {
+  if (!command) return;
+  
+  commandHistory.push(command);
+  historyIndex = commandHistory.length;
+  
+  const output = document.getElementById('console-output');
+  if (!output) return;
+  
+  // Show command
+  const commandDiv = document.createElement('div');
+  commandDiv.innerHTML = `<span class="console-prompt">victor@portfolio:~$ </span>${command}`;
+  output.appendChild(commandDiv);
+  
+  // Parse command
+  const [cmd, ...args] = command.toLowerCase().split(' ');
+  
+  let result = '';
+  
+  if (cmd === 'cd') {
+    const section = args[0];
+    if (section && ['home', 'portfolio', 'gallery', 'blog'].includes(section)) {
+      showTab(section);
+      result = `<div class="command-output">Changed to ${section}</div>`;
+    } else {
+      result = `<div class="command-error">cd: ${section || ''}: No such directory</div>`;
+    }
+  } else if (cmd === 'cat' && args[0] === 'resume') {
+    window.open('https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/assets/Victor_Gutierrez_CV_2025_EN.pdf', '_blank');
+    result = `<div class="command-output">Opening resume...</div>`;
+  } else if (commands[cmd]) {
+    result = commands[cmd]();
+  } else {
+    result = `<div class="command-error">Command not found: ${cmd}. Type 'help' for available commands.</div>`;
+  }
+  
+  if (result) {
+    const resultDiv = document.createElement('div');
+    resultDiv.innerHTML = result;
+    output.appendChild(resultDiv);
+  }
+  
+  // Scroll to bottom
+  output.scrollTop = output.scrollHeight;
+}
+
+function navigateHistory(direction) {
+  const input = document.getElementById('console-input');
+  if (!input) return;
+  
+  if (direction < 0 && historyIndex > 0) {
+    historyIndex--;
+    input.value = commandHistory[historyIndex] || '';
+  } else if (direction > 0 && historyIndex < commandHistory.length) {
+    historyIndex++;
+    input.value = commandHistory[historyIndex] || '';
+  }
+}
+
+function toggleTerminalConsole() {
+  const console = document.getElementById('terminal-console');
+  const input = document.getElementById('console-input');
+  
+  if (!console) return;
+  
+  if (console.style.display === 'none') {
+    console.style.display = 'block';
+    if (input) input.focus();
+  } else {
+    console.style.display = 'none';
+  }
+}
+
+// Keyboard shortcut to open terminal (Ctrl + `)
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === '`') {
+    e.preventDefault();
+    toggleTerminalConsole();
+  }
+});

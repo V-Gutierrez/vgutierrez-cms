@@ -112,16 +112,19 @@
   <body>
     <header>
       <nav class="container">
-        <div class="logo" onclick="showTab('home')">Victor Gutierrez</div>
+        <div class="logo" onclick="showTab('home')">
+          Victor Gutierrez<span class="terminal-cursor"></span>
+        </div>
         <div class="hamburger-menu" onclick="toggleMobileMenu()">
           <span></span>
           <span></span>
           <span></span>
         </div>
         <ul class="nav-links">
-          <li><a href="#" data-tab="home" class="active">Home</a></li>
-          <li><a href="#" data-tab="portfolio">Portfolio</a></li>
-          <li><a href="#" data-tab="blog">Blog</a></li>
+          <li><a href="#" data-tab="home" class="active">home</a></li>
+          <li><a href="#" data-tab="portfolio">portfolio</a></li>
+          <li><a href="#" data-tab="gallery">gallery</a></li>
+          <li><a href="#" data-tab="blog">blog</a></li>
         </ul>
       </nav>
     </header>
@@ -142,12 +145,72 @@
           </div>
         </section>
 
+        <!-- Skills Section -->
+        <section class="skills-section">
+          <div class="container">
+            <div class="section-header">
+              <h2 class="section-title">
+                victor@website:~/skills$ cat capabilities.md
+              </h2>
+              <p class="section-subtitle">
+                Key areas of expertise and leadership
+              </p>
+            </div>
+            <div class="skills-grid">
+              <div class="loading">Loading skills...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section class="languages-section">
+          <div class="container">
+            <div class="section-header">
+              <h2 class="section-title">victor@website:~/languages$ ls -la</h2>
+              <p class="section-subtitle">Languages and proficiency levels</p>
+            </div>
+            <div id="languages-grid" class="languages-grid">
+              <div class="loading">Loading languages...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="education-section">
+          <div class="container">
+            <div class="section-header">
+              <h2 class="section-title">
+                victor@website:~/education$ cat timeline.txt
+              </h2>
+              <p class="section-subtitle">
+                Academic background and certifications
+              </p>
+            </div>
+            <div id="education-timeline" class="education-timeline">
+              <div class="loading">Loading education...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Technical Stack Section -->
+        <section class="tech-stack-section">
+          <div class="container">
+            <div class="section-header">
+              <h2 class="section-title">victor@website:~/tech$ tree</h2>
+              <p class="section-subtitle">Technical tools and technologies</p>
+            </div>
+            <div id="tech-categories" class="tech-categories">
+              <div class="loading">Loading tech stack...</div>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <!-- Portfolio Tab -->
       <div id="portfolio" class="tab-content">
         <section class="container">
           <div class="section-header">
-            <h2 class="section-title">Portfolio</h2>
+            <h2 class="section-title">victor@website:~/projects$ ls -la</h2>
             <p class="section-subtitle">
               Key projects and achievements across enterprise systems and team
               development
@@ -160,14 +223,43 @@
         </section>
       </div>
 
+      <!-- Gallery Tab -->
+      <div id="gallery" class="tab-content">
+        <section class="container">
+          <div class="section-header">
+            <h2 class="section-title">victor@website:~/gallery$ ls -la</h2>
+            <p class="section-subtitle">
+              Personal collection of photos and drawings
+            </p>
+          </div>
+
+          <div class="gallery-controls">
+            <div class="terminal-command">
+              <span class="prompt">victor@website:~/gallery$ </span>
+              <span class="command">find . -type f</span>
+            </div>
+            <div class="gallery-filters">
+              <button class="filter-btn active" data-filter="all">all</button>
+              <button class="filter-btn" data-filter="photos">photos/</button>
+              <button class="filter-btn" data-filter="drawings">
+                drawings/
+              </button>
+            </div>
+          </div>
+
+          <div class="gallery-grid">
+            <div class="loading">Scanning directory...</div>
+          </div>
+        </section>
+      </div>
+
       <!-- Blog Tab -->
       <div id="blog" class="tab-content">
         <section class="container">
           <div class="section-header">
-            <h2 class="section-title">Blog</h2>
+            <h2 class="section-title">victor@website:~/blog$ cat *.md</h2>
             <p class="section-subtitle">
               Insights on technical leadership, architecture, and engineering
-              excellence
             </p>
           </div>
 
@@ -190,10 +282,35 @@
       </div>
     </main>
 
+    <!-- Gallery Modal -->
+    <div class="gallery-modal" id="gallery-modal">
+      <div class="gallery-modal-content">
+        <button class="gallery-modal-close" onclick="closeGalleryModal()">
+          &times;
+        </button>
+        <img id="gallery-modal-image" src="" alt="" />
+      </div>
+    </div>
+
+    <!-- Hidden Terminal Input -->
+    <div class="terminal-console" id="terminal-console" style="display: none">
+      <div class="console-output" id="console-output"></div>
+      <div class="console-input-line">
+        <span class="console-prompt">victor@website:~$ </span>
+        <input
+          type="text"
+          id="console-input"
+          class="console-input"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
     <!-- Tab Progress Dots -->
     <div class="tab-progress">
       <div class="progress-dot active" data-tab="home"></div>
       <div class="progress-dot" data-tab="portfolio"></div>
+      <div class="progress-dot" data-tab="gallery"></div>
       <div class="progress-dot" data-tab="blog"></div>
     </div>
 

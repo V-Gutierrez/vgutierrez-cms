@@ -86,11 +86,11 @@
     }
   ],
   "siteSettings": {
-    "theme": "dark",
-    "primaryColor": "#ffd700",
-    "secondaryColor": "#1a1a1a",
-    "backgroundColor": "#0a0a0a",
-    "textColor": "#ffffff",
+    "theme": "terminal",
+    "primaryColor": "#00ff41",
+    "secondaryColor": "#004411",
+    "backgroundColor": "#0c0c0c",
+    "textColor": "#00ff41",
     "siteTitle": "Victor Gutierrez - Technical Leader & Solutions Architect",
     "siteDescription": "Personal website and blog of Victor Gutierrez, Technical Leader & Solutions Architect specializing in enterprise systems and high-performing engineering teams.",
     "keywords": [
