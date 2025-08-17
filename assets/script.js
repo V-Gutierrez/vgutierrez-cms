@@ -692,8 +692,6 @@ function loadMoreProjects() {
 
 // Gallery functionality
 let allArtworks = [];
-let filteredArtworks = [];
-let currentFilter = "all";
 let currentLightboxIndex = 0;
 
 // Load gallery data from GitHub
@@ -718,11 +716,8 @@ async function loadGallery() {
     const publishedArtworks = artworks.filter((artwork) => artwork.published);
 
     allArtworks = publishedArtworks;
-    filteredArtworks = allArtworks;
 
     renderGallery();
-    setupGalleryFilters();
-    setupLightbox();
 
     // Update easter egg data
     if (window.vg) window.vg.gallery = allArtworks;
@@ -744,18 +739,12 @@ async function loadGallery() {
 // Render gallery grid
 function renderGallery() {
   const galleryContainer = document.getElementById("gallery-grid");
-  if (!galleryContainer || !filteredArtworks) return;
+  if (!galleryContainer) return;
 
-  if (filteredArtworks.length === 0) {
-    galleryContainer.innerHTML =
-      '<div class="loading">No artworks found for this filter</div>';
-    return;
-  }
-
-  galleryContainer.innerHTML = filteredArtworks
+  galleryContainer.innerHTML = allArtworks
     .map(
       (artwork, index) => `
-      <div class="gallery-item" data-index="${allArtworks.indexOf(artwork)}" onclick="openLightbox(${allArtworks.indexOf(artwork)})">
+      <div class="gallery-item" data-index="${allArtworks.indexOf(artwork)}">
         <img 
           src="${artwork.image}" 
           alt="${artwork.title}"
@@ -782,133 +771,6 @@ function renderGallery() {
       item.style.transform = "translateY(0)";
     }, index * 100);
   });
-}
-
-// Setup gallery filters
-function setupGalleryFilters() {
-  const filterButtons = document.querySelectorAll(".filter-btn");
-
-  filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const filter = button.dataset.filter;
-
-      // Update active button
-      filterButtons.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
-
-      // Filter artworks
-      currentFilter = filter;
-      if (filter === "all") {
-        filteredArtworks = allArtworks;
-      } else {
-        filteredArtworks = allArtworks.filter(
-          (artwork) => artwork.category === filter,
-        );
-      }
-
-      renderGallery();
-    });
-  });
-}
-
-// Setup lightbox functionality
-function setupLightbox() {
-  const lightboxOverlay = document.getElementById("lightbox-overlay");
-  const lightboxClose = document.getElementById("lightbox-close");
-  const lightboxPrev = document.getElementById("lightbox-prev");
-  const lightboxNext = document.getElementById("lightbox-next");
-
-  // Close lightbox
-  lightboxClose.addEventListener("click", closeLightbox);
-  lightboxOverlay.addEventListener("click", (e) => {
-    if (e.target === lightboxOverlay) {
-      closeLightbox();
-    }
-  });
-
-  // Navigation
-  lightboxPrev.addEventListener("click", prevLightboxImage);
-  lightboxNext.addEventListener("click", nextLightboxImage);
-
-  // Keyboard navigation
-  document.addEventListener("keydown", (e) => {
-    if (lightboxOverlay.style.display === "flex") {
-      switch (e.key) {
-        case "Escape":
-          closeLightbox();
-          break;
-        case "ArrowLeft":
-          prevLightboxImage();
-          break;
-        case "ArrowRight":
-          nextLightboxImage();
-          break;
-      }
-    }
-  });
-}
-
-// Open lightbox
-function openLightbox(index) {
-  currentLightboxIndex = index;
-  const artwork = allArtworks[index];
-
-  const lightboxOverlay = document.getElementById("lightbox-overlay");
-  const lightboxImage = document.getElementById("lightbox-image");
-  const lightboxTitle = document.getElementById("lightbox-title");
-  const lightboxDescription = document.getElementById("lightbox-description");
-  const lightboxTechnique = document.getElementById("lightbox-technique");
-  const lightboxYear = document.getElementById("lightbox-year");
-  const lightboxDimensions = document.getElementById("lightbox-dimensions");
-  const lightboxTags = document.getElementById("lightbox-tags");
-
-  lightboxImage.src = artwork.image;
-  lightboxImage.alt = artwork.title;
-  lightboxTitle.textContent = artwork.title;
-  lightboxDescription.textContent = artwork.description;
-  lightboxTechnique.textContent = artwork.technique;
-  lightboxYear.textContent = artwork.year;
-  lightboxDimensions.textContent = artwork.dimensions;
-
-  // Render tags
-  if (artwork.tags && artwork.tags.length > 0) {
-    lightboxTags.innerHTML = artwork.tags
-      .map((tag) => `<span class="tag">${tag}</span>`)
-      .join("");
-  } else {
-    lightboxTags.innerHTML = "";
-  }
-
-  lightboxOverlay.style.display = "flex";
-  document.body.style.overflow = "hidden";
-
-  // Trigger haptic feedback on mobile
-  triggerHapticFeedback();
-}
-
-// Close lightbox
-function closeLightbox() {
-  const lightboxOverlay = document.getElementById("lightbox-overlay");
-  lightboxOverlay.style.display = "none";
-  document.body.style.overflow = "";
-}
-
-// Previous lightbox image
-function prevLightboxImage() {
-  currentLightboxIndex =
-    currentLightboxIndex > 0
-      ? currentLightboxIndex - 1
-      : allArtworks.length - 1;
-  openLightbox(currentLightboxIndex);
-}
-
-// Next lightbox image
-function nextLightboxImage() {
-  currentLightboxIndex =
-    currentLightboxIndex < allArtworks.length - 1
-      ? currentLightboxIndex + 1
-      : 0;
-  openLightbox(currentLightboxIndex);
 }
 
 // Load profile data from GitHub
