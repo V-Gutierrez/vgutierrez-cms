@@ -170,7 +170,7 @@
     "id": 10,
     "title": "Vivant",
     "slug": "vivant-performance-suite",
-    "description": "Built a complete performance testing suite. Vivant enables realistic load simulations with an interactive CLI, environment presets, and real-time monitoring via Grafana and InfluxDB. Vivant is closed-source for now",
+    "description": "Built a complete performance testing suite. Vivant enables realistic load simulations with an interactive CLI, environment presets, and real-time monitoring via Grafana and InfluxDB. Vivant is inner-sourced for now",
     "category": "Performance Engineering",
     "technologies": ["Node.js", "k6", "Grafana", "InfluxDB", "CLI"],
     "status": "in-progress",
