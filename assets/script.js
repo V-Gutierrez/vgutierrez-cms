@@ -690,6 +690,89 @@ function loadMoreProjects() {
   }, 200);
 }
 
+// Gallery functionality
+let allArtworks = [];
+let currentLightboxIndex = 0;
+
+// Load gallery data from GitHub
+async function loadGallery() {
+  const galleryContainer = document.getElementById("gallery-grid");
+
+  try {
+    if (galleryContainer) {
+      galleryContainer.innerHTML =
+        '<div class="loading">Loading gallery...</div>';
+    }
+
+    const response = await fetch(
+      "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/gallery.json",
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const artworks = await response.json();
+    const publishedArtworks = artworks.filter((artwork) => artwork.published);
+
+    allArtworks = publishedArtworks;
+
+    renderGallery();
+
+    // Update easter egg data
+    if (window.vg) window.vg.gallery = allArtworks;
+  } catch (error) {
+    console.error("Error loading gallery:", error);
+
+    if (galleryContainer) {
+      galleryContainer.innerHTML = `
+        <div class="loading" style="color: #ff6b6b;">
+          <h3>⚠️ Unable to load gallery</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+          <p>Check if the GitHub repository and gallery data exist</p>
+        </div>
+      `;
+    }
+  }
+}
+
+// Render gallery grid
+function renderGallery() {
+  const galleryContainer = document.getElementById("gallery-grid");
+  if (!galleryContainer) return;
+
+  galleryContainer.innerHTML = allArtworks
+    .map(
+      (artwork, index) => `
+      <div class="gallery-item" data-index="${allArtworks.indexOf(artwork)}">
+        <img 
+          src="${artwork.image}" 
+          alt="${artwork.title}"
+          loading="lazy"
+          onerror="this.src='${artwork.image}'"
+        >
+        <div class="gallery-overlay">
+          <h3>${artwork.title}</h3>
+          <p>${artwork.year} • ${artwork.technique}</p>
+        </div>
+      </div>
+    `,
+    )
+    .join("");
+
+  // Add animation to gallery items
+  const galleryItems = galleryContainer.querySelectorAll(".gallery-item");
+  galleryItems.forEach((item, index) => {
+    item.style.opacity = "0";
+    item.style.transform = "translateY(20px)";
+    setTimeout(() => {
+      item.style.transition = "all 0.5s ease";
+      item.style.opacity = "1";
+      item.style.transform = "translateY(0)";
+    }, index * 100);
+  });
+}
+
 // Load profile data from GitHub
 async function loadProfile() {
   try {
