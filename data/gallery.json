@@ -1,58 +1,214 @@
 [
   {
     "id": 1,
-    "title": "Sunset Reflection",
-    "description": "Uma captura do pôr do sol refletindo no lago durante uma viagem ao interior.",
-    "category": "photography",
-    "technique": "Digital Photography",
-    "year": 2024,
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/sunset-reflection.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/sunset-reflection-thumb.jpg",
-    "tags": ["nature", "landscape", "reflection", "sunset"],
+    "title": "Minimalist Hallway",
+    "description": "A minimalist sketch of a tiled hallway with clean lines and perspective depth.",
+    "category": "digital art",
+    "technique": "Digital Sketching",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/C2EDFDF6-560C-480A-AACA-5EC1C4CC07AD.jpeg",
+
+    "tags": ["sketch", "architecture", "minimalism"],
+    "dimensions": "1920x1080",
+    "featured": false,
+    "published": true
+  },
+  {
+    "id": 2,
+    "title": "Lonely Tower",
+    "description": "A surreal tower standing against a dark cloudy sky, overlooking a green field.",
+    "category": "digital art",
+    "technique": "Digital Painting",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/DF1A956F-321C-431C-A880-3B8056692C94.jpeg",
+
+    "tags": ["surreal", "tower", "landscape", "clouds"],
     "dimensions": "1920x1080",
     "featured": true,
     "published": true
   },
   {
-    "id": 2,
-    "title": "Abstract Portrait",
-    "description": "Estudo de luz e sombra através de desenho digital, explorando formas geométricas.",
-    "category": "digital-art",
-    "technique": "Digital Drawing",
-    "year": 2024,
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/abstract-portrait.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/abstract-portrait-thumb.jpg",
-    "tags": ["portrait", "abstract", "digital", "geometric"],
-    "dimensions": "1080x1350",
-    "featured": true,
-    "published": true
-  },
-  {
     "id": 3,
-    "title": "Urban Sketch",
-    "description": "Desenho a lápis da arquitetura urbana, capturando a geometria das construções modernas.",
-    "category": "drawings",
-    "technique": "Pencil on Paper",
-    "year": 2023,
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/urban-sketch.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/urban-sketch-thumb.jpg",
-    "tags": ["urban", "architecture", "pencil", "sketch"],
-    "dimensions": "297x420",
-    "featured": false,
+    "title": "Beach Sunset",
+    "description": "A vivid seashore scene with a striking orange sunset over the ocean.",
+    "category": "digital art",
+    "technique": "Digital Painting",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/72E858A9-8006-43AA-88DE-2ED3F1770785.jpeg",
+
+    "tags": ["beach", "sunset", "ocean", "landscape"],
+    "dimensions": "1920x1080",
+    "featured": true,
     "published": true
   },
   {
     "id": 4,
-    "title": "Color Composition",
-    "description": "Exploração de paletas de cores e composição através de técnicas mistas.",
-    "category": "mixed-media",
-    "technique": "Acrylic and Digital",
-    "year": 2024,
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/color-composition.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/color-composition-thumb.jpg",
-    "tags": ["abstract", "color", "composition", "mixed-media"],
-    "dimensions": "800x1000",
+    "title": "Curved Road",
+    "description": "A winding road with glowing markings, cutting through a grassy field.",
+    "category": "digital art",
+    "technique": "Digital Illustration",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/572A6FBE-C47A-460D-B039-B3B4BD9CD6C3.jpeg",
+
+    "tags": ["road", "night", "landscape", "illustration"],
+    "dimensions": "1920x1080",
+    "featured": false,
+    "published": true
+  },
+  {
+    "id": 5,
+    "title": "Cloudy Horizon",
+    "description": "A soft green hill under a bright blue sky with a single cloudy sun.",
+    "category": "digital art",
+    "technique": "Digital Painting",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/34C2525F-978D-4EA7-A0B3-3E302E8FBB9E.jpeg",
+
+    "tags": ["sky", "hill", "cloud", "minimalism"],
+    "dimensions": "1920x1080",
+    "featured": false,
+    "published": true
+  },
+  {
+    "id": 6,
+    "title": "Colorful Patterns",
+    "description": "Abstract scribbles of multiple colors forming dynamic textures.",
+    "category": "abstract art",
+    "technique": "Digital Drawing",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/065B6E4F-F4B7-49D9-81BB-F948A6B2ABA1.jpeg",
+
+    "tags": ["abstract", "scribbles", "color"],
+    "dimensions": "1920x1080",
+    "featured": false,
+    "published": true
+  },
+  {
+    "id": 7,
+    "title": "Lonely Ball",
+    "description": "Minimalist sketch of a single ball connected by a line, surrounded by blue strokes.",
+    "category": "digital art",
+    "technique": "Digital Sketch",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/BF7E1895-D54F-42B3-BF0D-2B447FC6EF89.jpeg",
+
+    "tags": ["minimalism", "ball", "abstract"],
+    "dimensions": "1920x1080",
+    "featured": false,
+    "published": true
+  },
+  {
+    "id": 8,
+    "title": "Stormy Meadow",
+    "description": "A dark blue storm brewing above a lush green field.",
+    "category": "digital art",
+    "technique": "Digital Painting",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/7C96E62E-2625-419F-9EF0-8BCC1437A9B1.jpeg",
+
+    "tags": ["storm", "clouds", "landscape", "field"],
+    "dimensions": "1920x1080",
     "featured": true,
     "published": true
-  }
+  },
+  {
+    "id": 9,
+    "title": "Dark Entity",
+    "description": "An ominous figure with glowing eyes and fangs, surrounded by red strokes.",
+    "category": "digital art",
+    "technique": "Digital Illustration",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/8B7405BB-DA6F-4D04-A8A1-27011DED7937.jpeg",
+
+    "tags": ["dark", "monster", "abstract", "red"],
+    "dimensions": "1920x1080",
+    "featured": true,
+    "published": true
+  },
+  {
+    "id": 10,
+    "title": "Falling Lights",
+    "description": "White streaks falling over a colorful gradient of blue, green, and orange.",
+    "category": "abstract art",
+    "technique": "Digital Painting",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/990789A7-6A2F-4C38-833E-4C8D12421560.jpeg",
+
+    "tags": ["abstract", "light", "gradient", "motion"],
+    "dimensions": "1920x1080",
+    "featured": false,
+    "published": true
+  },
+  [
+    {
+      "id": 11,
+      "title": "Cockpit Sketch",
+      "description": "A rough sketch of an airplane cockpit showing flight controls and panels.",
+      "category": "sketch",
+      "technique": "Digital Sketching",
+      "year": 2025,
+      "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/11.jpeg",
+
+      "tags": ["aviation", "cockpit", "airplane", "sketch"],
+      "dimensions": "1920x1080",
+      "featured": true,
+      "published": true
+    },
+    {
+      "id": 12,
+      "title": "Window View",
+      "description": "A colorful scene viewed from an airplane window, showing blue sky and green fields below.",
+      "category": "digital art",
+      "technique": "Digital Painting",
+      "year": 2025,
+      "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/12.jpeg",
+
+      "tags": ["aviation", "window", "landscape", "sky"],
+      "dimensions": "1920x1080",
+      "featured": false,
+      "published": true
+    },
+    {
+      "id": 13,
+      "title": "Abstract Flag",
+      "description": "A bold digital painting of a stylized red, white, and blue flag with a star.",
+      "category": "abstract art",
+      "technique": "Digital Painting",
+      "year": 2025,
+      "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/13.jpeg",
+
+      "tags": ["flag", "abstract", "patriotic", "star"],
+      "dimensions": "1920x1080",
+      "featured": false,
+      "published": true
+    },
+    {
+      "id": 14,
+      "title": "Football Kick",
+      "description": "A pencil sketch capturing the moment of a player about to kick a ball.",
+      "category": "sketch",
+      "technique": "Digital Sketching",
+      "year": 2025,
+      "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/2.jpeg",
+
+      "tags": ["football", "soccer", "player", "sketch"],
+      "dimensions": "1920x1080",
+      "featured": true,
+      "published": true
+    },
+    {
+      "id": 15,
+      "title": "Minimal Ball Path",
+      "description": "A minimalist drawing of a single ball connected to a flowing line and surrounded by scribbles.",
+      "category": "abstract art",
+      "technique": "Digital Sketching",
+      "year": 2025,
+      "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/3.jpeg",
+
+      "tags": ["minimalism", "abstract", "ball", "line"],
+      "dimensions": "1920x1080",
+      "featured": false,
+      "published": true
+    }
+  ]
 ]
