@@ -2,6 +2,39 @@
 let currentTab = "home";
 let isTransitioning = false;
 
+// Centralized configuration and helpers
+const CONFIG = {
+  BREAKPOINT: 1025,
+  API_BASE:
+    "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data",
+  BATCH: { posts: 5, projects: 6 },
+  DURATIONS: { tabFade: 300, tabEnter: 500 },
+};
+
+const PATHS = {
+  posts: "posts.json",
+  post: (id) => `posts/post-${id}.json`,
+  projects: "projects.json",
+};
+
+// Lightweight DOM/data utilities
+const $ = (sel, ctx = document) => ctx.querySelector(sel);
+const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+const setHTML = (el, html) => {
+  if (el) el.innerHTML = html;
+};
+const formatDate = (iso) =>
+  new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+const updateActiveByDataAttr = (selector, dataKey, value) => {
+  $$(selector).forEach((el) =>
+    el.classList.toggle("active", el.dataset[dataKey] === value),
+  );
+};
+
 function showTab(tabName) {
   if (isTransitioning || tabName === currentTab) return;
 
@@ -14,7 +47,14 @@ function showTab(tabName) {
   if (isMobile) {
     // Mobile: switch instantly without animations to avoid layout shift
     if (newTabElement) newTabElement.classList.add("active");
-    if (currentTabElement) currentTabElement.classList.remove("active", "fade-out", "slide-right", "slide-left", "fade-up");
+    if (currentTabElement)
+      currentTabElement.classList.remove(
+        "active",
+        "fade-out",
+        "slide-right",
+        "slide-left",
+        "fade-up",
+      );
     isTransitioning = false;
   } else {
     // Desktop: keep animated transitions
@@ -137,9 +177,30 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
 
 // Blog functionality
 let blogPosts = [];
-const MAX_POSTS_INITIAL = 5;
+const MAX_POSTS_INITIAL = CONFIG.BATCH.posts || 5;
 let allBlogPosts = [];
 let displayedPostsCount = 0;
+
+// Templates
+const templates = {
+  blogCard: (post) => `
+    <article class="blog-post" onclick="showPost(${post.id})">
+      <h3 class="blog-post-title">${post.title}</h3>
+      <div class="blog-post-date">${formatDate(post.date)}</div>
+      <p class="blog-post-excerpt">${post.excerpt}</p>
+      ${
+        post.tags
+          ? `
+        <div class="blog-post-tags">
+          ${post.tags.map((tag) => `<span class=\"tag\">${tag}</span>`).join("")}
+        </div>
+      `
+          : ""
+      }
+      ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
+    </article>
+  `,
+};
 
 // Sample blog posts (replace with your GitHub API endpoint)
 const samplePosts = [];
@@ -184,34 +245,7 @@ function renderBlogPosts(posts) {
   const container = document.getElementById("blog-posts");
   if (!container) return;
 
-  const postsHtml = posts
-    .map((post) => {
-      return `
-              <article class="blog-post" onclick="showPost(${post.id})">
-                  <h3 class="blog-post-title">${post.title}</h3>
-                  <div class="blog-post-date">${new Date(
-                    post.date,
-                  ).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}</div>
-                  <p class="blog-post-excerpt">${post.excerpt}</p>
-                  ${
-                    post.tags
-                      ? `
-                      <div class="blog-post-tags">
-                          ${post.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
-                      </div>
-                  `
-                      : ""
-                  }
-                  ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
-              </article>
-          `;
-    })
-    .join("");
-
+  const postsHtml = posts.map(templates.blogCard).join("");
   if (displayedPostsCount === 0) {
     container.innerHTML = postsHtml;
   } else {
@@ -264,9 +298,7 @@ async function loadMoreBlogPosts() {
   // Render new posts with animation
   const container = document.getElementById("blog-posts");
   if (container) {
-    const newPostsHtml = newPosts
-      .map((post) => generateBlogPostHTML(post))
-      .join("");
+    const newPostsHtml = newPosts.map(templates.blogCard).join("");
 
     // Create temporary container for new posts
     const tempDiv = document.createElement("div");
@@ -291,7 +323,7 @@ async function loadMoreBlogPosts() {
   displayedPostsCount = newPostsEnd;
 
   // Load full content for new posts
-  await loadFullContentForNewPosts(newPosts);
+  await loadFullContentForPosts(newPosts);
 
   // Update controls
   const blogSection = container.closest("section");
@@ -313,42 +345,17 @@ async function loadMoreBlogPosts() {
 
 // Generate HTML for a single blog post
 function generateBlogPostHTML(post) {
-  return `
-    <article class="blog-post" onclick="showPost(${post.id})">
-      <h3 class="blog-post-title">${post.title}</h3>
-      <div class="blog-post-date">${new Date(post.date).toLocaleDateString(
-        "en-US",
-        {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        },
-      )}</div>
-      <p class="blog-post-excerpt">${post.excerpt}</p>
-      ${
-        post.tags
-          ? `
-          <div class="blog-post-tags">
-              ${post.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
-          </div>
-      `
-          : ""
-      }
-      ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
-    </article>
-  `;
+  // Backwards-compatible alias to the new template
+  return templates.blogCard(post);
 }
 
 // Load full content for displayed posts only
-async function loadFullContentForDisplayedPosts() {
-  const displayedPosts = allBlogPosts.slice(0, displayedPostsCount);
-
-  for (let i = 0; i < displayedPosts.length; i++) {
-    const post = displayedPosts[i];
+async function loadFullContentForPosts(postsSubset) {
+  for (let i = 0; i < postsSubset.length; i++) {
+    const post = postsSubset[i];
     if (!post.content) {
-      // Only load if not already loaded
       try {
-        const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
+        const contentUrl = `${CONFIG.API_BASE}/${PATHS.post(post.id)}`;
         const contentResponse = await fetch(contentUrl);
         if (contentResponse.ok) {
           const fullPost = await contentResponse.json();
@@ -363,25 +370,14 @@ async function loadFullContentForDisplayedPosts() {
   }
 }
 
-// Load full content for new posts
+// Backwards-compatible wrappers (to avoid touching all callers at once)
+async function loadFullContentForDisplayedPosts() {
+  const displayed = allBlogPosts.slice(0, displayedPostsCount);
+  return loadFullContentForPosts(displayed);
+}
+
 async function loadFullContentForNewPosts(newPosts) {
-  for (let i = 0; i < newPosts.length; i++) {
-    const post = newPosts[i];
-    if (!post.content) {
-      try {
-        const contentUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts/post-${post.id}.json`;
-        const contentResponse = await fetch(contentUrl);
-        if (contentResponse.ok) {
-          const fullPost = await contentResponse.json();
-          post.content = fullPost.content;
-          post.readingTime = fullPost.readingTime;
-          post.author = fullPost.author;
-        }
-      } catch (error) {
-        console.warn(`Failed to load full content for post ${post.id}:`, error);
-      }
-    }
-  }
+  return loadFullContentForPosts(newPosts);
 }
 
 // Show individual post
@@ -422,9 +418,7 @@ async function loadBlogPosts() {
         '<div class="loading">🔄 Loading blog posts from GitHub...</div>';
     }
 
-    const postsUrl =
-      "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/posts.json";
-
+    const postsUrl = `${CONFIG.API_BASE}/${PATHS.posts}`;
     const response = await fetch(postsUrl);
 
     if (!response.ok) {
@@ -480,7 +474,7 @@ async function loadBlogPosts() {
 }
 
 // Project display configuration
-const MAX_PROJECTS_INITIAL = 6;
+const MAX_PROJECTS_INITIAL = CONFIG.BATCH.projects || 6;
 let allProjects = [];
 let displayedProjectsCount = 0;
 
@@ -493,9 +487,7 @@ async function loadProjects() {
       container.innerHTML = '<div class="loading">Loading projects...</div>';
     }
 
-    const response = await fetch(
-      "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/projects.json",
-    );
+    const response = await fetch(`${CONFIG.API_BASE}/${PATHS.projects}`);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -597,44 +589,24 @@ function addProjectControls(container) {
 }
 
 // Generate HTML for a single project
-function generateProjectHTML(project) {
-  return `
-    <div class="project-card">
-      <div class="project-image ${project.image ? "" : "no-image"}">
-        ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
-      </div>
-      <div class="project-content">
-        <h3 class="project-title">${project.title || "Untitled Project"}</h3>
-        <p class="project-description">${project.description || "No description available"}</p>
-        ${
-          project.technologies && project.technologies.length > 0
-            ? `
-        <div class="project-tech">
-          ${project.technologies
-            .map((tech) => `<span class="tech-tag">${tech}</span>`)
-            .join("")}
-        </div>
-        `
-            : ""
-        }
-        ${
-          project.metrics && Object.keys(project.metrics).length > 0
-            ? `
-            <div class="project-metrics">
-              ${Object.entries(project.metrics)
-                .map(
-                  ([key, value]) =>
-                    `<div class="metric"><strong>${formatMetricKey(key)}:</strong> ${value}</div>`,
-                )
-                .join("")}
-            </div>
-        `
-            : ""
-        }
-        ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ""}
-      </div>
+// Project card template (unified: includes tech, metrics, status)
+if (!window.templates) window.templates = {};
+window.templates.projectCard = (project) => `
+  <div class="project-card">
+    <div class="project-image ${project.image ? "" : "no-image"}">
+      ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
     </div>
-  `;
+    <div class="project-content">
+      <h3 class="project-title">${project.title || "Untitled Project"}</h3>
+      <p class="project-description">${project.description || "No description available"}</p>
+            ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ""}
+    </div>
+  </div>
+`;
+
+function generateProjectHTML(project) {
+  // Backwards-compatible alias to the new template
+  return window.templates.projectCard(project);
 }
 
 // Load more projects function
@@ -693,88 +665,7 @@ function loadMoreProjects() {
   }, 200);
 }
 
-// Gallery functionality
-let allArtworks = [];
-let currentLightboxIndex = 0;
-
-// Load gallery data from GitHub
-async function loadGallery() {
-  const galleryContainer = document.getElementById("gallery-grid");
-
-  try {
-    if (galleryContainer) {
-      galleryContainer.innerHTML =
-        '<div class="loading">Loading gallery...</div>';
-    }
-
-    const response = await fetch(
-      "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/gallery.json",
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    const artworks = await response.json();
-    const publishedArtworks = artworks.filter((artwork) => artwork.published);
-
-    allArtworks = publishedArtworks;
-
-    renderGallery();
-
-    // Update easter egg data
-    if (window.vg) window.vg.gallery = allArtworks;
-  } catch (error) {
-    console.error("Error loading gallery:", error);
-
-    if (galleryContainer) {
-      galleryContainer.innerHTML = `
-        <div class="loading" style="color: #ff6b6b;">
-          <h3>⚠️ Unable to load gallery</h3>
-          <p><strong>Error:</strong> ${error.message}</p>
-          <p>Check if the GitHub repository and gallery data exist</p>
-        </div>
-      `;
-    }
-  }
-}
-
-// Render gallery grid
-function renderGallery() {
-  const galleryContainer = document.getElementById("gallery-grid");
-  if (!galleryContainer) return;
-
-  galleryContainer.innerHTML = allArtworks
-    .map(
-      (artwork, index) => `
-      <div class="gallery-item" data-index="${allArtworks.indexOf(artwork)}">
-        <img 
-          src="${artwork.image}" 
-          alt="${artwork.title}"
-          loading="lazy"
-          onerror="this.src='${artwork.image}'"
-        >
-        <div class="gallery-overlay">
-          <h3>${artwork.title}</h3>
-          <p>${artwork.year} • ${artwork.technique}</p>
-        </div>
-      </div>
-    `,
-    )
-    .join("");
-
-  // Add animation to gallery items
-  const galleryItems = galleryContainer.querySelectorAll(".gallery-item");
-  galleryItems.forEach((item, index) => {
-    item.style.opacity = "0";
-    item.style.transform = "translateY(20px)";
-    setTimeout(() => {
-      item.style.transition = "all 0.5s ease";
-      item.style.opacity = "1";
-      item.style.transform = "translateY(0)";
-    }, index * 100);
-  });
-}
+// Gallery functionality (unified version below)
 
 // Load profile data from GitHub
 async function loadProfile() {
@@ -801,8 +692,8 @@ async function loadProfile() {
 // Typewriter effect for hero text
 function typewriterEffect(element, text, callback) {
   let i = 0;
-  element.textContent = '';
-  
+  element.textContent = "";
+
   function typeChar() {
     if (i < text.length) {
       element.textContent += text.charAt(i);
@@ -812,7 +703,7 @@ function typewriterEffect(element, text, callback) {
       callback();
     }
   }
-  
+
   typeChar();
 }
 
@@ -909,10 +800,10 @@ function updateProfileData(profile) {
   heroText.innerHTML = heroContent;
 
   // Apply typewriter effect to the hero title on first render
-  const heroTitle = document.getElementById('hero-title');
+  const heroTitle = document.getElementById("hero-title");
   if (heroTitle && !heroTitle.dataset.typewriterDone) {
     const titleText = heroTitle.textContent;
-    heroTitle.dataset.typewriterDone = 'true';
+    heroTitle.dataset.typewriterDone = "true";
     typewriterEffect(heroTitle, titleText);
   }
 
@@ -1018,7 +909,7 @@ function showSkillsError() {
   }
 }
 
-// Update project rendering to handle GitHub data
+// Update project rendering to handle GitHub data (uses unified template)
 function renderProjects(projects) {
   const container = document.querySelector(".portfolio-grid");
   if (!container) return;
@@ -1029,45 +920,7 @@ function renderProjects(projects) {
   }
 
   container.innerHTML = projects
-    .map(
-      (project) => `
-          <div class="project-card">
-              <div class="project-image ${project.image ? "" : "no-image"}">
-                  ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
-              </div>
-              <div class="project-content">
-                  <h3 class="project-title">${project.title || "Untitled Project"}</h3>
-                  <p class="project-description">${project.description || "No description available"}</p>
-                  ${
-                    project.technologies && project.technologies.length > 0
-                      ? `
-                  <div class="project-tech">
-                      ${project.technologies
-                        .map((tech) => `<span class="tech-tag">${tech}</span>`)
-                        .join("")}
-                  </div>
-                  `
-                      : ""
-                  }
-                  ${
-                    project.metrics && Object.keys(project.metrics).length > 0
-                      ? `
-                      <div class="project-metrics">
-                          ${Object.entries(project.metrics)
-                            .map(
-                              ([key, value]) =>
-                                `<div class="metric"><strong>${formatMetricKey(key)}:</strong> ${value}</div>`,
-                            )
-                            .join("")}
-                      </div>
-                  `
-                      : ""
-                  }
-                  ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ""}
-              </div>
-          </div>
-      `,
-    )
+    .map((project) => window.templates.projectCard(project))
     .join("");
 }
 
@@ -1253,6 +1106,7 @@ function showEasterEgg() {
     projects: [],
     profile: null,
     blogPosts: [],
+    gallery: [],
     greeting: () => console.log("👋 Hello from Victor Gutierrez!"),
     contact: () =>
       console.log(
@@ -1596,6 +1450,7 @@ async function loadGalleryImages() {
     }));
 
     renderGallery();
+    if (window.vg) window.vg.gallery = galleryImages;
   } catch (error) {
     console.error("Error loading gallery:", error);
     const container = document.querySelector(".gallery-grid");
