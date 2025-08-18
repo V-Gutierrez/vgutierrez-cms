@@ -431,6 +431,25 @@ main {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Disable tab animations on mobile to prevent layout shift after swipe */
+@media (max-width: 1024px) {
+  .tab-content {
+    transition: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+  .tab-content.active {
+    transform: none !important;
+  }
+  .tab-content.slide-right,
+  .tab-content.slide-left,
+  .tab-content.fade-up,
+  .tab-content.fade-out {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 @keyframes slideInFromRight {
   from {
     opacity: 0;

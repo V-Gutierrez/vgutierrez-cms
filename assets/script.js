@@ -6,56 +6,59 @@ function showTab(tabName) {
   if (isTransitioning || tabName === currentTab) return;
 
   isTransitioning = true;
-  const tabs = document.querySelectorAll(".tab-content");
   const currentTabElement = document.getElementById(currentTab);
   const newTabElement = document.getElementById(tabName);
 
-  // Determine animation direction
-  const tabOrder = ["home", "portfolio", "gallery", "blog", "post-detail"];
-  const currentIndex = tabOrder.indexOf(currentTab);
-  const newIndex = tabOrder.indexOf(tabName);
+  const isMobile = window.innerWidth < 1025;
 
-  let animationClass = "fade-up";
-  if (newIndex > currentIndex) {
-    animationClass = "slide-right";
-  } else if (newIndex < currentIndex) {
-    animationClass = "slide-left";
-  }
+  if (isMobile) {
+    // Mobile: switch instantly without animations to avoid layout shift
+    if (newTabElement) newTabElement.classList.add("active");
+    if (currentTabElement) currentTabElement.classList.remove("active", "fade-out", "slide-right", "slide-left", "fade-up");
+    isTransitioning = false;
+  } else {
+    // Desktop: keep animated transitions
+    const tabOrder = ["home", "portfolio", "gallery", "blog", "post-detail"];
+    const currentIndex = tabOrder.indexOf(currentTab);
+    const newIndex = tabOrder.indexOf(tabName);
 
-  // Fade out current tab
-  if (currentTabElement) {
-    currentTabElement.classList.add("fade-out");
+    let animationClass = "fade-up";
+    if (newIndex > currentIndex) {
+      animationClass = "slide-right";
+    } else if (newIndex < currentIndex) {
+      animationClass = "slide-left";
+    }
 
-    setTimeout(() => {
-      // Hide current tab
-      currentTabElement.classList.remove("active", "fade-out");
+    if (currentTabElement) {
+      currentTabElement.classList.add("fade-out");
 
-      // Show new tab with animation
+      setTimeout(() => {
+        currentTabElement.classList.remove("active", "fade-out");
+        newTabElement.classList.add("active", animationClass);
+
+        setTimeout(() => {
+          newTabElement.classList.remove(animationClass);
+          isTransitioning = false;
+        }, 500);
+      }, 300);
+    } else {
       newTabElement.classList.add("active", animationClass);
-
-      // Clean up animation classes
       setTimeout(() => {
         newTabElement.classList.remove(animationClass);
         isTransitioning = false;
       }, 500);
-    }, 300);
-  } else {
-    // No current tab, just show the new one
-    newTabElement.classList.add("active", animationClass);
-    setTimeout(() => {
-      newTabElement.classList.remove(animationClass);
-      isTransitioning = false;
-    }, 500);
+    }
   }
 
   // Update current tab reference
   currentTab = tabName;
 
-  // Scroll to top of page smoothly
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  // Scroll to top of page
+  if (isMobile) {
+    window.scrollTo(0, 0);
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   // Update nav links
   const navLinks = document.querySelectorAll(".nav-links a");
@@ -1367,15 +1370,10 @@ function handleTouchMove(e) {
   // Check if horizontal swipe (more horizontal than vertical)
   if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 30) {
     isDragging = true;
-    e.preventDefault(); // Prevent scrolling
+    e.preventDefault(); // Prevent vertical scroll while swiping
 
-    // Add visual feedback
-    const currentTabElement = document.getElementById(currentTab);
-    if (currentTabElement) {
-      const opacity = Math.max(0.7, 1 - Math.abs(deltaX) / 300);
-      currentTabElement.style.opacity = opacity;
-      currentTabElement.style.transform = `translateX(${deltaX * 0.2}px)`;
-    }
+    // Remove visual feedback on mobile to avoid layout shifts
+    // (Keep content stable during gesture)
   }
 }
 
