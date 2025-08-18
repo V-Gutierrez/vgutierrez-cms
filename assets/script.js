@@ -795,6 +795,24 @@ async function loadProfile() {
   }
 }
 
+// Typewriter effect for hero text
+function typewriterEffect(element, text, callback) {
+  let i = 0;
+  element.textContent = '';
+  
+  function typeChar() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeChar, 50 + Math.random() * 50); // Variable speed for natural feel
+    } else if (callback) {
+      callback();
+    }
+  }
+  
+  typeChar();
+}
+
 // Update profile data on the page
 function updateProfileData(profile) {
   if (!profile || !profile.personalInfo) {
@@ -813,12 +831,12 @@ function updateProfileData(profile) {
   if (personalInfo.subtitle) {
     const parts = personalInfo.subtitle.split("&");
     if (parts.length > 1) {
-      heroContent += `<h1>${parts[0].trim()} & <span>${parts[1].trim()}</span></h1>`;
+      heroContent += `<h1 id="hero-title">${parts[0].trim()} & <span>${parts[1].trim()}</span></h1>`;
     } else {
-      heroContent += `<h1>${personalInfo.subtitle}</h1>`;
+      heroContent += `<h1 id="hero-title">${personalInfo.subtitle}</h1>`;
     }
   } else {
-    heroContent += "<h1>Profile information not available</h1>";
+    heroContent += "<h1 id='hero-title'>Profile information not available</h1>";
   }
 
   if (personalInfo.role) {
@@ -887,11 +905,19 @@ function updateProfileData(profile) {
 
   heroText.innerHTML = heroContent;
 
+  // Apply typewriter effect to the hero title on first render
+  const heroTitle = document.getElementById('hero-title');
+  if (heroTitle && !heroTitle.dataset.typewriterDone) {
+    const titleText = heroTitle.textContent;
+    heroTitle.dataset.typewriterDone = 'true';
+    typewriterEffect(heroTitle, titleText);
+  }
+
   // Update profile image
   const profilePlaceholder = document.querySelector(".profile-placeholder");
   if (profilePlaceholder) {
     if (personalInfo.profileImage) {
-      profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || "Profile"}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
+      profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || "Profile"}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
     } else {
       profilePlaceholder.innerHTML = "Profile Image";
     }

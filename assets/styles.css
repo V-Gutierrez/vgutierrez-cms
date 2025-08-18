@@ -575,6 +575,7 @@ main {
   font-weight: 800;
   margin-bottom: 1rem;
   line-height: 1.1;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
   opacity: 0;
   animation: fadeInStaggered 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.8s
     forwards;
@@ -715,9 +716,9 @@ main {
 
 .profile-placeholder {
   width: 400px;
-  height: 500px;
+  height: 400px;
   background: linear-gradient(135deg, #333 0%, #555 100%);
-  border-radius: 20px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1521,7 +1522,7 @@ body:has(#post-detail.active) .tab-progress {
 
   .profile-placeholder {
     width: 300px;
-    height: 400px;
+    height: 300px;
   }
 
   .social-links {
