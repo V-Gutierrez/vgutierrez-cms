@@ -7,7 +7,6 @@
     "technique": "Digital Sketching",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/hallway.jpeg",
-
     "tags": ["sketch", "architecture", "minimalism"],
     "dimensions": "1920x1080",
     "featured": false,
@@ -21,7 +20,6 @@
     "technique": "Digital Painting",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cldy.jpeg",
-
     "tags": ["surreal", "tower", "landscape", "clouds"],
     "dimensions": "1920x1080",
     "featured": true,
@@ -35,7 +33,6 @@
     "technique": "Digital Painting",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cld.jpeg",
-
     "tags": ["beach", "sunset", "ocean", "landscape"],
     "dimensions": "1920x1080",
     "featured": true,
@@ -49,7 +46,6 @@
     "technique": "Digital Illustration",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cvr.jpeg",
-
     "tags": ["road", "night", "landscape", "illustration"],
     "dimensions": "1920x1080",
     "featured": false,
@@ -63,7 +59,6 @@
     "technique": "Digital Painting",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/clty.jpeg",
-
     "tags": ["sky", "hill", "cloud", "minimalism"],
     "dimensions": "1920x1080",
     "featured": false,
@@ -77,7 +72,6 @@
     "technique": "Digital Drawing",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cat.jpeg",
-
     "tags": ["abstract", "scribbles", "color"],
     "dimensions": "1920x1080",
     "featured": false,
@@ -91,7 +85,6 @@
     "technique": "Digital Sketch",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lb.jpeg",
-
     "tags": ["minimalism", "ball", "abstract"],
     "dimensions": "1920x1080",
     "featured": false,
@@ -105,7 +98,6 @@
     "technique": "Digital Painting",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/sm.jpeg",
-
     "tags": ["storm", "clouds", "landscape", "field"],
     "dimensions": "1920x1080",
     "featured": true,
@@ -119,7 +111,6 @@
     "technique": "Digital Illustration",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/vd.jpeg",
-
     "tags": ["dark", "monster", "abstract", "red"],
     "dimensions": "1920x1080",
     "featured": true,
@@ -133,7 +124,6 @@
     "technique": "Digital Painting",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/bo.jpeg",
-
     "tags": ["abstract", "light", "gradient", "motion"],
     "dimensions": "1920x1080",
     "featured": false,
@@ -148,7 +138,6 @@
       "technique": "Digital Sketching",
       "year": 2025,
       "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cs.jpeg",
-
       "tags": ["aviation", "cockpit", "airplane", "sketch"],
       "dimensions": "1920x1080",
       "featured": true,
@@ -162,7 +151,6 @@
       "technique": "Digital Painting",
       "year": 2025,
       "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/wv.jpeg",
-
       "tags": ["aviation", "window", "landscape", "sky"],
       "dimensions": "1920x1080",
       "featured": false,
@@ -176,7 +164,6 @@
       "technique": "Digital Painting",
       "year": 2025,
       "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/pr.jpeg",
-
       "tags": ["flag", "abstract", "patriotic", "star"],
       "dimensions": "1920x1080",
       "featured": false,
@@ -190,7 +177,6 @@
       "technique": "Digital Sketching",
       "year": 2025,
       "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/football_kick.jpeg",
-
       "tags": ["football", "soccer", "player", "sketch"],
       "dimensions": "1920x1080",
       "featured": true,
@@ -204,11 +190,24 @@
       "technique": "Digital Sketching",
       "year": 2025,
       "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/ball_path.jpeg",
-
       "tags": ["minimalism", "abstract", "ball", "line"],
       "dimensions": "1920x1080",
       "featured": false,
       "published": true
     }
-  ]
+  ],
+  {
+    "id": null,
+    "title": "Skynight",
+    "description": "Congresso - Argentina",
+    "category": "photography",
+    "technique": "Digital Photography",
+    "year": 2023,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/skynight.jpeg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpg",
+    "tags": [""],
+    "dimensions": "",
+    "featured": true,
+    "published": true
+  }
 ]
