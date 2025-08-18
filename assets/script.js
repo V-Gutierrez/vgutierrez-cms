@@ -829,8 +829,17 @@ function updateProfileData(profile) {
     heroContent += `<p class="description">${personalInfo.description}</p>`;
   }
 
-  heroContent +=
-    '<button class="cta-button" onclick="showTab(\'portfolio\')">View My Work</button>';
+  // Add personal details
+  if (personalInfo.location || personalInfo.interests) {
+    heroContent += '<div class="personal-details">';
+    if (personalInfo.location) {
+      heroContent += `<p class="location">📍 ${personalInfo.location}</p>`;
+    }
+    if (personalInfo.interests) {
+      heroContent += `<p class="interests">✨ ${personalInfo.interests}</p>`;
+    }
+    heroContent += "</div>";
+  }
 
   // Add social links and CV download
   heroContent += '<div class="social-links">';
@@ -873,6 +882,8 @@ function updateProfileData(profile) {
   `;
 
   heroContent += "</div>";
+
+  // Add languages section to hero content
 
   heroText.innerHTML = heroContent;
 
@@ -1433,12 +1444,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup scroll detection for progress dots
   setupScrollDetection();
 
-
   // Load content from GitHub or use fallbacks
   loadProfile();
   loadProjects();
   loadBlogPosts();
-  
+
   // Setup gallery
   setupGalleryFilters();
   loadGalleryImages();
@@ -1537,30 +1547,43 @@ async function loadGalleryImages() {
   try {
     // Load gallery images from the existing directory structure
     const imageFiles = [
-      'ball_path.jpeg', 'bo.jpeg', 'cat.jpeg', 'cld.jpeg', 'cldy.jpeg', 
-      'clty.jpeg', 'cs.jpeg', 'cvr.jpeg', 'football_kick.jpeg', 'hallway.jpeg',
-      'lb.jpeg', 'pr.jpeg', 'sm.jpeg', 'vd.jpeg', 'wv.jpeg'
+      "ball_path.jpeg",
+      "bo.jpeg",
+      "cat.jpeg",
+      "cld.jpeg",
+      "cldy.jpeg",
+      "clty.jpeg",
+      "cs.jpeg",
+      "cvr.jpeg",
+      "football_kick.jpeg",
+      "hallway.jpeg",
+      "lb.jpeg",
+      "pr.jpeg",
+      "sm.jpeg",
+      "vd.jpeg",
+      "wv.jpeg",
     ];
 
-    galleryImages = imageFiles.map(filename => ({
+    galleryImages = imageFiles.map((filename) => ({
       name: filename,
-      type: filename.includes('draw') ? 'drawings' : 'photos',
+      type: filename.includes("draw") ? "drawings" : "photos",
       path: `data/images/gallery/${filename}`,
-      url: `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${filename}`
+      url: `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${filename}`,
     }));
 
     renderGallery();
   } catch (error) {
-    console.error('Error loading gallery:', error);
-    const container = document.querySelector('.gallery-grid');
+    console.error("Error loading gallery:", error);
+    const container = document.querySelector(".gallery-grid");
     if (container) {
-      container.innerHTML = '<div class="loading" style="color: #ff6b6b;">Failed to load gallery images</div>';
+      container.innerHTML =
+        '<div class="loading" style="color: #ff6b6b;">Failed to load gallery images</div>';
     }
   }
 }
 
 function renderGallery() {
-  const container = document.querySelector('.gallery-grid');
+  const container = document.querySelector(".gallery-grid");
   if (!container) return;
 
   if (galleryImages.length === 0) {
@@ -1568,53 +1591,56 @@ function renderGallery() {
     return;
   }
 
-  container.innerHTML = galleryImages.map((image, index) => `
+  container.innerHTML = galleryImages
+    .map(
+      (image, index) => `
     <div class="gallery-item animate" onclick="openGalleryModal('${image.url}', '${image.name}')" 
          style="animation-delay: ${index * 0.1}s">
       <img src="${image.url}" alt="${image.name}" loading="lazy" 
            onerror="this.parentElement.style.display='none';">
       <div class="gallery-item-info">
         <div class="gallery-item-name">${image.name}</div>
-        <div class="gallery-item-meta">${image.type}</div>
       </div>
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 }
 
 function openGalleryModal(imageUrl, imageName) {
-  const modal = document.getElementById('gallery-modal');
-  const modalImage = document.getElementById('gallery-modal-image');
-  
+  const modal = document.getElementById("gallery-modal");
+  const modalImage = document.getElementById("gallery-modal-image");
+
   if (modal && modalImage) {
     modalImage.src = imageUrl;
     modalImage.alt = imageName;
-    modal.classList.add('active');
-    
+    modal.classList.add("active");
+
     // Prevent body scroll
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   }
 }
 
 function closeGalleryModal() {
-  const modal = document.getElementById('gallery-modal');
+  const modal = document.getElementById("gallery-modal");
   if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
   }
 }
 
 // Setup gallery filter buttons
 function setupGalleryFilters() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  const filterBtns = document.querySelectorAll(".filter-btn");
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       e.preventDefault();
-      
+
       // Update active state
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
+      filterBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
       // Filter gallery
       const filter = btn.dataset.filter;
       renderGallery(filter);
@@ -1623,15 +1649,14 @@ function setupGalleryFilters() {
 }
 
 // Close modal on ESC key or background click
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
     closeGalleryModal();
   }
 });
 
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('gallery-modal')) {
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("gallery-modal")) {
     closeGalleryModal();
   }
 });
-

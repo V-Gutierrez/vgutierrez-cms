@@ -2,11 +2,13 @@
   "personalInfo": {
     "name": "Victor Gutierrez",
     "title": "Senior Technical Leader | Solutions Architect | Multilingual Team Developer",
-    "subtitle": "Technical Leader & Solutions Architect",
+    "subtitle": "Technical Leader who builds, leads, and creates",
+    "location": "Based in Manaus, Brazil",
+    "interests": "Digital art, photography, and exploring cultures through languages",
     "linkedin": "https://www.linkedin.com/in/victtorgutierrez/",
     "github": "https://github.com/V-Gutierrez",
     "whatsApp": "https://wa.me/+5592981802707",
-    "description": "7+ years scaling systems, leading teams, and driving full-stack architecture with human-centered leadership.",
+    "description": "7+ years scaling systems and leading teams with human-centered leadership. Passionate about technology, creativity, and connecting across cultures.",
     "profileImage": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/victor-photo.jpeg"
   },
   "languages": [
