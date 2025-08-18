@@ -63,9 +63,9 @@ nav {
   cursor: pointer;
   transition: color 0.3s ease;
 }
-
+ 
 .logo::before {
-  content: "victor@website:~$ ";
+  content: "victor-gutierrez@website:~$ ";
   color: #666;
   margin-right: 0.5rem;
 }
