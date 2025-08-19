@@ -184,7 +184,7 @@ let displayedPostsCount = 0;
 // Templates
 const templates = {
   blogCard: (post) => `
-    <article class="blog-post" onclick="showPost(${post.id})">
+    <article class="blog-post" data-id="${post.id}" onclick="showPost(${post.id})">
       <h3 class="blog-post-title">${post.title}</h3>
       <div class="blog-post-date">${formatDate(post.date)}</div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
@@ -201,6 +201,20 @@ const templates = {
     </article>
   `,
 };
+
+// Enhance: inject reading time into already-rendered cards when it becomes available
+function injectReadingTimes(posts) {
+  posts.forEach((post) => {
+    if (!post || !post.id || !post.readingTime) return;
+    const card = document.querySelector(`.blog-post[data-id="${post.id}"]`);
+    if (card && !card.querySelector(".reading-time")) {
+      const rt = document.createElement("div");
+      rt.className = "reading-time";
+      rt.textContent = `${post.readingTime} min read`;
+      card.appendChild(rt);
+    }
+  });
+}
 
 // Sample blog posts (replace with your GitHub API endpoint)
 const samplePosts = [];
@@ -324,6 +338,8 @@ async function loadMoreBlogPosts() {
 
   // Load full content for new posts
   await loadFullContentForPosts(newPosts);
+  // Inject reading time for newly loaded posts
+  injectReadingTimes(newPosts);
 
   // Update controls
   const blogSection = container.closest("section");
@@ -438,6 +454,8 @@ async function loadBlogPosts() {
 
     // Load full content for displayed posts only (performance optimization)
     await loadFullContentForDisplayedPosts();
+    // Inject reading time into visible cards after content loads
+    injectReadingTimes(allBlogPosts.slice(0, displayedPostsCount));
 
     // Update easter egg data
     if (window.vg) window.vg.blogPosts = allBlogPosts;
@@ -665,14 +683,11 @@ function loadMoreProjects() {
   }, 200);
 }
 
-// Gallery functionality (unified version below)
 
 // Load profile data from GitHub
 async function loadProfile() {
   try {
-    const response = await fetch(
-      "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/profile.json",
-    );
+    const response = await fetch(`${CONFIG.API_BASE}/profile.json`);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
