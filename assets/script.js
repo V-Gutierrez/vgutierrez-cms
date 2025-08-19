@@ -1081,18 +1081,33 @@ function setupTutorial() {
 function setupScrollDetection() {
   if (window.innerWidth >= 1025) return; // Only on mobile and tablets
 
+  // Thresholds to improve UX on short pages (like Home)
+  const MIN_SCROLL_FOR_DOTS = 120; // require real user scroll
+  const MIN_PAGE_EXCESS = 200; // page must be at least this much taller than viewport
+  const SHOW_PERCENT = 80; // only near the end
+  const HIDE_PERCENT = 60; // hide again when going back up
+
   let isProgressVisible = false;
 
   function checkScrollPosition() {
-    const scrollPosition = window.scrollY + window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollPercentage = (scrollPosition / documentHeight) * 100;
+    const scrollY = window.scrollY;
+    const viewportH = window.innerHeight;
+    const docH = document.documentElement.scrollHeight;
+    const scrollPosition = scrollY + viewportH;
+    const scrollPercentage = (scrollPosition / docH) * 100;
+    const contentExcess = docH - viewportH;
 
-    // Show progress dots when user reaches 70% of any page
-    if (scrollPercentage > 70 && !isProgressVisible) {
+    // Only consider showing dots on pages with meaningful scrollable content
+    const pageIsLong = contentExcess > MIN_PAGE_EXCESS;
+    const userScrolled = scrollY > MIN_SCROLL_FOR_DOTS;
+
+    const shouldShow = pageIsLong && userScrolled && scrollPercentage > SHOW_PERCENT;
+    const shouldHide = !userScrolled || scrollPercentage <= HIDE_PERCENT || !pageIsLong;
+
+    if (shouldShow && !isProgressVisible) {
       showProgressDots();
       isProgressVisible = true;
-    } else if (scrollPercentage <= 50 && isProgressVisible) {
+    } else if (shouldHide && isProgressVisible) {
       hideProgressDots();
       isProgressVisible = false;
     }
@@ -1117,28 +1132,40 @@ function setupScrollDetection() {
 
 function showProgressDots() {
   const progressDots = document.querySelector(".tab-progress");
-  const header = document.querySelector("header");
-
   if (progressDots) {
     progressDots.classList.add("show");
   }
-
-  // Hide header on touch devices to avoid redundancy
-  if (header && window.innerWidth < 1025) {
-    header.classList.add("hide-for-dots");
-  }
+  updateHeaderVisibilityForDots(true);
 }
 
 function hideProgressDots() {
   const progressDots = document.querySelector(".tab-progress");
-  const header = document.querySelector("header");
-
   if (progressDots) {
     progressDots.classList.remove("show");
   }
+  updateHeaderVisibilityForDots(false);
+}
 
-  // Show header again
-  if (header) {
+// Be cautious hiding the header: only when dots are visible AND
+// user scrolled enough on long pages (avoid hiding on short Home)
+function updateHeaderVisibilityForDots(dotsVisible) {
+  const header = document.querySelector("header");
+  if (!header || window.innerWidth >= 1025) return;
+
+  if (!dotsVisible) {
+    header.classList.remove("hide-for-dots");
+    return;
+  }
+
+  const viewportH = window.innerHeight;
+  const docH = document.documentElement.scrollHeight;
+  const contentExcess = docH - viewportH;
+  const pageIsLong = contentExcess > 200;
+  const userScrolled = window.scrollY > 120;
+
+  if (pageIsLong && userScrolled) {
+    header.classList.add("hide-for-dots");
+  } else {
     header.classList.remove("hide-for-dots");
   }
 }
