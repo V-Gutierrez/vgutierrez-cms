@@ -1447,12 +1447,16 @@ async function loadGalleryImages() {
       "wv.jpeg",
     ];
 
+    // Build image list
     galleryImages = imageFiles.map((filename) => ({
       name: filename,
       type: filename.includes("draw") ? "drawings" : "photos",
       path: `data/images/gallery/${filename}`,
       url: `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${filename}`,
     }));
+
+    // Shuffle like projects section
+    galleryImages = galleryImages.sort(() => Math.random() - 0.5);
 
     renderGallery();
     if (window.vg) window.vg.gallery = galleryImages;
@@ -1466,16 +1470,24 @@ async function loadGalleryImages() {
   }
 }
 
-function renderGallery() {
+function renderGallery(filter) {
   const container = document.querySelector(".gallery-grid");
   if (!container) return;
 
-  if (galleryImages.length === 0) {
+  // Filter (if provided)
+  const list = filter && filter !== 'all'
+    ? galleryImages.filter((img) => img.type === filter)
+    : galleryImages.slice();
+
+  if (list.length === 0) {
     container.innerHTML = '<div class="loading">No images found</div>';
     return;
   }
 
-  container.innerHTML = galleryImages
+  // Randomize order each render to mimic projects behavior on filter
+  const randomized = list.sort(() => Math.random() - 0.5);
+
+  container.innerHTML = randomized
     .map(
       (image, index) => `
     <div class="gallery-item animate" onclick="openGalleryModal('${image.url}', '${image.name}')" 
