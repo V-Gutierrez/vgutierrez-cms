@@ -15,6 +15,7 @@ const PATHS = {
   posts: "posts.json",
   post: (id) => `posts/post-${id}.json`,
   projects: "projects.json",
+  gallery: "gallery.json",
 };
 
 // Lightweight DOM/data utilities
@@ -1146,32 +1147,35 @@ function hideProgressDots() {
 let galleryImages = [];
 
 async function loadGalleryImages() {
+  const container = document.querySelector(".gallery-grid");
+  
   try {
-    // Load gallery images from the existing directory structure
-    const imageFiles = [
-      "ball_path.jpeg",
-      "bo.jpeg",
-      "cat.jpeg",
-      "cld.jpeg",
-      "cldy.jpeg",
-      "clty.jpeg",
-      "cs.jpeg",
-      "cvr.jpeg",
-      "football_kick.jpeg",
-      "hallway.jpeg",
-      "lb.jpeg",
-      "pr.jpeg",
-      "sm.jpeg",
-      "vd.jpeg",
-      "wv.jpeg",
-    ];
+    // Show loading state
+    if (container) {
+      container.innerHTML = '<div class="loading">🎨 Loading gallery images...</div>';
+    }
 
-    // Build image list
-    galleryImages = imageFiles.map((filename) => ({
-      name: filename,
-      type: filename.includes("draw") ? "drawings" : "photos",
-      path: `data/images/gallery/${filename}`,
-      url: `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${filename}`,
+    const response = await fetch(`${CONFIG.API_BASE}/${PATHS.gallery}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const images = await response.json();
+    
+    // Filter for published images only
+    const publishedImages = images.filter((image) => image.published);
+
+    // Transform to expected format for renderGallery function
+    galleryImages = publishedImages.map((image) => ({
+      id: image.id,
+      name: image.title,
+      type: image.category === "photography" ? "photos" : "drawings",
+      description: image.description,
+      category: image.category,
+      tags: image.tags,
+      url: image.image,
+      featured: image.featured
     }));
 
     // Shuffle like projects section
@@ -1181,10 +1185,18 @@ async function loadGalleryImages() {
     if (window.vg) window.vg.gallery = galleryImages;
   } catch (error) {
     console.error("Error loading gallery:", error);
-    const container = document.querySelector(".gallery-grid");
+    
     if (container) {
-      container.innerHTML =
-        '<div class="loading" style="color: #ff6b6b;">Failed to load gallery images</div>';
+      container.innerHTML = `
+        <div class="loading" style="color: #ff6b6b;">
+          <h3>⚠️ Unable to load gallery images</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+          <p>Check if the GitHub repository and gallery.json file exist</p>
+          <button onclick="loadGalleryImages()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #ffd700; color: #0a0a0a; border: none; border-radius: 4px; cursor: pointer;">
+            🔄 Retry Loading
+          </button>
+        </div>
+      `;
     }
   }
 }
