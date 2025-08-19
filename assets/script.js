@@ -188,15 +188,6 @@ const templates = {
       <h3 class="blog-post-title">${post.title}</h3>
       <div class="blog-post-date">${formatDate(post.date)}</div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
-      ${
-        post.tags
-          ? `
-        <div class="blog-post-tags">
-          ${post.tags.map((tag) => `<span class=\"tag\">${tag}</span>`).join("")}
-        </div>
-      `
-          : ""
-      }
       ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
     </article>
   `,
@@ -682,7 +673,6 @@ function loadMoreProjects() {
     }
   }, 200);
 }
-
 
 // Load profile data from GitHub
 async function loadProfile() {
