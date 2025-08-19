@@ -1,107 +1,19 @@
 {
   "personalInfo": {
     "name": "Victor Gutierrez",
-    "title": "Senior Technical Leader | Solutions Architect | Multilingual Team Developer",
     "subtitle": "Technical Leader who builds, leads, and creates",
-    "location": "Based in Manaus, Brazil",
     "interests": "Digital art, photography, and exploring cultures through languages",
     "linkedin": "https://www.linkedin.com/in/victtorgutierrez/",
     "github": "https://github.com/V-Gutierrez",
     "whatsApp": "https://wa.me/+5592981802707",
-    "description": "7+ years scaling systems and leading teams with human-centered leadership. Passionate about technology, creativity, and connecting across cultures.",
+    "description": "7+ years scaling systems and leading teams with human-centered leadership.",
     "profileImage": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/victor-photo.jpeg"
   },
-  "languages": [
-    {
-      "language": "Portuguese",
-      "level": "Native Language"
-    },
-    {
-      "language": "Spanish",
-      "level": "C1 Level"
-    },
-    {
-      "language": "English",
-      "level": "C1 Level"
-    },
-    {
-      "language": "Italian",
-      "level": "B1 Level"
-    },
-    {
-      "language": "French",
-      "level": "A2 Level"
-    }
-  ],
-  "skills": {
-    "leadershipAndStrategy": [
-      "Led high-impact teams, aligning architecture with product vision",
-      "Defined technical roadmaps, managed risks & trade-offs",
-      "Coached engineers, scaled agile practices across squads"
-    ],
-    "architectureAndSystems": [
-      "Designed resilient cloud & event-driven systems",
-      "Built APIs, data platforms, and master data integrations",
-      "Scaled distributed architectures with performance in mind"
-    ],
-    "engineeringExcellence": [
-      "Drove test automation & CI/CD pipelines with quality gates",
-      "Reduced technical debt via refactoring strategies",
-      "Enabled observability & production-grade monitoring"
-    ],
-    "businessAndProduct": [
-      "Translated business goals into scalable technical strategies",
-      "Balanced cost, speed, and quality through data-driven decisions",
-      "Evaluated vendors, led make-vs-buy and tech adoption analysis"
-    ]
-  },
-  "technicalStack": {
-    "databases": ["PostgreSQL", "MongoDB", "Redis", "InfluxDB"],
-    "backend": ["TypeScript", "Python", "Java", "Rust", "Ruby", "Go"],
-    "devops": ["Docker", "Kubernetes", "Terraform", "Serverless Architectures"],
-    "cloud": ["AWS", "GCP"]
-  },
-  "assets": [
-    "Multi-Industry Technical Perspective",
-    "Team Catalyst & Culture Builder",
-    "Cross-Domain Technical Versatility",
-    "High-Performance Architecture Specialist",
-    "Crisis Resolution & System Recovery Specialist",
-    "Multilingual Technical Leader"
-  ],
-  "education": [
-    {
-      "degree": "Bachelor's Degree in Computer Engineering",
-      "institution": "Universidade Positivo",
-      "location": "São Paulo, SP, Brazil",
-      "startDate": "2024-07-01",
-      "endDate": "2029-07-01",
-      "status": "in-progress"
-    },
-    {
-      "degree": "Professional Certificate in Naval Electroelectronics",
-      "institution": "Brazilian Navy – EAMCE",
-      "location": "Fortaleza, CE, Brazil",
-      "startDate": "2017-01-01",
-      "endDate": "2017-12-31",
-      "status": "completed"
-    }
-  ],
   "siteSettings": {
     "theme": "terminal",
     "primaryColor": "#00ff41",
     "secondaryColor": "#004411",
     "backgroundColor": "#0c0c0c",
-    "textColor": "#00ff41",
-    "siteTitle": "Victor Gutierrez - Technical Leader & Solutions Architect",
-    "siteDescription": "Personal website and blog of Victor Gutierrez, Technical Leader & Solutions Architect specializing in enterprise systems and high-performing engineering teams.",
-    "keywords": [
-      "Victor Gutierrez",
-      "Technical Leader",
-      "Solutions Architect",
-      "Software Engineering",
-      "Team Leadership",
-      "System Architecture"
-    ]
+    "textColor": "#00ff41"
   }
 }

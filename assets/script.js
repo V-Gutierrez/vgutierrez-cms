@@ -738,24 +738,8 @@ function updateProfileData(profile) {
     heroContent += "<h1 id='hero-title'>Profile information not available</h1>";
   }
 
-  if (personalInfo.role) {
-    heroContent += `<p class="subtitle">${personalInfo.role}</p>`;
-  }
-
   if (personalInfo.description) {
     heroContent += `<p class="description">${personalInfo.description}</p>`;
-  }
-
-  // Add personal details
-  if (personalInfo.location || personalInfo.interests) {
-    heroContent += '<div class="personal-details">';
-    if (personalInfo.location) {
-      heroContent += `<p class="location">📍 ${personalInfo.location}</p>`;
-    }
-    if (personalInfo.interests) {
-      heroContent += `<p class="interests">✨ ${personalInfo.interests}</p>`;
-    }
-    heroContent += "</div>";
   }
 
   // Add social links and CV download
@@ -821,97 +805,6 @@ function updateProfileData(profile) {
       profilePlaceholder.innerHTML = "Profile Image";
     }
   }
-
-  // Update skills section
-  if (profile.skills) {
-    updateSkillsSection(profile.skills);
-  } else {
-    showSkillsError();
-  }
-
-  // Update languages section
-  if (profile.languages) {
-    updateLanguagesSection(profile.languages);
-  }
-
-  // Update education section
-  if (profile.education) {
-    updateEducationSection(profile.education);
-  }
-
-  // Update technical stack section
-  if (profile.technicalStack) {
-    updateTechnicalStackSection(profile.technicalStack);
-  }
-}
-
-function showProfileError() {
-  const heroText = document.querySelector(".hero-text");
-  if (heroText) {
-    heroText.innerHTML = `
-      <div class="loading" style="color: #ff6b6b;">
-        <h3>⚠️ Profile data not available</h3>
-        <p>Unable to load profile information from API</p>
-      </div>
-    `;
-  }
-}
-
-// Update skills section with profile data
-function updateSkillsSection(skills) {
-  const skillsGrid = document.querySelector(".skills-grid");
-  if (!skillsGrid) return;
-
-  if (!skills || Object.keys(skills).length === 0) {
-    skillsGrid.innerHTML =
-      '<div class="loading">No skills data available</div>';
-    return;
-  }
-
-  const skillCategories = {
-    leadershipAndStrategy: "🧭 Leadership & Strategy",
-    architectureAndSystems: "🏗️ Architecture & Systems",
-    engineeringExcellence: "🔧 Engineering Excellence",
-    businessAndProduct: "📦 Business & Product",
-    technicalStack: "Technical Stack",
-    languages: "Languages",
-  };
-
-  const hasAnySkills = Object.keys(skills).some(
-    (key) => skills[key] && skills[key].length > 0,
-  );
-
-  if (!hasAnySkills) {
-    skillsGrid.innerHTML = '<div class="loading">No skills available</div>';
-    return;
-  }
-
-  skillsGrid.innerHTML = Object.entries(skillCategories)
-    .filter(([key]) => skills[key] && skills[key].length > 0)
-    .map(([key, title]) => {
-      const skillList = skills[key];
-      return `
-        <div class="skill-category">
-          <h3>${title}</h3>
-          <ul class="skills-list">
-            ${skillList.map((skill) => `<li>${skill}</li>`).join("")}
-          </ul>
-        </div>
-      `;
-    })
-    .join("");
-}
-
-function showSkillsError() {
-  const skillsGrid = document.querySelector(".skills-grid");
-  if (skillsGrid) {
-    skillsGrid.innerHTML = `
-      <div class="loading" style="color: #ff6b6b;">
-        <h3>⚠️ Skills data not available</h3>
-        <p>Unable to load skills information from API</p>
-      </div>
-    `;
-  }
 }
 
 // Update project rendering to handle GitHub data (uses unified template)
@@ -942,157 +835,25 @@ function formatStatus(status) {
   return status.replace(/-/g, " ").toUpperCase();
 }
 
-// Update languages section
-function updateLanguagesSection(languages) {
-  const languagesGrid = document.getElementById("languages-grid");
-  if (!languagesGrid) return;
-
-  if (!languages || languages.length === 0) {
-    languagesGrid.innerHTML =
-      '<div class="loading">No languages data available</div>';
-    return;
-  }
-
-  const languageFlags = {
-    Portuguese: "🇧🇷",
-    Spanish: "🇪🇸",
-    English: "🇺🇸",
-    Italian: "🇮🇹",
-    French: "🇫🇷",
-  };
-
-  languagesGrid.innerHTML = languages
-    .map((lang) => {
-      const flag = languageFlags[lang.language] || "🌐";
-      return `
-        <div class="language-item">
-          <div class="language-flag">${flag}</div>
-          <div class="language-info">
-            <div class="language-name">${lang.language}</div>
-            <div class="language-level">${lang.level}</div>
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-}
-
-// Update education section
-function updateEducationSection(education) {
-  const educationContainer = document.getElementById("education-timeline");
-  if (!educationContainer) return;
-
-  if (!education || education.length === 0) {
-    educationContainer.innerHTML =
-      '<div class="loading">No education data available</div>';
-    return;
-  }
-
-  const educationIcons = {
-    bachelor: "🎓",
-    master: "📚",
-    phd: "🔬",
-    certificate: "📜",
-    diploma: "🎖️",
-  };
-
-  educationContainer.innerHTML = education
-    .sort((a, b) => new Date(b.startDate) - new Date(a.startDate)) // Sort by start date, newest first
-    .map((edu) => {
-      const degreeType = edu.degree.toLowerCase().includes("bachelor")
-        ? "bachelor"
-        : edu.degree.toLowerCase().includes("master")
-          ? "master"
-          : edu.degree.toLowerCase().includes("phd")
-            ? "phd"
-            : edu.degree.toLowerCase().includes("certificate")
-              ? "certificate"
-              : "diploma";
-
-      const icon = educationIcons[degreeType] || "🎓";
-
-      const startYear = new Date(edu.startDate).getFullYear();
-      const endYear =
-        edu.status === "in-progress"
-          ? "Present"
-          : new Date(edu.endDate).getFullYear();
-      const period = `${startYear} - ${endYear}`;
-
-      const statusText =
-        edu.status === "in-progress" ? "Currently Pursuing" : "Completed";
-      const statusClass =
-        edu.status === "in-progress" ? "in-progress" : "completed";
-
-      return `
-        <div class="education-item">
-          <div class="education-icon">${icon}</div>
-          <div class="education-content">
-            <div class="education-degree">${edu.degree}</div>
-            <div class="education-institution">${edu.institution}</div>
-            <div class="education-period">${period} • ${statusText}</div>
-            ${edu.location ? `<div class="education-description">${edu.location}</div>` : ""}
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-}
-
-// Update technical stack section
-function updateTechnicalStackSection(technicalStack) {
-  const techContainer = document.getElementById("tech-categories");
-  if (!techContainer) return;
-
-  if (!technicalStack || Object.keys(technicalStack).length === 0) {
-    techContainer.innerHTML =
-      '<div class="loading">No technical stack data available</div>';
-    return;
-  }
-
-  const categoryNames = {
-    backend: "Backend Technologies",
-    databases: "Databases",
-    devops: "DevOps & Infrastructure",
-    cloud: "Cloud Platforms",
-  };
-
-  techContainer.innerHTML = Object.entries(technicalStack)
-    .filter(([key, technologies]) => technologies && technologies.length > 0)
-    .map(([category, technologies]) => {
-      const categoryTitle =
-        categoryNames[category] ||
-        category.charAt(0).toUpperCase() + category.slice(1);
-      return `
-        <div class="tech-category">
-          <h4>${categoryTitle}</h4>
-          <div class="tech-items">
-            ${technologies.map((tech) => `<span class="tech-item">${tech}</span>`).join("")}
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-}
-
 // Easter egg for console explorers
 function showEasterEgg() {
   console.log(`
   ╔══════════════════════════════════════════════════════════════╗
   ║                                                              ║
-  ║  👨‍💻 Hey there, fellow developer! 🕵️‍♀️                           ║
+  ║  👨‍💻 Hey there, fellow developer! 🕵️‍♀️                          ║
   ║                                                              ║
   ║  You found the secret console easter egg! 🥚                 ║
   ║                                                              ║
-  ║  Since you're here, here are some fun facts:                ║
-  ║  • This site is 100% vanilla JS (no frameworks!)            ║
-  ║  • Uses GitHub Pages as a headless CMS                      ║
-  ║  • Built with performance and simplicity in mind            ║
-  ║  • Features smooth tab animations with cubic-bezier         ║
+  ║  Since you're here, here are some fun facts:                 ║
+  ║  • This site is 100% vanilla JS (no frameworks!)             ║
+  ║  • Uses GitHub Pages as a headless CMS                       ║
+  ║  • Built with performance and simplicity in mind             ║
+  ║  • Features smooth tab animations with cubic-bezier          ║
   ║                                                              ║
-  ║  Want to see the source? Check it out:                      ║
-  ║  🔗 https://github.com/V-Gutierrez/vgutierrez-cms           ║
+  ║  Want to see the source? Check it out:                       ║
+  ║  🔗 https://github.com/V-Gutierrez/vgutierrez-cms            ║
   ║                                                              ║
-  ║  Keep exploring! There might be more secrets... 👀          ║
+  ║  Keep exploring! There might be more secrets... 👀           ║
   ║                                                              ║
   ╚══════════════════════════════════════════════════════════════╝
   `);
@@ -1135,44 +896,6 @@ function setupScrollAnimations() {
         // Add animate class to trigger animation
         element.classList.add("animate");
 
-        // Handle staggered animations for child elements
-        if (element.classList.contains("skills-grid")) {
-          const skillCategories = element.querySelectorAll(".skill-category");
-          skillCategories.forEach((category, index) => {
-            setTimeout(() => {
-              category.classList.add("animate");
-            }, index * 100);
-          });
-        }
-
-        if (element.classList.contains("languages-section")) {
-          const languageItems = element.querySelectorAll(".language-item");
-          languageItems.forEach((item, index) => {
-            setTimeout(() => {
-              item.classList.add("animate");
-            }, index * 100);
-          });
-        }
-
-        if (element.classList.contains("education-section")) {
-          const educationItems = element.querySelectorAll(".education-item");
-          educationItems.forEach((item, index) => {
-            setTimeout(() => {
-              item.classList.add("animate");
-            }, index * 150);
-          });
-        }
-
-        if (element.classList.contains("tech-stack-section")) {
-          const techCategories = element.querySelectorAll(".tech-category");
-          techCategories.forEach((category, index) => {
-            setTimeout(() => {
-              category.classList.add("animate");
-            }, index * 100);
-          });
-        }
-
-        // Stop observing once animated
         observer.unobserve(element);
       }
     });
@@ -1180,11 +903,7 @@ function setupScrollAnimations() {
 
   // Observe all animatable elements
   const animatableElements = document.querySelectorAll(`
-    .section-header,
-    .skills-grid,
-    .languages-section,
-    .education-section,
-    .tech-stack-section
+    .section-header
   `);
 
   animatableElements.forEach((element) => {
@@ -1475,9 +1194,10 @@ function renderGallery(filter) {
   if (!container) return;
 
   // Filter (if provided)
-  const list = filter && filter !== 'all'
-    ? galleryImages.filter((img) => img.type === filter)
-    : galleryImages.slice();
+  const list =
+    filter && filter !== "all"
+      ? galleryImages.filter((img) => img.type === filter)
+      : galleryImages.slice();
 
   if (list.length === 0) {
     container.innerHTML = '<div class="loading">No images found</div>';
