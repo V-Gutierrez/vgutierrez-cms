@@ -194,20 +194,20 @@
       "dimensions": "1920x1080",
       "featured": false,
       "published": true
+    },
+    {
+      "id": 131,
+      "title": "Congresso",
+      "description": "Congresso - Argentina",
+      "category": "photography",
+      "technique": "Digital Photography",
+      "year": 2023,
+      "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/skynight.jpeg",
+      "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpg",
+      "tags": [""],
+      "dimensions": "",
+      "featured": true,
+      "published": true
     }
-  ],
-  {
-    "id": null,
-    "title": "Skynight",
-    "description": "Congresso - Argentina",
-    "category": "photography",
-    "technique": "Digital Photography",
-    "year": 2023,
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/skynight.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpg",
-    "tags": [""],
-    "dimensions": "",
-    "featured": true,
-    "published": true
-  }
+  ]
 ]
