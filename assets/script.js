@@ -15,6 +15,7 @@ const PATHS = {
   posts: "posts.json",
   post: (id) => `posts/post-${id}.json`,
   projects: "projects.json",
+  gallery: "gallery.json",
 };
 
 // Lightweight DOM/data utilities
