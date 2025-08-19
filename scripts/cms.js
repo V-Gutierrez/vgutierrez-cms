@@ -1,0 +1,579 @@
+#!/usr/bin/env node
+
+const fs = require('fs').promises;
+const path = require('path');
+const cli = require('./utils/cli');
+
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const POSTS_DIR = path.join(DATA_DIR, 'posts');
+const IMAGES_DIR = path.join(DATA_DIR, 'images');
+const GALLERY_FILE = path.join(DATA_DIR, 'gallery.json');
+
+// Utils
+function generateSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .trim();
+}
+
+function estimateReadingTime(content) {
+  const wordsPerMinute = 200;
+  const wordCount = String(content || '').split(/\s+/).filter(Boolean).length;
+  return Math.ceil(wordCount / wordsPerMinute) || 1;
+}
+
+// Blog
+async function loadPosts() {
+  try { return JSON.parse(await fs.readFile(path.join(DATA_DIR, 'posts.json'), 'utf8')); } catch { return []; }
+}
+async function savePosts(posts) {
+  await fs.writeFile(path.join(DATA_DIR, 'posts.json'), JSON.stringify(posts, null, 2));
+}
+async function blogCreate() {
+  console.log('\n=== Creating New Blog Post ===\n');
+  const title = await cli.ask('Post title: ');
+  const excerpt = await cli.ask('Post excerpt: ');
+  const tags = await cli.ask('Tags (comma-separated): ');
+  const useEditor = await cli.confirm('Edit content in your editor?', true);
+  const content = useEditor
+    ? await cli.editInEditor('<!-- Write your post HTML/Markdown content here -->\n\n', { filePrefix: 'post-content', extension: 'html' })
+    : await cli.ask('Post content (HTML): ');
+
+  const posts = await loadPosts();
+  const newId = Math.max(0, ...posts.map(p => p.id)) + 1;
+  const slug = generateSlug(title);
+  const date = new Date().toISOString().split('T')[0];
+
+  const postIndex = {
+    id: newId,
+    title,
+    slug,
+    date,
+    excerpt,
+    tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+    published: true,
+    contentFile: `posts/post-${newId}.json`
+  };
+
+  const postContent = {
+    id: newId,
+    title,
+    slug,
+    date,
+    author: 'Victor Gutierrez',
+    tags: postIndex.tags,
+    published: true,
+    excerpt,
+    content,
+    readingTime: estimateReadingTime(content),
+    seo: {
+      metaTitle: `${title} - Victor Gutierrez`,
+      metaDescription: excerpt,
+      keywords: postIndex.tags
+    }
+  };
+
+  await fs.writeFile(path.join(POSTS_DIR, `post-${newId}.json`), JSON.stringify(postContent, null, 2));
+  posts.push(postIndex);
+  await savePosts(posts);
+  console.log(`\n✅ Post created successfully with ID: ${newId}`);
+}
+async function blogList() {
+  const posts = await loadPosts();
+  console.log('\n=== All Blog Posts ===\n');
+  if (!posts.length) return console.log('No posts found.');
+  posts.forEach((post) => {
+    const status = post.published ? '✅ Published' : '❌ Draft';
+    console.log(`${post.id}. ${post.title}`);
+    console.log(`   Date: ${post.date} | Status: ${status}`);
+    console.log(`   Tags: ${post.tags.join(', ')}`);
+    console.log(`   Excerpt: ${post.excerpt.substring(0, 100)}...\n`);
+  });
+}
+async function blogEdit() {
+  const posts = await loadPosts();
+  if (!posts.length) return console.log('No posts found to edit.');
+  await blogList();
+  const postId = parseInt(await cli.ask('Enter post ID to edit: '));
+  const post = posts.find(p => p.id === postId);
+  if (!post) return console.log('Post not found.');
+
+  const contentPath = path.join(DATA_DIR, post.contentFile);
+  const fullPost = JSON.parse(await fs.readFile(contentPath, 'utf8'));
+
+  const newTitle = await cli.askDefault('Title', post.title);
+  const newExcerpt = await cli.askDefault('Excerpt', post.excerpt);
+  const newTags = await cli.askDefault('Tags', post.tags.join(', '));
+  const wantsEditor = await cli.confirm('Edit content in your editor?', true);
+  const newContent = wantsEditor
+    ? await cli.editInEditor(fullPost.content, { filePrefix: `post-${post.id}`, extension: 'html' })
+    : (await cli.ask(`Content (current length: ${fullPost.content.length} chars): `)) || fullPost.content;
+  const published = await cli.confirm('Published?', post.published);
+
+  post.title = newTitle;
+  post.excerpt = newExcerpt;
+  post.tags = newTags.split(',').map(t => t.trim()).filter(Boolean);
+  post.published = !!published;
+  post.slug = generateSlug(newTitle);
+
+  fullPost.title = newTitle;
+  fullPost.excerpt = newExcerpt;
+  fullPost.tags = post.tags;
+  fullPost.published = !!published;
+  fullPost.slug = post.slug;
+  fullPost.content = newContent;
+  fullPost.readingTime = estimateReadingTime(newContent);
+  fullPost.seo.metaTitle = `${newTitle} - Victor Gutierrez`;
+  fullPost.seo.metaDescription = newExcerpt;
+  fullPost.seo.keywords = post.tags;
+
+  await fs.writeFile(contentPath, JSON.stringify(fullPost, null, 2));
+  await savePosts(posts);
+  console.log('\n✅ Post updated successfully!');
+}
+async function blogDelete() {
+  const posts = await loadPosts();
+  if (!posts.length) return console.log('No posts found to delete.');
+  await blogList();
+  const postId = parseInt(await cli.ask('Enter post ID to delete: '));
+  const idx = posts.findIndex(p => p.id === postId);
+  if (idx === -1) return console.log('Post not found.');
+  const post = posts[idx];
+  const ok = await cli.confirm(`Are you sure you want to delete "${post.title}"?`, false);
+  if (!ok) return console.log('Delete cancelled.');
+  const contentPath = path.join(DATA_DIR, post.contentFile);
+  try { await fs.unlink(contentPath); } catch(_) {}
+  posts.splice(idx, 1);
+  await savePosts(posts);
+  console.log('\n✅ Post deleted successfully!');
+}
+
+// Projects
+async function loadProjects() {
+  try { return JSON.parse(await fs.readFile(path.join(DATA_DIR, 'projects.json'), 'utf8')); } catch { return []; }
+}
+async function saveProjects(projects) {
+  await fs.writeFile(path.join(DATA_DIR, 'projects.json'), JSON.stringify(projects, null, 2));
+}
+async function projectCreate() {
+  console.log('\n=== Creating New Project ===\n');
+  const title = await cli.ask('Project title: ');
+  const description = await cli.ask('Project description: ');
+  const category = await cli.ask('Category: ');
+  const technologies = await cli.ask('Technologies (comma-separated): ');
+  const status = await cli.ask('Status (completed/in-progress/planned): ');
+  const startDate = await cli.ask('Start date (YYYY-MM-DD): ');
+  const endDate = await cli.ask('End date (YYYY-MM-DD or "ongoing"): ');
+  const featured = await cli.confirm('Featured project?', false);
+  const projects = await loadProjects();
+  const newId = Math.max(0, ...projects.map(p => p.id)) + 1;
+  const slug = generateSlug(title);
+  const newProject = {
+    id: newId,
+    title,
+    slug,
+    description,
+    category,
+    technologies: technologies.split(',').map(t => t.trim()).filter(Boolean),
+    status,
+    startDate,
+    endDate,
+    metrics: {},
+    highlights: [],
+    featured: !!featured
+  };
+  projects.push(newProject);
+  await saveProjects(projects);
+  console.log(`\n✅ Project created successfully with ID: ${newId}`);
+}
+async function projectList() {
+  const projects = await loadProjects();
+  console.log('\n=== All Projects ===\n');
+  if (!projects.length) return console.log('No projects found.');
+  projects.forEach((p) => {
+    const star = p.featured ? '⭐' : ' ';
+    console.log(`${star} ${p.id}. ${p.title}`);
+    console.log(`   Category: ${p.category} | Status: ${p.status}`);
+    console.log(`   Technologies: ${p.technologies.join(', ')}`);
+    console.log(`   Period: ${p.startDate} to ${p.endDate}`);
+    console.log(`   Description: ${p.description.substring(0, 100)}...\n`);
+  });
+}
+async function projectEdit() {
+  const projects = await loadProjects();
+  if (!projects.length) return console.log('No projects found to edit.');
+  await projectList();
+  const id = parseInt(await cli.ask('Enter project ID to edit: '));
+  const p = projects.find(x => x.id === id);
+  if (!p) return console.log('Project not found.');
+  p.title = await cli.askDefault('Title', p.title);
+  p.description = await cli.askDefault('Description', p.description);
+  p.category = await cli.askDefault('Category', p.category);
+  p.technologies = (await cli.askDefault('Technologies', p.technologies.join(', '))).split(',').map(t => t.trim()).filter(Boolean);
+  p.status = await cli.askDefault('Status', p.status);
+  p.startDate = await cli.askDefault('Start date', p.startDate);
+  p.endDate = await cli.askDefault('End date', p.endDate);
+  p.featured = await cli.confirm('Featured?', p.featured);
+  p.slug = generateSlug(p.title);
+  await saveProjects(projects);
+  console.log('\n✅ Project updated successfully!');
+}
+async function projectDelete() {
+  const projects = await loadProjects();
+  if (!projects.length) return console.log('No projects found to delete.');
+  await projectList();
+  const id = parseInt(await cli.ask('Enter project ID to delete: '));
+  const idx = projects.findIndex(x => x.id === id);
+  if (idx === -1) return console.log('Project not found.');
+  const ok = await cli.confirm(`Are you sure you want to delete "${projects[idx].title}"?`, false);
+  if (!ok) return console.log('Delete cancelled.');
+  projects.splice(idx, 1);
+  await saveProjects(projects);
+  console.log('\n✅ Project deleted successfully!');
+}
+
+// Profile
+async function loadProfile() {
+  try { return JSON.parse(await fs.readFile(path.join(DATA_DIR, 'profile.json'), 'utf8')); } catch (e) { console.error('Error loading profile:', e.message); return null; }
+}
+async function saveProfile(profile) {
+  await fs.writeFile(path.join(DATA_DIR, 'profile.json'), JSON.stringify(profile, null, 2));
+}
+async function profileView() {
+  const profile = await loadProfile(); if (!profile) return;
+  console.log('\n=== Current Profile ===\n');
+  console.log(`Name: ${profile.personalInfo.name}`);
+  console.log(`Title: ${profile.personalInfo.title}`);
+  console.log(`Location: ${profile.personalInfo.location}`);
+  console.log(`Email: ${profile.personalInfo.email}`);
+  console.log(`LinkedIn: ${profile.personalInfo.linkedin}`);
+  console.log(`GitHub: ${profile.personalInfo.github}`);
+  console.log(`\nDescription: ${profile.personalInfo.description}`);
+  console.log('\nLanguages:');
+  profile.languages.forEach(l => console.log(`- ${l.language}: ${l.level}`));
+}
+async function profileEditPersonal() {
+  const profile = await loadProfile(); if (!profile) return;
+  const info = profile.personalInfo;
+  info.name = await cli.askDefault('Name', info.name);
+  info.title = await cli.askDefault('Title', info.title);
+  info.subtitle = await cli.askDefault('Subtitle', info.subtitle);
+  info.location = await cli.askDefault('Location', info.location);
+  info.email = await cli.askDefault('Email', info.email);
+  info.linkedin = await cli.askDefault('LinkedIn', info.linkedin);
+  info.github = await cli.askDefault('GitHub', info.github);
+  info.description = await cli.askDefault('Description', info.description);
+  await saveProfile(profile);
+  console.log('\n✅ Personal information updated successfully!');
+}
+async function profileEditSkills() {
+  const profile = await loadProfile(); if (!profile) return;
+  console.log('\nCurrent skill categories:');
+  const categories = Object.keys(profile.skills);
+  categories.forEach((c, i) => console.log(`${i + 1}. ${c}`));
+  const pick = parseInt(await cli.ask('\nChoose category to edit (number): '));
+  const cat = categories[pick - 1]; if (!cat) return console.log('Invalid category selection.');
+  console.log(`\nEditing: ${cat}`);
+  console.log('Current skills:');
+  profile.skills[cat].forEach((s, i) => console.log(`${i + 1}. ${s}`));
+  const action = await cli.ask('\n1. Add skill\n2. Remove skill\n3. Edit skill\nChoose action: ');
+  switch (action) {
+    case '1': {
+      const s = await cli.ask('Enter new skill: ');
+      if (s) profile.skills[cat].push(s);
+      break;
+    }
+    case '2': {
+      const idx = parseInt(await cli.ask('Enter skill number to remove: ')) - 1;
+      if (idx >= 0 && idx < profile.skills[cat].length) profile.skills[cat].splice(idx, 1);
+      break;
+    }
+    case '3': {
+      const idx = parseInt(await cli.ask('Enter skill number to edit: ')) - 1;
+      if (idx >= 0 && idx < profile.skills[cat].length) {
+        const cur = profile.skills[cat][idx];
+        profile.skills[cat][idx] = await cli.askDefault('Edit skill', cur);
+      }
+      break;
+    }
+  }
+  await saveProfile(profile);
+  console.log('\n✅ Skills updated successfully!');
+}
+async function profileEditTech() {
+  const profile = await loadProfile(); if (!profile) return;
+  console.log('\nCurrent technical categories:');
+  const categories = Object.keys(profile.technicalStack);
+  categories.forEach((c, i) => console.log(`${i + 1}. ${c}: ${profile.technicalStack[c].join(', ')}`));
+  const pick = parseInt(await cli.ask('\nChoose category to edit (number): '));
+  const cat = categories[pick - 1]; if (!cat) return console.log('Invalid category selection.');
+  const current = profile.technicalStack[cat].join(', ');
+  const next = await cli.askDefault(cat, current);
+  profile.technicalStack[cat] = next.split(',').map(t => t.trim()).filter(Boolean);
+  await saveProfile(profile);
+  console.log('\n✅ Technical stack updated successfully!');
+}
+async function profileEditSite() {
+  const profile = await loadProfile(); if (!profile) return;
+  const s = profile.siteSettings;
+  s.siteTitle = await cli.askDefault('Site Title', s.siteTitle);
+  s.siteDescription = await cli.askDefault('Site Description', s.siteDescription);
+  s.theme = await cli.askDefault('Theme', s.theme);
+  s.primaryColor = await cli.askDefault('Primary Color', s.primaryColor);
+  await saveProfile(profile);
+  console.log('\n✅ Site settings updated successfully!');
+}
+
+// Gallery
+async function loadGallery() { try { return JSON.parse(await fs.readFile(GALLERY_FILE, 'utf8')); } catch { return []; } }
+async function saveGallery(g) { await fs.writeFile(GALLERY_FILE, JSON.stringify(g, null, 2)); }
+async function galleryCreate() {
+  console.log('\n=== Creating New Gallery Item ===\n');
+  const title = await cli.ask('Title: ');
+  const description = await cli.ask('Description: ');
+  const category = await cli.ask('Category (photography/digital-art/drawings/mixed-media): ');
+  const technique = await cli.ask('Technique (e.g., Digital Photography, Pencil on Paper): ');
+  const year = parseInt(await cli.ask('Year: ')) || new Date().getFullYear();
+  const tags = await cli.ask('Tags (comma-separated): ');
+  const dimensions = await cli.ask('Dimensions (e.g., 1920x1080, 297x420): ');
+  const rawName = (await cli.ask('Image filename (with or without extension): ')).trim();
+  const parsed = path.parse(rawName);
+  const baseName = parsed.name || rawName;
+  let ext = (parsed.ext || '').replace('.', '').toLowerCase();
+  const allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
+  if (!ext) {
+    const picked = (await cli.ask(`Image extension [${allowedExt.join('/')}] (default: jpg): `)).trim().toLowerCase();
+    ext = picked || 'jpg';
+  }
+  if (!allowedExt.includes(ext)) { console.log(`Unsupported extension "${ext}". Falling back to 'jpg'.`); ext = 'jpg'; }
+  const featured = await cli.confirm('Featured item?', false);
+
+  const gallery = await loadGallery();
+  const newId = Math.max(0, ...gallery.map(i => i.id)) + 1;
+  const baseUrl = 'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery';
+  const imageUrl = `${baseUrl}/${baseName}.${ext}`;
+  const thumbnailUrl = `${baseUrl}/thumbnails/${baseName}-thumb.${ext}`;
+  const item = {
+    id: newId,
+    title,
+    description,
+    category: category.toLowerCase(),
+    technique,
+    year,
+    image: imageUrl,
+    thumbnail: thumbnailUrl,
+    tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+    dimensions,
+    featured: !!featured,
+    published: true
+  };
+  gallery.push(item);
+  await saveGallery(gallery);
+  console.log(`\n✅ Gallery item created successfully with ID: ${newId}`);
+  console.log(`📸 Image URL: ${imageUrl}`);
+  console.log(`🖼️  Thumbnail URL: ${thumbnailUrl}`);
+  console.log('\n📝 Remember to upload the image files to:');
+  console.log(`   - data/images/gallery/${baseName}.${ext}`);
+  console.log(`   - data/images/gallery/thumbnails/${baseName}-thumb.${ext}`);
+}
+async function galleryList() {
+  const gallery = await loadGallery();
+  console.log('\n=== All Gallery Items ===\n');
+  if (!gallery.length) return console.log('No gallery items found.');
+  gallery.forEach((item) => {
+    const status = item.published ? '✅ Published' : '❌ Draft';
+    const featured = item.featured ? '⭐ Featured' : '';
+    console.log(`${item.id}. ${item.title} ${featured}`);
+    console.log(`   Category: ${item.category} | Year: ${item.year} | Status: ${status}`);
+    console.log(`   Technique: ${item.technique} | Dimensions: ${item.dimensions}`);
+    console.log(`   Tags: ${item.tags.join(', ')}`);
+    console.log(`   Description: ${item.description.substring(0, 100)}...\n`);
+  });
+}
+async function galleryEdit() {
+  const gallery = await loadGallery();
+  if (!gallery.length) return console.log('No gallery items found to edit.');
+  await galleryList();
+  const id = parseInt(await cli.ask('Enter item ID to edit: '));
+  const item = gallery.find(i => i.id === id);
+  if (!item) return console.log('Gallery item not found.');
+  item.title = await cli.askDefault('Title', item.title);
+  item.description = await cli.askDefault('Description', item.description);
+  item.category = (await cli.askDefault('Category', item.category)).toLowerCase();
+  item.technique = await cli.askDefault('Technique', item.technique);
+  item.year = parseInt(await cli.ask(`Year (${item.year}): `)) || item.year;
+  item.tags = (await cli.askDefault('Tags', item.tags.join(', '))).split(',').map(t => t.trim()).filter(Boolean);
+  item.dimensions = await cli.askDefault('Dimensions', item.dimensions);
+  item.featured = await cli.confirm('Featured?', item.featured);
+  item.published = await cli.confirm('Published?', item.published);
+  await saveGallery(gallery);
+  console.log('\n✅ Gallery item updated successfully!');
+}
+async function galleryDelete() {
+  const gallery = await loadGallery();
+  if (!gallery.length) return console.log('No gallery items found to delete.');
+  await galleryList();
+  const id = parseInt(await cli.ask('Enter item ID to delete: '));
+  const idx = gallery.findIndex(i => i.id === id);
+  if (idx === -1) return console.log('Gallery item not found.');
+  const ok = await cli.confirm(`Are you sure you want to delete "${gallery[idx].title}"?`, false);
+  if (!ok) return console.log('Delete cancelled.');
+  gallery.splice(idx, 1);
+  await saveGallery(gallery);
+  console.log('\n✅ Gallery item deleted successfully!');
+}
+
+// Images
+const GITHUB_REPO = 'V-Gutierrez/vgutierrez-cms';
+const GITHUB_BRANCH = 'main';
+async function imageUrls() {
+  const baseUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/data/images`;
+  console.log('🖼️  GitHub Image URLs:\n=====================\n');
+  console.log('Base URL:', baseUrl);
+  console.log('\nURL Templates:');
+  console.log('- Profile Photo: ' + `${baseUrl}/profile/victor-photo.jpg`);
+  console.log('- Project Images: ' + `${baseUrl}/projects/{project-slug}.jpg`);
+  console.log('- Blog Images: ' + `${baseUrl}/blog/{post-slug}-hero.jpg`);
+  console.log('- Blog Content: ' + `${baseUrl}/blog/{post-slug}-{image-name}.jpg`);
+}
+async function imageList() {
+  console.log('📁 Current Images Structure:\n============================');
+  const categories = ['profile', 'projects', 'blog', 'gallery'];
+  for (const category of categories) {
+    const categoryPath = path.join(IMAGES_DIR, category);
+    try {
+      const files = await fs.readdir(categoryPath);
+      console.log(`\n📂 ${category}/`);
+      if (!files.length) console.log('   (empty - add images here)');
+      else files.forEach((file) => console.log(`   🖼️  ${file}`));
+    } catch (_) {
+      console.log(`\n📂 ${category}/`);
+      console.log('   (directory not accessible)');
+    }
+  }
+}
+async function imageAddRef() {
+  console.log('\n=== Add Image Reference ===\n');
+  const type = await cli.ask('Image type (profile/projects/blog/gallery): ');
+  const name = await cli.ask('Image filename (with extension): ');
+  const description = await cli.ask('Image description: ');
+  const baseUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/data/images`;
+  const imageUrl = `${baseUrl}/${type}/${name}`;
+  console.log('\n✅ Image Reference Created:\n==========================');
+  console.log(`URL: ${imageUrl}`);
+  console.log(`Type: ${type}`);
+  console.log(`Description: ${description}`);
+  console.log('\n📝 Next Steps:');
+  console.log(`1. Add the image file to: data/images/${type}/${name}`);
+  console.log('2. Commit and push to GitHub');
+  console.log('3. Use this URL in your content');
+}
+
+// Main menu
+async function menuBlog() {
+  while (true) {
+    console.log('\nBlog:');
+    console.log('1. Create new post');
+    console.log('2. List all posts');
+    console.log('3. Edit post');
+    console.log('4. Delete post');
+    console.log('5. Back');
+    const c = await cli.ask('\nChoose (1-5): ');
+    if (c === '1') await blogCreate();
+    else if (c === '2') await blogList();
+    else if (c === '3') await blogEdit();
+    else if (c === '4') await blogDelete();
+    else if (c === '5') return; else console.log('Invalid option.');
+  }
+}
+async function menuProjects() {
+  while (true) {
+    console.log('\nProjects:');
+    console.log('1. Create new project');
+    console.log('2. List all projects');
+    console.log('3. Edit project');
+    console.log('4. Delete project');
+    console.log('5. Back');
+    const c = await cli.ask('\nChoose (1-5): ');
+    if (c === '1') await projectCreate();
+    else if (c === '2') await projectList();
+    else if (c === '3') await projectEdit();
+    else if (c === '4') await projectDelete();
+    else if (c === '5') return; else console.log('Invalid option.');
+  }
+}
+async function menuProfile() {
+  while (true) {
+    console.log('\nProfile:');
+    console.log('1. View current profile');
+    console.log('2. Edit personal information');
+    console.log('3. Edit skills');
+    console.log('4. Edit technical stack');
+    console.log('5. Edit site settings');
+    console.log('6. Back');
+    const c = await cli.ask('\nChoose (1-6): ');
+    if (c === '1') await profileView();
+    else if (c === '2') await profileEditPersonal();
+    else if (c === '3') await profileEditSkills();
+    else if (c === '4') await profileEditTech();
+    else if (c === '5') await profileEditSite();
+    else if (c === '6') return; else console.log('Invalid option.');
+  }
+}
+async function menuGallery() {
+  while (true) {
+    console.log('\nGallery:');
+    console.log('1. Create new gallery item');
+    console.log('2. List all gallery items');
+    console.log('3. Edit gallery item');
+    console.log('4. Delete gallery item');
+    console.log('5. Back');
+    const c = await cli.ask('\nChoose (1-5): ');
+    if (c === '1') await galleryCreate();
+    else if (c === '2') await galleryList();
+    else if (c === '3') await galleryEdit();
+    else if (c === '4') await galleryDelete();
+    else if (c === '5') return; else console.log('Invalid option.');
+  }
+}
+async function menuImages() {
+  while (true) {
+    console.log('\nImages:');
+    console.log('1. List images');
+    console.log('2. Generate image URLs');
+    console.log('3. Add new image reference');
+    console.log('4. Back');
+    const c = await cli.ask('\nChoose (1-4): ');
+    if (c === '1') await imageList();
+    else if (c === '2') await imageUrls();
+    else if (c === '3') await imageAddRef();
+    else if (c === '4') return; else console.log('Invalid option.');
+  }
+}
+
+async function main() {
+  console.log('🛠️  Victor Gutierrez CMS - Unified CLI');
+  console.log('======================================');
+  while (true) {
+    console.log('\nSections:');
+    console.log('1. Blog');
+    console.log('2. Projects');
+    console.log('3. Profile');
+    console.log('4. Gallery');
+    console.log('5. Images');
+    console.log('6. Exit');
+    const choice = await cli.ask('\nChoose a section (1-6): ');
+    if (choice === '1') await menuBlog();
+    else if (choice === '2') await menuProjects();
+    else if (choice === '3') await menuProfile();
+    else if (choice === '4') await menuGallery();
+    else if (choice === '5') await menuImages();
+    else if (choice === '6') { console.log('👋 Goodbye!'); cli.close(); return; }
+    else console.log('Invalid option.');
+  }
+}
+
+main().catch((err) => { console.error(err); try { cli.close(); } catch(_) {} });
+

@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "title": "Minimalist Hallway",
+    "title": "allons-y",
     "description": "A minimalist sketch of a tiled hallway with clean lines and perspective depth.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/hallway.jpeg",
@@ -11,7 +11,7 @@
   },
   {
     "id": 2,
-    "title": "Lonely Tower",
+    "title": "st",
     "description": "A surreal tower standing against a dark cloudy sky, overlooking a green field.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cldy.jpeg",
@@ -21,7 +21,7 @@
   },
   {
     "id": 3,
-    "title": "Beach Sunset",
+    "title": "sunset",
     "description": "A vivid seashore scene with a striking orange sunset over the ocean.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cld.jpeg",
@@ -31,7 +31,7 @@
   },
   {
     "id": 4,
-    "title": "Curved Road",
+    "title": "cvr",
     "description": "A winding road with glowing markings, cutting through a grassy field.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cvr.jpeg",
@@ -41,7 +41,7 @@
   },
   {
     "id": 5,
-    "title": "Cloudy Horizon",
+    "title": "clty",
     "description": "A soft green hill under a bright blue sky with a single cloudy sun.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/clty.jpeg",
@@ -51,7 +51,7 @@
   },
   {
     "id": 6,
-    "title": "Colorful Patterns",
+    "title": "cat",
     "description": "Abstract scribbles of multiple colors forming dynamic textures.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cat.jpeg",
@@ -61,7 +61,7 @@
   },
   {
     "id": 7,
-    "title": "Lonely Ball",
+    "title": "sphere-line",
     "description": "Minimalist sketch of a single ball connected by a line, surrounded by blue strokes.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lb.jpeg",
@@ -71,7 +71,7 @@
   },
   {
     "id": 8,
-    "title": "Stormy Meadow",
+    "title": "stormy",
     "description": "A dark blue storm brewing above a lush green field.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/sm.jpeg",
@@ -81,7 +81,7 @@
   },
   {
     "id": 9,
-    "title": "Dark Entity",
+    "title": "void",
     "description": "An ominous figure with glowing eyes and fangs, surrounded by red strokes.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/vd.jpeg",
@@ -91,7 +91,7 @@
   },
   {
     "id": 10,
-    "title": "Falling Lights",
+    "title": "lights",
     "description": "White streaks falling over a colorful gradient of blue, green, and orange.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/bo.jpeg",
@@ -101,7 +101,7 @@
   },
   {
     "id": 11,
-    "title": "Cockpit Sketch",
+    "title": "cockpit-sketch",
     "description": "A rough sketch of an airplane cockpit showing flight controls and panels.",
     "category": "sketch",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cs.jpeg",
@@ -111,7 +111,7 @@
   },
   {
     "id": 12,
-    "title": "Window View",
+    "title": "de-gaulle",
     "description": "A colorful scene viewed from an airplane window, showing blue sky and green fields below.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/wv.jpeg",
@@ -121,7 +121,7 @@
   },
   {
     "id": 13,
-    "title": "Abstract PR Flag",
+    "title": "PR",
     "description": "A bold digital painting of a stylized red, white, and blue flag with a star.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/pr.jpeg",
@@ -131,7 +131,7 @@
   },
   {
     "id": 14,
-    "title": "Football Kick",
+    "title": "fk-memo",
     "description": "A pencil sketch capturing the moment of a player about to kick a ball.",
     "category": "sketch",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/football_kick.jpeg",
@@ -141,7 +141,7 @@
   },
   {
     "id": 15,
-    "title": "Minimal Ball Path",
+    "title": "bp",
     "description": "A minimalist drawing of a single ball connected to a flowing line and surrounded by scribbles.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/ball_path.jpeg",
@@ -151,42 +151,49 @@
   },
   {
     "id": 131,
-    "title": "Congresso",
+    "title": "congresso",
     "description": "Congresso - Argentina",
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/skynight.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpeg",
     "tags": [""],
     "featured": true,
     "published": true
   },
   {
-    "id": 16,
-    "title": "Racing Scene",
-    "description": "High-speed racing action captured on track",
+    "id": 132,
+    "title": "racing",
+    "description": "-",
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/racing.jpeg",
-    "tags": ["racing", "sports", "action", "speed"],
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/racing-thumb.jpeg",
+    "tags": [""],
     "featured": true,
     "published": true
   },
   {
-    "id": 17,
-    "title": "Eiffel Tower",
-    "description": "The iconic Eiffel Tower in Paris",
-    "category": "photography",
+    "id": 133,
+    "title": "Eiffel",
+    "description": "-",
+    "category": "-",
+    "technique": "-",
+    "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/eif.jpeg",
-    "tags": ["paris", "eiffel", "tower", "landmark", "architecture"],
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/eif-thumb.jpeg",
+    "tags": [""],
     "featured": true,
     "published": true
   },
   {
-    "id": 18,
-    "title": "Lille Opera House",
-    "description": "The beautiful opera house in Lille, France",
+    "id": 134,
+    "title": "lille-centre",
+    "description": "-",
     "category": "photography",
+    "technique": "",
+    "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lille_opera.jpeg",
-    "tags": ["lille", "opera", "architecture", "france"],
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/lille_opera-thumb.jpeg",
+    "tags": [""],
     "featured": true,
     "published": true
   }

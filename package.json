@@ -4,22 +4,7 @@
   "description": "Content Management System for Victor Gutierrez personal website",
   "main": "index.js",
   "scripts": {
-    "blog": "node scripts/blog-manager.js",
-    "projects": "node scripts/project-manager.js",
-    "profile": "node scripts/profile-manager.js",
-    "gallery": "node scripts/gallery-manager.js",
-    "build": "node scripts/build-tools.js all",
-    "validate": "node scripts/build-tools.js validate",
-    "deploy": "node scripts/build-tools.js deploy",
-    "urls": "node scripts/build-tools.js urls",
-    "sitemap": "node scripts/build-tools.js sitemap",
-    "structure": "node scripts/structure.js",
-    "start": "node scripts/structure.js",
-    "test-urls": "node scripts/test-urls.js",
-    "images": "node scripts/image-manager.js",
-    "debug": "node scripts/debug-posts.js",
-    "help": "node scripts/help-posts.js",
-    "test-pages": "node scripts/test-pages.js"
+    "cms": "node scripts/cms.js"
   },
   "keywords": [
     "cms",
@@ -38,4 +23,3 @@
     "url": "https://github.com/V-Gutierrez/vgutierrez-cms.git"
   }
 }
-

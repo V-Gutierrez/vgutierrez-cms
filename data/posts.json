@@ -1,17 +1,14 @@
 [
   {
-    "id": 1,
-    "title": "OK",
-    "date": "2025-07-12",
-    "excerpt": "OK",
-    "published": false,
-    "contentFile": "posts/post-1.json"
-  },
-  {
     "id": 2,
     "title": "Optimism is a Driving Force in Development Teams",
     "date": "2025-07-16",
     "excerpt": "Optimism is not naivety: it's strategy. In this personal reflection, I share how choosing optimism as a leadership mindset has shaped outcomes, culture, and trust in technical environments.",
+    "tags": [
+      "Leadership",
+      "Mindset",
+      "Culture"
+    ],
     "published": true,
     "contentFile": "posts/post-2.json"
   },
@@ -20,6 +17,11 @@
     "title": "Artificial Intelligence Encourages Simpler Software Architectures",
     "date": "2025-07-16",
     "excerpt": "To truly benefit from AI in software development, engineers must adopt simpler, cheaper, and more modular architectures; designed for machines to extend.",
+    "tags": [
+      "AI",
+      "Software Architecture",
+      "Engineering"
+    ],
     "published": true,
     "contentFile": "posts/post-3.json"
   }
