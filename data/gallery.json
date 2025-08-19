@@ -5,7 +5,11 @@
     "description": "A minimalist sketch of a tiled hallway with clean lines and perspective depth.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/hallway.jpeg",
-    "tags": ["sketch", "architecture", "minimalism"],
+    "tags": [
+      "sketch",
+      "architecture",
+      "minimalism"
+    ],
     "featured": false,
     "published": true
   },
@@ -15,7 +19,12 @@
     "description": "A surreal tower standing against a dark cloudy sky, overlooking a green field.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cldy.jpeg",
-    "tags": ["surreal", "tower", "landscape", "clouds"],
+    "tags": [
+      "surreal",
+      "tower",
+      "landscape",
+      "clouds"
+    ],
     "featured": true,
     "published": true
   },
@@ -25,7 +34,12 @@
     "description": "A vivid seashore scene with a striking orange sunset over the ocean.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cld.jpeg",
-    "tags": ["beach", "sunset", "ocean", "landscape"],
+    "tags": [
+      "beach",
+      "sunset",
+      "ocean",
+      "landscape"
+    ],
     "featured": true,
     "published": true
   },
@@ -35,7 +49,12 @@
     "description": "A winding road with glowing markings, cutting through a grassy field.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cvr.jpeg",
-    "tags": ["road", "night", "landscape", "illustration"],
+    "tags": [
+      "road",
+      "night",
+      "landscape",
+      "illustration"
+    ],
     "featured": false,
     "published": true
   },
@@ -45,7 +64,12 @@
     "description": "A soft green hill under a bright blue sky with a single cloudy sun.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/clty.jpeg",
-    "tags": ["sky", "hill", "cloud", "minimalism"],
+    "tags": [
+      "sky",
+      "hill",
+      "cloud",
+      "minimalism"
+    ],
     "featured": false,
     "published": true
   },
@@ -55,7 +79,11 @@
     "description": "Abstract scribbles of multiple colors forming dynamic textures.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cat.jpeg",
-    "tags": ["abstract", "scribbles", "color"],
+    "tags": [
+      "abstract",
+      "scribbles",
+      "color"
+    ],
     "featured": false,
     "published": true
   },
@@ -65,7 +93,11 @@
     "description": "Minimalist sketch of a single ball connected by a line, surrounded by blue strokes.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lb.jpeg",
-    "tags": ["minimalism", "ball", "abstract"],
+    "tags": [
+      "minimalism",
+      "ball",
+      "abstract"
+    ],
     "featured": false,
     "published": true
   },
@@ -75,7 +107,12 @@
     "description": "A dark blue storm brewing above a lush green field.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/sm.jpeg",
-    "tags": ["storm", "clouds", "landscape", "field"],
+    "tags": [
+      "storm",
+      "clouds",
+      "landscape",
+      "field"
+    ],
     "featured": true,
     "published": true
   },
@@ -85,7 +122,12 @@
     "description": "An ominous figure with glowing eyes and fangs, surrounded by red strokes.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/vd.jpeg",
-    "tags": ["dark", "monster", "abstract", "red"],
+    "tags": [
+      "dark",
+      "monster",
+      "abstract",
+      "red"
+    ],
     "featured": true,
     "published": true
   },
@@ -95,7 +137,12 @@
     "description": "White streaks falling over a colorful gradient of blue, green, and orange.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/bo.jpeg",
-    "tags": ["abstract", "light", "gradient", "motion"],
+    "tags": [
+      "abstract",
+      "light",
+      "gradient",
+      "motion"
+    ],
     "featured": false,
     "published": true
   },
@@ -105,7 +152,12 @@
     "description": "A rough sketch of an airplane cockpit showing flight controls and panels.",
     "category": "sketch",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cs.jpeg",
-    "tags": ["aviation", "cockpit", "airplane", "sketch"],
+    "tags": [
+      "aviation",
+      "cockpit",
+      "airplane",
+      "sketch"
+    ],
     "featured": true,
     "published": true
   },
@@ -115,7 +167,12 @@
     "description": "A colorful scene viewed from an airplane window, showing blue sky and green fields below.",
     "category": "digital art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/wv.jpeg",
-    "tags": ["aviation", "window", "landscape", "sky"],
+    "tags": [
+      "aviation",
+      "window",
+      "landscape",
+      "sky"
+    ],
     "featured": false,
     "published": true
   },
@@ -125,7 +182,12 @@
     "description": "A bold digital painting of a stylized red, white, and blue flag with a star.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/pr.jpeg",
-    "tags": ["flag", "abstract", "patriotic", "star"],
+    "tags": [
+      "flag",
+      "abstract",
+      "patriotic",
+      "star"
+    ],
     "featured": false,
     "published": true
   },
@@ -135,7 +197,12 @@
     "description": "A pencil sketch capturing the moment of a player about to kick a ball.",
     "category": "sketch",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/football_kick.jpeg",
-    "tags": ["football", "soccer", "player", "sketch"],
+    "tags": [
+      "football",
+      "soccer",
+      "player",
+      "sketch"
+    ],
     "featured": true,
     "published": true
   },
@@ -145,7 +212,12 @@
     "description": "A minimalist drawing of a single ball connected to a flowing line and surrounded by scribbles.",
     "category": "abstract art",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/ball_path.jpeg",
-    "tags": ["minimalism", "abstract", "ball", "line"],
+    "tags": [
+      "minimalism",
+      "abstract",
+      "ball",
+      "line"
+    ],
     "featured": false,
     "published": true
   },
@@ -156,7 +228,9 @@
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/skynight.jpeg",
     "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpeg",
-    "tags": [""],
+    "tags": [
+      ""
+    ],
     "featured": true,
     "published": true
   },
@@ -167,7 +241,9 @@
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/racing.jpeg",
     "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/racing-thumb.jpeg",
-    "tags": [""],
+    "tags": [
+      ""
+    ],
     "featured": true,
     "published": true
   },
@@ -180,7 +256,9 @@
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/eif.jpeg",
     "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/eif-thumb.jpeg",
-    "tags": [""],
+    "tags": [
+      ""
+    ],
     "featured": true,
     "published": true
   },
@@ -193,7 +271,23 @@
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lille_opera.jpeg",
     "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/lille_opera-thumb.jpeg",
-    "tags": [""],
+    "tags": [
+      ""
+    ],
+    "featured": true,
+    "published": true
+  },
+  {
+    "id": 135,
+    "title": "lavalle",
+    "description": "-",
+    "category": "photography",
+    "technique": "",
+    "year": 2024,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lavalle.jpeg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/lavalle-thumb.jpeg",
+    "tags": [],
+    "dimensions": "",
     "featured": true,
     "published": true
   }

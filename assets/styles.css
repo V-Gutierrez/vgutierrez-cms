@@ -408,7 +408,7 @@ main {
   margin-top: 96px;
   min-height: calc(100vh - 96px);
   /* Safe area support for devices with notch */
-  margin-top: calc(96px + env(safe-area-inset-top, 0));
+  margin-top: calc(67px + env(safe-area-inset-top, 0));
   min-height: calc(100vh - 96px - env(safe-area-inset-top, 0));
   position: relative;
   overflow: hidden;
