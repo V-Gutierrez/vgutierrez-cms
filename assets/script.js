@@ -7,60 +7,63 @@ const Router = {
   // Parse current hash and extract route information
   parseHash() {
     const hash = window.location.hash.slice(1); // Remove #
-    if (!hash) return { tab: 'home', params: {} };
-    
-    const parts = hash.split('/');
+    if (!hash) return { tab: "home", params: {} };
+
+    const parts = hash.split("/");
     const tab = parts[0];
-    
+
     // Handle post URLs like #post/2
-    if (tab === 'post' && parts[1]) {
-      return { tab: 'post-detail', params: { postId: parseInt(parts[1]) } };
+    if (tab === "post" && parts[1]) {
+      return { tab: "post-detail", params: { postId: parseInt(parts[1]) } };
     }
-    
+
     return { tab, params: {} };
   },
-  
+
   // Navigate to a route
   navigate(route) {
     const { tab, params } = route;
-    
+
     // Special handling for post detail
-    if (tab === 'post-detail' && params.postId) {
+    if (tab === "post-detail" && params.postId) {
       showPost(params.postId, false); // Don't update URL to avoid loop
       return;
     }
-    
-    // Regular tab navigation  
+
+    // Regular tab navigation
     showTab(tab, false); // Don't update URL to avoid loop
   },
-  
+
   // Update URL without triggering navigation
   updateURL(tab, params = {}) {
-    if (tab === 'post-detail' && params.postId) {
+    if (tab === "post-detail" && params.postId) {
       window.location.hash = `#post/${params.postId}`;
     } else {
       window.location.hash = `#${tab}`;
     }
   },
-  
+
   // Initialize routing
   init() {
     // Handle hash changes (back/forward buttons)
-    window.addEventListener('hashchange', () => {
+    window.addEventListener("hashchange", () => {
       const route = this.parseHash();
       this.navigate(route);
     });
-    
+
     // Store initial route for later loading
     this.initialRoute = this.parseHash();
   },
-  
+
   // Load initial route after content is loaded
   loadInitialRoute() {
-    if (this.initialRoute && (this.initialRoute.tab !== 'home' || this.initialRoute.params.postId)) {
+    if (
+      this.initialRoute &&
+      (this.initialRoute.tab !== "home" || this.initialRoute.params.postId)
+    ) {
       this.navigate(this.initialRoute);
     }
-  }
+  },
 };
 
 // Centralized configuration and helpers
@@ -101,7 +104,7 @@ function showTab(tabName, updateURL = true) {
   if (isTransitioning || tabName === currentTab) return;
 
   isTransitioning = true;
-  
+
   // Update URL unless explicitly disabled (to prevent hashchange loops)
   if (updateURL) {
     Router.updateURL(tabName);
@@ -458,29 +461,41 @@ async function loadFullContentForNewPosts(newPosts) {
 function showPost(postId, updateURL = true) {
   const post = allBlogPosts.find((p) => p.id === postId);
   if (!post) return;
-  
+
   // Update URL unless explicitly disabled
   if (updateURL) {
-    Router.updateURL('post-detail', { postId });
+    Router.updateURL("post-detail", { postId });
   }
+
+  const postMeta = `
+    <div class="post-meta">
+      <p class="post-date">Published on ${new Date(
+        post.date,
+      ).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })}</p>
+            <div class="post-share">
+        <button class="share-button" onclick="sharePost(${postId})">
+          <div class="share-content">
+            <span class="share-command">[user@site]$ share link</span>
+            <span class="share-feedback"></span>
+          </div>
+          <span class="share-icon">📤</span>
+        </button>
+      </div>
+    </div>
+  `;
 
   document.getElementById("post-content").innerHTML = `
           <div class="post-header">
               <h1 class="post-title">${post.title}</h1>
-              <div class="post-meta">
-                  Published on ${new Date(post.date).toLocaleDateString(
-                    "en-US",
-                    {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    },
-                  )}
-              </div>
           </div>
           <div class="post-content">
               ${post.content}
           </div>
+          ${postMeta}
       `;
 
   showTab("post-detail", !updateURL); // Invert the updateURL for showTab
@@ -522,7 +537,7 @@ async function loadBlogPosts() {
 
     // Update easter egg data
     if (window.vg) window.vg.blogPosts = allBlogPosts;
-    
+
     // Load initial route after blog posts are loaded
     Router.loadInitialRoute();
   } catch (error) {
@@ -554,7 +569,7 @@ async function loadBlogPosts() {
 
     // Fall back to sample data
     initializeBlog();
-    
+
     // Still try to load initial route (for non-post routes)
     Router.loadInitialRoute();
   }
@@ -941,7 +956,7 @@ function showEasterEgg() {
     "color: #ffd700; font-weight: bold; font-size: 14px;",
   );
   console.log(
-    '%cTry typing "vg.projects" or "vg.profile" to inspect the data!',
+    '%cTry typing "vg.projects", "vg.profile", "vg.gallery", or "vg.bug" to inspect the data!',
     "color: #cccccc; font-style: italic;",
   );
 
@@ -956,6 +971,22 @@ function showEasterEgg() {
       console.log(
         "📫 Want to get in touch? Check the social links on the homepage!",
       ),
+    bug: {
+      title: "🐛 The Post-Detail Refresh Bug",
+      description: "A charming little bug in the routing system",
+      reproduction: [
+        "1. Navigate to any blog post (e.g., click on a post from the blog section)",
+        "2. Notice you're now on route #post/ID and can read the post normally",
+        "3. Refresh the page (F5 or Ctrl+R)",
+        "4. 🐛 Bug occurs: Page loads but post content disappears",
+        "5. Post data isn't loaded yet when router tries to show the post",
+      ],
+      technicalCause:
+        "Race condition between blog data loading and initial route navigation",
+      workaround: "Navigate back to blog and click the post again",
+      severity: "Low - doesn't break core functionality",
+      status: "Known and documented ✨",
+    },
   };
 }
 
@@ -1105,7 +1136,7 @@ function resetTouchFeedback() {
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize routing system
   Router.init();
-  
+
   // Show easter egg for console users
   showEasterEgg();
 
@@ -1181,8 +1212,10 @@ function setupScrollDetection() {
     const pageIsLong = contentExcess > MIN_PAGE_EXCESS;
     const userScrolled = scrollY > MIN_SCROLL_FOR_DOTS;
 
-    const shouldShow = pageIsLong && userScrolled && scrollPercentage > SHOW_PERCENT;
-    const shouldHide = !userScrolled || scrollPercentage <= HIDE_PERCENT || !pageIsLong;
+    const shouldShow =
+      pageIsLong && userScrolled && scrollPercentage > SHOW_PERCENT;
+    const shouldHide =
+      !userScrolled || scrollPercentage <= HIDE_PERCENT || !pageIsLong;
 
     if (shouldShow && !isProgressVisible) {
       showProgressDots();
@@ -1255,21 +1288,22 @@ let galleryImages = [];
 
 async function loadGalleryImages() {
   const container = document.querySelector(".gallery-grid");
-  
+
   try {
     // Show loading state
     if (container) {
-      container.innerHTML = '<div class="loading">🎨 Loading gallery images...</div>';
+      container.innerHTML =
+        '<div class="loading">🎨 Loading gallery images...</div>';
     }
 
     const response = await fetch(`${CONFIG.API_BASE}/${PATHS.gallery}`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     const images = await response.json();
-    
+
     // Filter for published images only
     const publishedImages = images.filter((image) => image.published);
 
@@ -1282,7 +1316,7 @@ async function loadGalleryImages() {
       category: image.category,
       tags: image.tags,
       url: image.image,
-      featured: image.featured
+      featured: image.featured,
     }));
 
     // Shuffle like projects section
@@ -1292,7 +1326,7 @@ async function loadGalleryImages() {
     if (window.vg) window.vg.gallery = galleryImages;
   } catch (error) {
     console.error("Error loading gallery:", error);
-    
+
     if (container) {
       container.innerHTML = `
         <div class="loading" style="color: #ff6b6b;">
@@ -1395,3 +1429,158 @@ document.addEventListener("click", (e) => {
     closeGalleryModal();
   }
 });
+
+// Terminal-themed share functionality for posts
+function sharePost(postId) {
+  const shareButton = document.querySelector(".share-button");
+  const shareCommand = shareButton.querySelector(".share-command");
+  const shareFeedback = shareButton.querySelector(".share-feedback");
+  const shareIcon = shareButton.querySelector(".share-icon");
+
+  // Get post data for native sharing
+  const post = allBlogPosts.find((p) => p.id === postId);
+  const postUrl = `${window.location.origin}${window.location.pathname}#post/${postId}`;
+
+  // Try Web Share API first (native device integration)
+  if (navigator.share && post) {
+    navigator
+      .share({
+        title: post.title,
+        text:
+          post.excerpt ||
+          `Check out this post by Victor Gutierrez: ${post.title}`,
+        url: postUrl,
+      })
+      .then(() => {
+        showShareSuccess(
+          shareButton,
+          shareCommand,
+          shareFeedback,
+          shareIcon,
+          "shared",
+        );
+      })
+      .catch((error) => {
+        // User cancelled or error occurred, fallback to clipboard
+        if (error.name !== "AbortError") {
+          copyToClipboard(
+            postUrl,
+            shareButton,
+            shareCommand,
+            shareFeedback,
+            shareIcon,
+          );
+        }
+      });
+  } else {
+    // Fallback to clipboard copy
+    copyToClipboard(
+      postUrl,
+      shareButton,
+      shareCommand,
+      shareFeedback,
+      shareIcon,
+    );
+  }
+}
+
+function copyToClipboard(
+  postUrl,
+  shareButton,
+  shareCommand,
+  shareFeedback,
+  shareIcon,
+) {
+  // Try to copy to clipboard
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard
+      .writeText(postUrl)
+      .then(() => {
+        showShareSuccess(
+          shareButton,
+          shareCommand,
+          shareFeedback,
+          shareIcon,
+          "copied",
+        );
+      })
+      .catch(() => {
+        showShareFallback(
+          postUrl,
+          shareButton,
+          shareCommand,
+          shareFeedback,
+          shareIcon,
+        );
+      });
+  } else {
+    // Fallback for older browsers or non-secure contexts
+    showShareFallback(
+      postUrl,
+      shareButton,
+      shareCommand,
+      shareFeedback,
+      shareIcon,
+    );
+  }
+}
+
+function showShareSuccess(
+  shareButton,
+  shareCommand,
+  shareFeedback,
+  shareIcon,
+  type,
+) {
+  // Add success state
+  shareButton.classList.add("success");
+
+  if (type === "shared") {
+    shareCommand.textContent = "[user@site]$ shared successfully!";
+    shareIcon.textContent = "✅";
+  } else {
+    shareCommand.textContent = "[user@site]$ link copied successfully!";
+    shareIcon.textContent = "📋";
+  }
+
+  shareFeedback.innerHTML = '<span class="terminal-cursor"></span>';
+
+  // Reset after 3 seconds
+  setTimeout(() => {
+    shareButton.classList.remove("success");
+    shareCommand.textContent = "[user@site]$ cp link --clipboard";
+    shareIcon.textContent = "📤";
+    shareFeedback.innerHTML = "";
+  }, 3000);
+}
+
+function showShareFallback(
+  postUrl,
+  shareButton,
+  shareCommand,
+  shareFeedback,
+  shareIcon,
+) {
+  // Add fallback state
+  shareButton.classList.add("fallback");
+  shareCommand.textContent = "[user@site]$ select and copy:";
+  shareIcon.textContent = "⚠️";
+  shareFeedback.innerHTML = `<input type="text" value="${postUrl}" readonly onclick="this.select()" style="background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 2px 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; margin-left: 8px; width: 250px;">`;
+
+  // Auto-select the URL
+  setTimeout(() => {
+    const input = shareFeedback.querySelector("input");
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }, 100);
+
+  // Reset after 10 seconds
+  setTimeout(() => {
+    shareButton.classList.remove("fallback");
+    shareCommand.textContent = "[user@site]$ cp link --clipboard";
+    shareIcon.textContent = "📤";
+    shareFeedback.innerHTML = "";
+  }, 10000);
+}
