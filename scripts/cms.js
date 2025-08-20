@@ -2,6 +2,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
 const cli = require('./utils/cli');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -10,12 +11,28 @@ const IMAGES_DIR = path.join(DATA_DIR, 'images');
 const GALLERY_FILE = path.join(DATA_DIR, 'gallery.json');
 
 // Utils
+function generateId() {
+  return crypto.randomUUID().replace(/-/g, '');
+}
+
 function generateSlug(title) {
   return title
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, '-')
     .trim();
+}
+
+async function ensureUniqueSlug(baseSlug, existingItems, slugField = 'slug') {
+  let slug = baseSlug;
+  let counter = 1;
+  
+  while (existingItems.some(item => item[slugField] === slug)) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  
+  return slug;
 }
 
 function estimateReadingTime(content) {
@@ -42,25 +59,26 @@ async function blogCreate() {
     : await cli.ask('Post content (HTML): ');
 
   const posts = await loadPosts();
-  const newId = Math.max(0, ...posts.map(p => p.id)) + 1;
-  const slug = generateSlug(title);
+  const uuid = generateId();
+  const baseSlug = generateSlug(title);
+  const slug = await ensureUniqueSlug(baseSlug, posts);
   const date = new Date().toISOString().split('T')[0];
 
   const postIndex = {
-    id: newId,
-    title,
+    id: uuid,
     slug,
+    title,
     date,
     excerpt,
     tags: tags.split(',').map(t => t.trim()).filter(Boolean),
     published: true,
-    contentFile: `posts/post-${newId}.json`
+    contentFile: `posts/${slug}.json`
   };
 
   const postContent = {
-    id: newId,
-    title,
+    id: uuid,
     slug,
+    title,
     date,
     author: 'Victor Gutierrez',
     tags: postIndex.tags,
@@ -75,10 +93,10 @@ async function blogCreate() {
     }
   };
 
-  await fs.writeFile(path.join(POSTS_DIR, `post-${newId}.json`), JSON.stringify(postContent, null, 2));
+  await fs.writeFile(path.join(POSTS_DIR, `${slug}.json`), JSON.stringify(postContent, null, 2));
   posts.push(postIndex);
   await savePosts(posts);
-  console.log(`\n✅ Post created successfully with ID: ${newId}`);
+  console.log(`\n✅ Post created successfully with slug: ${slug}`);
 }
 async function blogList() {
   const posts = await loadPosts();
@@ -86,8 +104,8 @@ async function blogList() {
   if (!posts.length) return console.log('No posts found.');
   posts.forEach((post) => {
     const status = post.published ? '✅ Published' : '❌ Draft';
-    console.log(`${post.id}. ${post.title}`);
-    console.log(`   Date: ${post.date} | Status: ${status}`);
+    console.log(`📝 ${post.title}`);
+    console.log(`   Slug: ${post.slug} | Date: ${post.date} | Status: ${status}`);
     console.log(`   Tags: ${post.tags.join(', ')}`);
     console.log(`   Excerpt: ${post.excerpt.substring(0, 100)}...\n`);
   });
@@ -96,8 +114,8 @@ async function blogEdit() {
   const posts = await loadPosts();
   if (!posts.length) return console.log('No posts found to edit.');
   await blogList();
-  const postId = parseInt(await cli.ask('Enter post ID to edit: '));
-  const post = posts.find(p => p.id === postId);
+  const postSlug = await cli.ask('Enter post slug to edit: ');
+  const post = posts.find(p => p.slug === postSlug);
   if (!post) return console.log('Post not found.');
 
   const contentPath = path.join(DATA_DIR, post.contentFile);
@@ -116,7 +134,12 @@ async function blogEdit() {
   post.excerpt = newExcerpt;
   post.tags = newTags.split(',').map(t => t.trim()).filter(Boolean);
   post.published = !!published;
-  post.slug = generateSlug(newTitle);
+  
+  if (newTitle !== fullPost.title) {
+    const baseSlug = generateSlug(newTitle);
+    const otherPosts = posts.filter(p => p.slug !== post.slug);
+    post.slug = await ensureUniqueSlug(baseSlug, otherPosts);
+  }
 
   fullPost.title = newTitle;
   fullPost.excerpt = newExcerpt;
@@ -137,8 +160,8 @@ async function blogDelete() {
   const posts = await loadPosts();
   if (!posts.length) return console.log('No posts found to delete.');
   await blogList();
-  const postId = parseInt(await cli.ask('Enter post ID to delete: '));
-  const idx = posts.findIndex(p => p.id === postId);
+  const postSlug = await cli.ask('Enter post slug to delete: ');
+  const idx = posts.findIndex(p => p.slug === postSlug);
   if (idx === -1) return console.log('Post not found.');
   const post = posts[idx];
   const ok = await cli.confirm(`Are you sure you want to delete "${post.title}"?`, false);
@@ -168,12 +191,13 @@ async function projectCreate() {
   const endDate = await cli.ask('End date (YYYY-MM-DD or "ongoing"): ');
   const featured = await cli.confirm('Featured project?', false);
   const projects = await loadProjects();
-  const newId = Math.max(0, ...projects.map(p => p.id)) + 1;
-  const slug = generateSlug(title);
+  const uuid = generateId();
+  const baseSlug = generateSlug(title);
+  const slug = await ensureUniqueSlug(baseSlug, projects);
   const newProject = {
-    id: newId,
-    title,
+    id: uuid,
     slug,
+    title,
     description,
     category,
     technologies: technologies.split(',').map(t => t.trim()).filter(Boolean),
@@ -186,16 +210,16 @@ async function projectCreate() {
   };
   projects.push(newProject);
   await saveProjects(projects);
-  console.log(`\n✅ Project created successfully with ID: ${newId}`);
+  console.log(`\n✅ Project created successfully with slug: ${slug}`);
 }
 async function projectList() {
   const projects = await loadProjects();
   console.log('\n=== All Projects ===\n');
   if (!projects.length) return console.log('No projects found.');
   projects.forEach((p) => {
-    const star = p.featured ? '⭐' : ' ';
-    console.log(`${star} ${p.id}. ${p.title}`);
-    console.log(`   Category: ${p.category} | Status: ${p.status}`);
+    const star = p.featured ? '⭐' : '📦';
+    console.log(`${star} ${p.title}`);
+    console.log(`   Slug: ${p.slug} | Category: ${p.category} | Status: ${p.status}`);
     console.log(`   Technologies: ${p.technologies.join(', ')}`);
     console.log(`   Period: ${p.startDate} to ${p.endDate}`);
     console.log(`   Description: ${p.description.substring(0, 100)}...\n`);
@@ -205,9 +229,11 @@ async function projectEdit() {
   const projects = await loadProjects();
   if (!projects.length) return console.log('No projects found to edit.');
   await projectList();
-  const id = parseInt(await cli.ask('Enter project ID to edit: '));
-  const p = projects.find(x => x.id === id);
+  const slug = await cli.ask('Enter project slug to edit: ');
+  const p = projects.find(x => x.slug === slug);
   if (!p) return console.log('Project not found.');
+  
+  const oldTitle = p.title;
   p.title = await cli.askDefault('Title', p.title);
   p.description = await cli.askDefault('Description', p.description);
   p.category = await cli.askDefault('Category', p.category);
@@ -216,7 +242,12 @@ async function projectEdit() {
   p.startDate = await cli.askDefault('Start date', p.startDate);
   p.endDate = await cli.askDefault('End date', p.endDate);
   p.featured = await cli.confirm('Featured?', p.featured);
-  p.slug = generateSlug(p.title);
+  
+  if (p.title !== oldTitle) {
+    const baseSlug = generateSlug(p.title);
+    const otherProjects = projects.filter(proj => proj.slug !== p.slug);
+    p.slug = await ensureUniqueSlug(baseSlug, otherProjects);
+  }
   await saveProjects(projects);
   console.log('\n✅ Project updated successfully!');
 }
@@ -224,8 +255,8 @@ async function projectDelete() {
   const projects = await loadProjects();
   if (!projects.length) return console.log('No projects found to delete.');
   await projectList();
-  const id = parseInt(await cli.ask('Enter project ID to delete: '));
-  const idx = projects.findIndex(x => x.id === id);
+  const slug = await cli.ask('Enter project slug to delete: ');
+  const idx = projects.findIndex(x => x.slug === slug);
   if (idx === -1) return console.log('Project not found.');
   const ok = await cli.confirm(`Are you sure you want to delete "${projects[idx].title}"?`, false);
   if (!ok) return console.log('Delete cancelled.');
@@ -351,12 +382,15 @@ async function galleryCreate() {
   const featured = await cli.confirm('Featured item?', false);
 
   const gallery = await loadGallery();
-  const newId = Math.max(0, ...gallery.map(i => i.id)) + 1;
+  const uuid = generateId();
+  const baseSlug = generateSlug(title);
+  const slug = await ensureUniqueSlug(baseSlug, gallery);
   const baseUrl = 'https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery';
   const imageUrl = `${baseUrl}/${baseName}.${ext}`;
   const thumbnailUrl = `${baseUrl}/thumbnails/${baseName}-thumb.${ext}`;
   const item = {
-    id: newId,
+    id: uuid,
+    slug,
     title,
     description,
     category: category.toLowerCase(),
@@ -371,7 +405,7 @@ async function galleryCreate() {
   };
   gallery.push(item);
   await saveGallery(gallery);
-  console.log(`\n✅ Gallery item created successfully with ID: ${newId}`);
+  console.log(`\n✅ Gallery item created successfully with slug: ${slug}`);
   console.log(`📸 Image URL: ${imageUrl}`);
   console.log(`🖼️  Thumbnail URL: ${thumbnailUrl}`);
   console.log('\n📝 Remember to upload the image files to:');
@@ -384,9 +418,9 @@ async function galleryList() {
   if (!gallery.length) return console.log('No gallery items found.');
   gallery.forEach((item) => {
     const status = item.published ? '✅ Published' : '❌ Draft';
-    const featured = item.featured ? '⭐ Featured' : '';
-    console.log(`${item.id}. ${item.title} ${featured}`);
-    console.log(`   Category: ${item.category} | Year: ${item.year} | Status: ${status}`);
+    const featured = item.featured ? '⭐' : '🖼️';
+    console.log(`${featured} ${item.title}`);
+    console.log(`   Slug: ${item.slug} | Category: ${item.category} | Year: ${item.year} | Status: ${status}`);
     console.log(`   Technique: ${item.technique} | Dimensions: ${item.dimensions}`);
     console.log(`   Tags: ${item.tags.join(', ')}`);
     console.log(`   Description: ${item.description.substring(0, 100)}...\n`);
@@ -396,9 +430,11 @@ async function galleryEdit() {
   const gallery = await loadGallery();
   if (!gallery.length) return console.log('No gallery items found to edit.');
   await galleryList();
-  const id = parseInt(await cli.ask('Enter item ID to edit: '));
-  const item = gallery.find(i => i.id === id);
+  const slug = await cli.ask('Enter item slug to edit: ');
+  const item = gallery.find(i => i.slug === slug);
   if (!item) return console.log('Gallery item not found.');
+  
+  const oldTitle = item.title;
   item.title = await cli.askDefault('Title', item.title);
   item.description = await cli.askDefault('Description', item.description);
   item.category = (await cli.askDefault('Category', item.category)).toLowerCase();
@@ -408,6 +444,13 @@ async function galleryEdit() {
   item.dimensions = await cli.askDefault('Dimensions', item.dimensions);
   item.featured = await cli.confirm('Featured?', item.featured);
   item.published = await cli.confirm('Published?', item.published);
+  
+  if (item.title !== oldTitle) {
+    const baseSlug = generateSlug(item.title);
+    const otherItems = gallery.filter(g => g.slug !== item.slug);
+    item.slug = await ensureUniqueSlug(baseSlug, otherItems);
+  }
+  
   await saveGallery(gallery);
   console.log('\n✅ Gallery item updated successfully!');
 }
@@ -415,8 +458,8 @@ async function galleryDelete() {
   const gallery = await loadGallery();
   if (!gallery.length) return console.log('No gallery items found to delete.');
   await galleryList();
-  const id = parseInt(await cli.ask('Enter item ID to delete: '));
-  const idx = gallery.findIndex(i => i.id === id);
+  const slug = await cli.ask('Enter item slug to delete: ');
+  const idx = gallery.findIndex(i => i.slug === slug);
   if (idx === -1) return console.log('Gallery item not found.');
   const ok = await cli.confirm(`Are you sure you want to delete "${gallery[idx].title}"?`, false);
   if (!ok) return console.log('Delete cancelled.');
@@ -425,51 +468,6 @@ async function galleryDelete() {
   console.log('\n✅ Gallery item deleted successfully!');
 }
 
-// Images
-const GITHUB_REPO = 'V-Gutierrez/vgutierrez-cms';
-const GITHUB_BRANCH = 'main';
-async function imageUrls() {
-  const baseUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/data/images`;
-  console.log('🖼️  GitHub Image URLs:\n=====================\n');
-  console.log('Base URL:', baseUrl);
-  console.log('\nURL Templates:');
-  console.log('- Profile Photo: ' + `${baseUrl}/profile/victor-photo.jpg`);
-  console.log('- Project Images: ' + `${baseUrl}/projects/{project-slug}.jpg`);
-  console.log('- Blog Images: ' + `${baseUrl}/blog/{post-slug}-hero.jpg`);
-  console.log('- Blog Content: ' + `${baseUrl}/blog/{post-slug}-{image-name}.jpg`);
-}
-async function imageList() {
-  console.log('📁 Current Images Structure:\n============================');
-  const categories = ['profile', 'projects', 'blog', 'gallery'];
-  for (const category of categories) {
-    const categoryPath = path.join(IMAGES_DIR, category);
-    try {
-      const files = await fs.readdir(categoryPath);
-      console.log(`\n📂 ${category}/`);
-      if (!files.length) console.log('   (empty - add images here)');
-      else files.forEach((file) => console.log(`   🖼️  ${file}`));
-    } catch (_) {
-      console.log(`\n📂 ${category}/`);
-      console.log('   (directory not accessible)');
-    }
-  }
-}
-async function imageAddRef() {
-  console.log('\n=== Add Image Reference ===\n');
-  const type = await cli.ask('Image type (profile/projects/blog/gallery): ');
-  const name = await cli.ask('Image filename (with extension): ');
-  const description = await cli.ask('Image description: ');
-  const baseUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/data/images`;
-  const imageUrl = `${baseUrl}/${type}/${name}`;
-  console.log('\n✅ Image Reference Created:\n==========================');
-  console.log(`URL: ${imageUrl}`);
-  console.log(`Type: ${type}`);
-  console.log(`Description: ${description}`);
-  console.log('\n📝 Next Steps:');
-  console.log(`1. Add the image file to: data/images/${type}/${name}`);
-  console.log('2. Commit and push to GitHub');
-  console.log('3. Use this URL in your content');
-}
 
 // Main menu
 async function menuBlog() {
@@ -538,20 +536,6 @@ async function menuGallery() {
     else if (c === '5') return; else console.log('Invalid option.');
   }
 }
-async function menuImages() {
-  while (true) {
-    console.log('\nImages:');
-    console.log('1. List images');
-    console.log('2. Generate image URLs');
-    console.log('3. Add new image reference');
-    console.log('4. Back');
-    const c = await cli.ask('\nChoose (1-4): ');
-    if (c === '1') await imageList();
-    else if (c === '2') await imageUrls();
-    else if (c === '3') await imageAddRef();
-    else if (c === '4') return; else console.log('Invalid option.');
-  }
-}
 
 async function main() {
   console.log('🛠️  Victor Gutierrez CMS - Unified CLI');
@@ -562,15 +546,13 @@ async function main() {
     console.log('2. Projects');
     console.log('3. Profile');
     console.log('4. Gallery');
-    console.log('5. Images');
-    console.log('6. Exit');
-    const choice = await cli.ask('\nChoose a section (1-6): ');
+    console.log('5. Exit');
+    const choice = await cli.ask('\nChoose a section (1-5): ');
     if (choice === '1') await menuBlog();
     else if (choice === '2') await menuProjects();
     else if (choice === '3') await menuProfile();
     else if (choice === '4') await menuGallery();
-    else if (choice === '5') await menuImages();
-    else if (choice === '6') { console.log('👋 Goodbye!'); cli.close(); return; }
+    else if (choice === '5') { console.log('👋 Goodbye!'); cli.close(); return; }
     else console.log('Invalid option.');
   }
 }
