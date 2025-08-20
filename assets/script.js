@@ -2,6 +2,67 @@
 let currentTab = "home";
 let isTransitioning = false;
 
+// Routing system
+const Router = {
+  // Parse current hash and extract route information
+  parseHash() {
+    const hash = window.location.hash.slice(1); // Remove #
+    if (!hash) return { tab: 'home', params: {} };
+    
+    const parts = hash.split('/');
+    const tab = parts[0];
+    
+    // Handle post URLs like #post/2
+    if (tab === 'post' && parts[1]) {
+      return { tab: 'post-detail', params: { postId: parseInt(parts[1]) } };
+    }
+    
+    return { tab, params: {} };
+  },
+  
+  // Navigate to a route
+  navigate(route) {
+    const { tab, params } = route;
+    
+    // Special handling for post detail
+    if (tab === 'post-detail' && params.postId) {
+      showPost(params.postId, false); // Don't update URL to avoid loop
+      return;
+    }
+    
+    // Regular tab navigation  
+    showTab(tab, false); // Don't update URL to avoid loop
+  },
+  
+  // Update URL without triggering navigation
+  updateURL(tab, params = {}) {
+    if (tab === 'post-detail' && params.postId) {
+      window.location.hash = `#post/${params.postId}`;
+    } else {
+      window.location.hash = `#${tab}`;
+    }
+  },
+  
+  // Initialize routing
+  init() {
+    // Handle hash changes (back/forward buttons)
+    window.addEventListener('hashchange', () => {
+      const route = this.parseHash();
+      this.navigate(route);
+    });
+    
+    // Store initial route for later loading
+    this.initialRoute = this.parseHash();
+  },
+  
+  // Load initial route after content is loaded
+  loadInitialRoute() {
+    if (this.initialRoute && (this.initialRoute.tab !== 'home' || this.initialRoute.params.postId)) {
+      this.navigate(this.initialRoute);
+    }
+  }
+};
+
 // Centralized configuration and helpers
 const CONFIG = {
   BREAKPOINT: 1025,
@@ -36,10 +97,15 @@ const updateActiveByDataAttr = (selector, dataKey, value) => {
   );
 };
 
-function showTab(tabName) {
+function showTab(tabName, updateURL = true) {
   if (isTransitioning || tabName === currentTab) return;
 
   isTransitioning = true;
+  
+  // Update URL unless explicitly disabled (to prevent hashchange loops)
+  if (updateURL) {
+    Router.updateURL(tabName);
+  }
   const currentTabElement = document.getElementById(currentTab);
   const newTabElement = document.getElementById(tabName);
 
@@ -389,9 +455,14 @@ async function loadFullContentForNewPosts(newPosts) {
 }
 
 // Show individual post
-function showPost(postId) {
+function showPost(postId, updateURL = true) {
   const post = allBlogPosts.find((p) => p.id === postId);
   if (!post) return;
+  
+  // Update URL unless explicitly disabled
+  if (updateURL) {
+    Router.updateURL('post-detail', { postId });
+  }
 
   document.getElementById("post-content").innerHTML = `
           <div class="post-header">
@@ -412,7 +483,7 @@ function showPost(postId) {
           </div>
       `;
 
-  showTab("post-detail");
+  showTab("post-detail", !updateURL); // Invert the updateURL for showTab
 }
 
 // Load blog posts from GitHub
@@ -451,6 +522,9 @@ async function loadBlogPosts() {
 
     // Update easter egg data
     if (window.vg) window.vg.blogPosts = allBlogPosts;
+    
+    // Load initial route after blog posts are loaded
+    Router.loadInitialRoute();
   } catch (error) {
     console.error("Error loading blog posts:", error);
 
@@ -480,6 +554,9 @@ async function loadBlogPosts() {
 
     // Fall back to sample data
     initializeBlog();
+    
+    // Still try to load initial route (for non-post routes)
+    Router.loadInitialRoute();
   }
 }
 
@@ -1026,6 +1103,9 @@ function resetTouchFeedback() {
 
 // Initialize the site when page loads
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize routing system
+  Router.init();
+  
   // Show easter egg for console users
   showEasterEgg();
 
