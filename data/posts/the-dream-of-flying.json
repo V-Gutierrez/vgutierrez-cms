@@ -1,0 +1,27 @@
+{
+  "id": "f3f11e3bc3e0405693c1f32ed56636f8",
+  "slug": "the-dream-of-flying",
+  "title": "The Dream of Flying",
+  "date": "2025-08-21",
+  "author": "Victor Gutierrez",
+  "tags": [
+    "life",
+    "aviation",
+    "dreams",
+    "reflections"
+  ],
+  "published": true,
+  "excerpt": "Not just a wish, but a possibility taking shape in my mind.",
+  "content": "<section class=\"vg-post-flying\" aria-labelledby=\"post-title\">\n  <style>\n    .vg-post-flying {\n      --accent: #2563eb;              /* accent color */\n      --text: #0f172a;                /* slate-900 */\n      --muted: #475569;               /* slate-600 */\n      --bg: #ffffff;\n      --card: #f8fafc;                /* slate-50 */\n      --shadow: 0 10px 30px rgba(2, 6, 23, .10);\n      color: var(--text);\n      background: var(--bg);\n      padding: clamp(1.25rem, 2vw, 2rem);\n      border-radius: 1.25rem;\n      box-shadow: var(--shadow);\n      max-width: 72ch;\n      margin: 0 auto;\n    }\n    @media (prefers-color-scheme: dark) {\n      .vg-post-flying {\n        --text: #e5e7eb;             /* slate-200 */\n        --muted: #94a3b8;            /* slate-400 */\n        --bg: #0b1020;               /* deep blue-ish */\n        --card: #0f172a;             /* slate-900 */\n        --shadow: 0 10px 30px rgba(0, 0, 0, .35);\n      }\n    }\n\n    .vg-post-flying article { display: grid; gap: 1.25rem; }\n    .vg-post-flying h1 {\n      font-size: clamp(1.8rem, 3vw, 2.4rem);\n      line-height: 1.1;\n      margin: 0;\n      letter-spacing: -0.02em;\n    }\n\n    .vg-post-flying .post-excerpt {\n      margin: .5rem 0 0;\n      font-style: italic;\n      color: var(--muted);\n      border-left: 3px solid var(--accent);\n      padding-left: .75rem;\n    }\n\n    .vg-post-flying figure._hero-post-flying {\n      margin: 0;\n      background: linear-gradient(180deg, rgba(37, 99, 235, .08), rgba(37, 99, 235, .02));\n      border-radius: 1rem;\n      overflow: clip;\n      box-shadow: var(--shadow);\n    }\n    .vg-post-flying figure._hero-post-flying .media-frame {\n      position: relative;\n      aspect-ratio: 16 / 9;\n      width: 100%;\n      overflow: hidden;\n    }\n    .vg-post-flying figure._hero-post-flying img {\n      width: 100%;\n      height: 100%;\n      object-fit: cover;\n      display: block;\n    }\n    .vg-post-flying figure._hero-post-flying figcaption {\n      font-size: .9rem;\n      color: var(--muted);\n      padding: .75rem 1rem 1rem;\n    }\n\n    .vg-post-flying .content p {\n      margin: 0 0 1rem;\n      font-size: clamp(1rem, 1.3vw, 1.06rem);\n      line-height: 1.65;\n    }\n    .vg-post-flying .content p:last-child { margin-bottom: 0; }\n\n    /* Subtle link styling if needed inside content */\n    .vg-post-flying a { color: var(--accent); text-decoration: none; }\n    .vg-post-flying a:hover { text-decoration: underline; }\n  </style>\n\n  <article>\n    <figure class=\"_hero-post-flying\">\n      <div class=\"media-frame\">\n        <img\n          src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cockpit-sketch.jpeg\"\n          alt=\"First-person view from a small single-engine cockpit on final approach, runway centered on the horizon.\"\n          loading=\"lazy\"\n          decoding=\"async\"\n          width=\"1600\"\n          height=\"900\"\n          sizes=\"(max-width: 800px) 100vw, 800px\"\n        />\n      </div>\n      <figcaption>That vivid moment when a dream turns into a scene you can almost live.</figcaption>\n    </figure>\n\n    <div class=\"content\">\n      <p>I have a dream of piloting an airplane. I don’t say this casually, the way someone might say they’d like to learn guitar someday or take a far-off trip. I actually see myself flying. The image is clear in my mind: I’m in the cockpit of a small aircraft, hands on the controls, feeling the machine respond, and finally bringing the plane down safely onto a runway.</p>\n\n      <p>It’s not just an abstract idea. It’s a vivid scene, one I replay over and over, almost as if I’ve already been there. And that catches people’s attention. When I share it, I notice some are taken aback. Maybe because talking about flying a plane already feels so distant, like something from another world. Maybe because the clarity of this vision doesn’t sound like what we usually call a “dream.”</p>\n\n      <p>But that’s exactly what fascinates me: the strength a dream holds when it stops being vague and takes on details — sights, sounds, textures. For me, it’s not just a desire, it’s a possibility. And seeing this scene so clearly within myself is the first step toward making it real outside of me.</p>\n    </div>\n  </article>\n</section>\n",
+  "readingTime": 3,
+  "seo": {
+    "metaTitle": "The Dream of Flying - Victor Gutierrez",
+    "metaDescription": "Not just a wish, but a possibility taking shape in my mind.",
+    "keywords": [
+      "life",
+      "aviation",
+      "dreams",
+      "reflections"
+    ]
+  }
+}

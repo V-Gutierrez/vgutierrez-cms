@@ -290,5 +290,20 @@
     "dimensions": "",
     "featured": true,
     "published": true
+  },
+  {
+    "id": "d642ed433f19447da9baf9bdc6dc346d",
+    "slug": "nose",
+    "title": "nose",
+    "description": "",
+    "category": "",
+    "technique": "",
+    "year": 2025,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/nose.jpeg",
+    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/nose-thumb.jpeg",
+    "tags": [],
+    "dimensions": "",
+    "featured": true,
+    "published": true
   }
 ]

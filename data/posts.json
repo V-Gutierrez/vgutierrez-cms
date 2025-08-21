@@ -24,5 +24,20 @@
     ],
     "published": true,
     "contentFile": "posts/post-3.json"
+  },
+  {
+    "id": "f3f11e3bc3e0405693c1f32ed56636f8",
+    "slug": "the-dream-of-flying",
+    "title": "The Dream of Flying",
+    "date": "2025-08-21",
+    "excerpt": "Not just a wish, but a possibility taking shape in my mind.",
+    "tags": [
+      "life",
+      "aviation",
+      "dreams",
+      "reflections"
+    ],
+    "published": true,
+    "contentFile": "posts/the-dream-of-flying.json"
   }
 ]
