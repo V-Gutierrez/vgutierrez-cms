@@ -1,0 +1,3 @@
+[submodule "codex"]
+    path = codex
+    url = https://github.com/V-Gutierrez/vgutierrez-cms/codex.git
