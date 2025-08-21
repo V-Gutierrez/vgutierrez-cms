@@ -12,9 +12,9 @@ const Router = {
     const parts = hash.split("/");
     const tab = parts[0];
 
-    // Handle post URLs like #post/2
+    // Handle post URLs like #post/slug
     if (tab === "post" && parts[1]) {
-      return { tab: "post-detail", params: { postId: parseInt(parts[1]) } };
+      return { tab: "post-detail", params: { postSlug: parts[1] } };
     }
 
     return { tab, params: {} };
@@ -25,8 +25,8 @@ const Router = {
     const { tab, params } = route;
 
     // Special handling for post detail
-    if (tab === "post-detail" && params.postId) {
-      showPost(params.postId, false); // Don't update URL to avoid loop
+    if (tab === "post-detail" && params.postSlug) {
+      showPost(params.postSlug, false); // Don't update URL to avoid loop
       return;
     }
 
@@ -36,8 +36,8 @@ const Router = {
 
   // Update URL without triggering navigation
   updateURL(tab, params = {}) {
-    if (tab === "post-detail" && params.postId) {
-      window.location.hash = `#post/${params.postId}`;
+    if (tab === "post-detail" && params.postSlug) {
+      window.location.hash = `#post/${params.postSlug}`;
     } else {
       window.location.hash = `#${tab}`;
     }
@@ -59,7 +59,7 @@ const Router = {
   loadInitialRoute() {
     if (
       this.initialRoute &&
-      (this.initialRoute.tab !== "home" || this.initialRoute.params.postId)
+      (this.initialRoute.tab !== "home" || this.initialRoute.params.postSlug)
     ) {
       this.navigate(this.initialRoute);
     }
@@ -77,7 +77,7 @@ const CONFIG = {
 
 const PATHS = {
   posts: "posts.json",
-  post: (id) => `posts/post-${id}.json`,
+  post: (slug) => `posts/${slug}.json`,
   projects: "projects.json",
   gallery: "gallery.json",
 };
@@ -254,7 +254,7 @@ let displayedPostsCount = 0;
 // Templates
 const templates = {
   blogCard: (post) => `
-    <article class="blog-post" data-id="${post.id}" onclick="showPost(${post.id})">
+    <article class="blog-post" data-slug="${post.slug}" onclick="showPost('${post.slug}')">
       <h3 class="blog-post-title">${post.title}</h3>
       <div class="blog-post-date">${formatDate(post.date)}</div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
@@ -266,8 +266,8 @@ const templates = {
 // Enhance: inject reading time into already-rendered cards when it becomes available
 function injectReadingTimes(posts) {
   posts.forEach((post) => {
-    if (!post || !post.id || !post.readingTime) return;
-    const card = document.querySelector(`.blog-post[data-id="${post.id}"]`);
+    if (!post || !post.slug || !post.readingTime) return;
+    const card = document.querySelector(`.blog-post[data-slug="${post.slug}"]`);
     if (card && !card.querySelector(".reading-time")) {
       const rt = document.createElement("div");
       rt.className = "reading-time";
@@ -432,7 +432,7 @@ async function loadFullContentForPosts(postsSubset) {
     const post = postsSubset[i];
     if (!post.content) {
       try {
-        const contentUrl = `${CONFIG.API_BASE}/${PATHS.post(post.id)}`;
+        const contentUrl = `${CONFIG.API_BASE}/${PATHS.post(post.slug)}`;
         const contentResponse = await fetch(contentUrl);
         if (contentResponse.ok) {
           const fullPost = await contentResponse.json();
@@ -441,7 +441,7 @@ async function loadFullContentForPosts(postsSubset) {
           post.author = fullPost.author;
         }
       } catch (error) {
-        console.warn(`Failed to load full content for post ${post.id}:`, error);
+        console.warn(`Failed to load full content for post ${post.slug}:`, error);
       }
     }
   }
@@ -458,13 +458,13 @@ async function loadFullContentForNewPosts(newPosts) {
 }
 
 // Show individual post
-function showPost(postId, updateURL = true) {
-  const post = allBlogPosts.find((p) => p.id === postId);
+function showPost(postSlug, updateURL = true) {
+  const post = allBlogPosts.find((p) => p.slug === postSlug);
   if (!post) return;
 
   // Update URL unless explicitly disabled
   if (updateURL) {
-    Router.updateURL("post-detail", { postId });
+    Router.updateURL("post-detail", { postSlug });
   }
 
   const postMeta = `
@@ -477,7 +477,7 @@ function showPost(postId, updateURL = true) {
         day: "numeric",
       })}</p>
             <div class="post-share">
-        <button class="share-button" onclick="sharePost(${postId})">
+        <button class="share-button" onclick="sharePost('${postSlug}')">
           <div class="share-content">
             <span class="share-command">[user@site]$ share link</span>
             <span class="share-feedback"></span>
@@ -1431,15 +1431,15 @@ document.addEventListener("click", (e) => {
 });
 
 // Terminal-themed share functionality for posts
-function sharePost(postId) {
+function sharePost(postSlug) {
   const shareButton = document.querySelector(".share-button");
   const shareCommand = shareButton.querySelector(".share-command");
   const shareFeedback = shareButton.querySelector(".share-feedback");
   const shareIcon = shareButton.querySelector(".share-icon");
 
   // Get post data for native sharing
-  const post = allBlogPosts.find((p) => p.id === postId);
-  const postUrl = `${window.location.origin}${window.location.pathname}#post/${postId}`;
+  const post = allBlogPosts.find((p) => p.slug === postSlug);
+  const postUrl = `${window.location.origin}${window.location.pathname}#post/${postSlug}`;
 
   // Try Web Share API first (native device integration)
   if (navigator.share && post) {

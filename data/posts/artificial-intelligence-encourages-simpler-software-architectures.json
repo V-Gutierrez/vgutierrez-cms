@@ -1,10 +1,25 @@
 {
-  "id": 3,
+  "id": "ai-architecture-uuid-987654321",
+  "slug": "artificial-intelligence-encourages-simpler-software-architectures",
   "title": "Artificial Intelligence Encourages Simpler Software Architectures",
   "date": "2025-07-16",
   "author": "Victor Gutierrez",
+  "tags": [
+    "AI",
+    "Software Architecture",
+    "Engineering"
+  ],
   "published": true,
   "excerpt": "To truly benefit from AI in software development, engineers must adopt simpler, cheaper, and more modular architectures; designed for machines to extend.",
   "content": "<article><p>Recently, I've been reflecting on how modern Artificial Intelligence applications enable the development of relatively complex systems in a short amount of time. In an era where many success metrics revolve around delivery speed, AI allows us to ship value faster; shortening feedback loops and reducing time to market.</p><p>However, there's also an architectural perspective to consider when discussing software built with the help of AI. Given the current limitations of today's most powerful models — such as context window constraints — there is a growing incentive for engineers to design systems that are simpler, cheaper, and easier to build. This simplicity isn't just elegance; it's a strategic move to allow AI to play a meaningful role in building and maintaining software systems.</p><p>In essence, to take full advantage of AI in software development, we need to rethink how we design. We should aim for architectures that are modular, understandable, and optimized for how AI tools can consume, interpret, and extend them effectively.</p><p>This was the exact mindset I applied when building this website. The result has been both enriching and efficient — a real-world case of how AI nudges us toward smarter simplicity.</p></article>",
-  "readingTime": 2
+  "readingTime": 2,
+  "seo": {
+    "metaTitle": "Artificial Intelligence Encourages Simpler Software Architectures - Victor Gutierrez",
+    "metaDescription": "To truly benefit from AI in software development, engineers must adopt simpler, cheaper, and more modular architectures; designed for machines to extend.",
+    "keywords": [
+      "AI",
+      "Software Architecture",
+      "Engineering"
+    ]
+  }
 }

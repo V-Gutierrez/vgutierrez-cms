@@ -1,6 +1,7 @@
 [
   {
-    "id": 2,
+    "id": "optimism-uuid-123456789",
+    "slug": "optimism-is-a-driving-force-in-development-teams",
     "title": "Optimism is a Driving Force in Development Teams",
     "date": "2025-07-16",
     "excerpt": "Optimism is not naivety: it's strategy. In this personal reflection, I share how choosing optimism as a leadership mindset has shaped outcomes, culture, and trust in technical environments.",
@@ -10,10 +11,11 @@
       "Culture"
     ],
     "published": true,
-    "contentFile": "posts/post-2.json"
+    "contentFile": "posts/optimism-is-a-driving-force-in-development-teams.json"
   },
   {
-    "id": 3,
+    "id": "ai-architecture-uuid-987654321",
+    "slug": "artificial-intelligence-encourages-simpler-software-architectures",
     "title": "Artificial Intelligence Encourages Simpler Software Architectures",
     "date": "2025-07-16",
     "excerpt": "To truly benefit from AI in software development, engineers must adopt simpler, cheaper, and more modular architectures; designed for machines to extend.",
@@ -23,7 +25,7 @@
       "Engineering"
     ],
     "published": true,
-    "contentFile": "posts/post-3.json"
+    "contentFile": "posts/artificial-intelligence-encourages-simpler-software-architectures.json"
   },
   {
     "id": "f3f11e3bc3e0405693c1f32ed56636f8",
