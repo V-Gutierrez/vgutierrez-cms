@@ -523,6 +523,9 @@ async function loadBlogPosts() {
 
     const publishedPosts = posts.filter((post) => post.published);
 
+    // Sort posts by date (newest first)
+    publishedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     // Store all posts for progressive loading
     allBlogPosts = publishedPosts;
     displayedPostsCount = 0;
