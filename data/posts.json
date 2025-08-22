@@ -41,5 +41,15 @@
     ],
     "published": true,
     "contentFile": "posts/the-dream-of-flying.json"
+  },
+  {
+    "id": "4fe9531a55d848fd8b24e8d7e03c9038",
+    "slug": "how-data-from-the-past-decade-powered-the-economy-of-the-current-one",
+    "title": "How Data From the Past Decade Powered the Economy of the Current One",
+    "date": "2025-08-22",
+    "excerpt": "Social networks turned data into the fuel of today’s AI-driven economy",
+    "tags": [],
+    "published": true,
+    "contentFile": "posts/how-data-from-the-past-decade-powered-the-economy-of-the-current-one.json"
   }
 ]
