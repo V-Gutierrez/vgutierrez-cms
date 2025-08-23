@@ -51,5 +51,15 @@
     "tags": [],
     "published": true,
     "contentFile": "posts/how-data-from-the-past-decade-powered-the-economy-of-the-current-one.json"
+  },
+  {
+    "id": "717440790e8f41eebdfc6b78cbe32a52",
+    "slug": "how-ai-is-quietly-shaping-the-way-we-speak-think-and-create",
+    "title": "How AI Is Quietly Shaping the Way We Speak, Think, and Create",
+    "date": "2025-08-23",
+    "excerpt": "AI is not only automating tasks but quietly reshaping us.",
+    "tags": [],
+    "published": true,
+    "contentFile": "posts/how-ai-is-quietly-shaping-the-way-we-speak-think-and-create.json"
   }
 ]
