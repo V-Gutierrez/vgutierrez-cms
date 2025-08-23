@@ -441,7 +441,10 @@ async function loadFullContentForPosts(postsSubset) {
           post.author = fullPost.author;
         }
       } catch (error) {
-        console.warn(`Failed to load full content for post ${post.slug}:`, error);
+        console.warn(
+          `Failed to load full content for post ${post.slug}:`,
+          error,
+        );
       }
     }
   }
@@ -874,7 +877,6 @@ function updateProfileData(profile) {
   heroContent += `
     <a href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/assets/Victor_Gutierrez_CV_2025_EN.pdf" download="Victor_Gutierrez_CV_2025_EN.pdf" class="social-link">
       <span class="social-icon">📄</span>
-      CV
     </a>
   `;
 
