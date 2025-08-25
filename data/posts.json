@@ -5,11 +5,7 @@
     "title": "Optimism is a Driving Force in Development Teams",
     "date": "2025-07-16",
     "excerpt": "Optimism is not naivety: it's strategy. In this personal reflection, I share how choosing optimism as a leadership mindset has shaped outcomes, culture, and trust in technical environments.",
-    "tags": [
-      "Leadership",
-      "Mindset",
-      "Culture"
-    ],
+    "tags": ["Leadership", "Mindset", "Culture"],
     "published": true,
     "contentFile": "posts/optimism-is-a-driving-force-in-development-teams.json"
   },
@@ -19,11 +15,7 @@
     "title": "Artificial Intelligence Encourages Simpler Software Architectures",
     "date": "2025-07-16",
     "excerpt": "To truly benefit from AI in software development, engineers must adopt simpler, cheaper, and more modular architectures; designed for machines to extend.",
-    "tags": [
-      "AI",
-      "Software Architecture",
-      "Engineering"
-    ],
+    "tags": ["AI", "Software Architecture", "Engineering"],
     "published": true,
     "contentFile": "posts/artificial-intelligence-encourages-simpler-software-architectures.json"
   },
@@ -33,12 +25,7 @@
     "title": "The Dream of Flying",
     "date": "2025-08-21",
     "excerpt": "Not just a wish, but a possibility taking shape in my mind.",
-    "tags": [
-      "life",
-      "aviation",
-      "dreams",
-      "reflections"
-    ],
+    "tags": ["life", "aviation", "dreams", "reflections"],
     "published": true,
     "contentFile": "posts/the-dream-of-flying.json"
   },
@@ -56,7 +43,7 @@
     "id": "717440790e8f41eebdfc6b78cbe32a52",
     "slug": "how-ai-is-quietly-shaping-the-way-we-speak-think-and-create",
     "title": "How AI Is Quietly Shaping the Way We Speak, Think, and Create",
-    "date": "2025-08-23",
+    "date": "2025-08-28",
     "excerpt": "AI is not only automating tasks but quietly reshaping us.",
     "tags": [],
     "published": true,

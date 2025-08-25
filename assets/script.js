@@ -524,7 +524,16 @@ async function loadBlogPosts() {
 
     const posts = await response.json();
 
-    const publishedPosts = posts.filter((post) => post.published);
+    // Get today's date in YYYY-MM-DD format for comparison (using local timezone)
+    const now = new Date();
+    const today = now.getFullYear() + '-' + 
+      String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+      String(now.getDate()).padStart(2, '0');
+
+    // Filter posts: must be published AND date must be today or earlier
+    const publishedPosts = posts.filter((post) => 
+      post.published && post.date <= today
+    );
 
     // Sort posts by date (newest first)
     publishedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));

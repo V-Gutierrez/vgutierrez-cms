@@ -41,6 +41,58 @@ function estimateReadingTime(content) {
   return Math.ceil(wordCount / wordsPerMinute) || 1;
 }
 
+// Date utility functions for DD-MM-YY format handling
+function getCurrentDateForUser() {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = String(now.getFullYear()).slice(-2);
+  return `${day}-${month}-${year}`;
+}
+
+function formatDateForUser(isoDate) {
+  if (!isoDate) return '';
+  const date = new Date(isoDate + 'T00:00:00');
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear()).slice(-2);
+  return `${day}-${month}-${year}`;
+}
+
+function formatDateForStorage(userDate) {
+  if (!userDate) return '';
+  const match = userDate.match(/^(\d{1,2})-(\d{1,2})-(\d{2})$/);
+  if (!match) return '';
+  
+  const [, day, month, year] = match;
+  const fullYear = `20${year}`;
+  const paddedMonth = month.padStart(2, '0');
+  const paddedDay = day.padStart(2, '0');
+  
+  return `${fullYear}-${paddedMonth}-${paddedDay}`;
+}
+
+function isValidDateFormat(dateString) {
+  if (!dateString || typeof dateString !== 'string') return false;
+  
+  const match = dateString.match(/^(\d{1,2})-(\d{1,2})-(\d{2})$/);
+  if (!match) return false;
+  
+  const [, day, month, year] = match;
+  const dayNum = parseInt(day, 10);
+  const monthNum = parseInt(month, 10);
+  const yearNum = parseInt(`20${year}`, 10);
+  
+  if (dayNum < 1 || dayNum > 31) return false;
+  if (monthNum < 1 || monthNum > 12) return false;
+  if (yearNum < 2000 || yearNum > 2099) return false;
+  
+  const testDate = new Date(yearNum, monthNum - 1, dayNum);
+  return testDate.getFullYear() === yearNum && 
+         testDate.getMonth() === monthNum - 1 && 
+         testDate.getDate() === dayNum;
+}
+
 // Blog
 async function loadPosts() {
   try { return JSON.parse(await fs.readFile(path.join(DATA_DIR, 'posts.json'), 'utf8')); } catch { return []; }
@@ -53,6 +105,29 @@ async function blogCreate() {
   const title = await cli.ask('Post title: ');
   const excerpt = await cli.ask('Post excerpt: ');
   const tags = await cli.ask('Tags (comma-separated): ');
+  
+  // Date input with DD-MM-YY format
+  const todayForUser = getCurrentDateForUser();
+  let dateInput;
+  let date;
+  
+  while (true) {
+    dateInput = await cli.ask(`Publication date (DD-MM-YY, default: ${todayForUser}): `);
+    
+    if (!dateInput) {
+      dateInput = todayForUser;
+    }
+    
+    if (isValidDateFormat(dateInput)) {
+      date = formatDateForStorage(dateInput);
+      break;
+    } else {
+      console.log('⚠️  Invalid date format. Please use DD-MM-YY format (e.g., 23-08-25)');
+    }
+  }
+  
+  console.log(`📅 Publication date set to: ${formatDateForUser(date)} (${date})`);
+  
   const useEditor = await cli.confirm('Edit content in your editor?', true);
   const content = useEditor
     ? await cli.editInEditor('<!-- Write your post HTML/Markdown content here -->\n\n', { filePrefix: 'post-content', extension: 'html' })
@@ -62,7 +137,6 @@ async function blogCreate() {
   const uuid = generateId();
   const baseSlug = generateSlug(title);
   const slug = await ensureUniqueSlug(baseSlug, posts);
-  const date = new Date().toISOString().split('T')[0];
 
   const postIndex = {
     id: uuid,
@@ -124,6 +198,29 @@ async function blogEdit() {
   const newTitle = await cli.askDefault('Title', post.title);
   const newExcerpt = await cli.askDefault('Excerpt', post.excerpt);
   const newTags = await cli.askDefault('Tags', post.tags.join(', '));
+  
+  // Date editing with DD-MM-YY format
+  const currentDateForUser = formatDateForUser(post.date);
+  let dateInput;
+  let newDate = post.date;
+  
+  while (true) {
+    dateInput = await cli.ask(`Publication date (DD-MM-YY, current: ${currentDateForUser}): `);
+    
+    if (!dateInput) {
+      // Keep current date if no input
+      break;
+    }
+    
+    if (isValidDateFormat(dateInput)) {
+      newDate = formatDateForStorage(dateInput);
+      console.log(`📅 Publication date updated to: ${formatDateForUser(newDate)} (${newDate})`);
+      break;
+    } else {
+      console.log('⚠️  Invalid date format. Please use DD-MM-YY format (e.g., 23-08-25) or press Enter to keep current date');
+    }
+  }
+  
   const wantsEditor = await cli.confirm('Edit content in your editor?', true);
   const newContent = wantsEditor
     ? await cli.editInEditor(fullPost.content, { filePrefix: `post-${post.id}`, extension: 'html' })
@@ -134,6 +231,7 @@ async function blogEdit() {
   post.excerpt = newExcerpt;
   post.tags = newTags.split(',').map(t => t.trim()).filter(Boolean);
   post.published = !!published;
+  post.date = newDate;
   
   if (newTitle !== fullPost.title) {
     const baseSlug = generateSlug(newTitle);
@@ -147,6 +245,7 @@ async function blogEdit() {
   fullPost.published = !!published;
   fullPost.slug = post.slug;
   fullPost.content = newContent;
+  fullPost.date = newDate;
   fullPost.readingTime = estimateReadingTime(newContent);
   fullPost.seo.metaTitle = `${newTitle} - Victor Gutierrez`;
   fullPost.seo.metaDescription = newExcerpt;
