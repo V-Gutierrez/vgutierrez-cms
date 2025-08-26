@@ -38,12 +38,6 @@ header {
   transition: transform 0.3s ease;
 }
 
-/* Hide header when progress dots are visible on touch devices */
-@media (max-width: 1024px) {
-  header.hide-for-dots {
-    transform: translateY(-100%);
-  }
-}
 
 nav {
   display: flex;
@@ -1560,8 +1554,8 @@ main {
   padding: 12px 20px;
   border-radius: 25px;
   backdrop-filter: blur(10px);
-  opacity: 0;
-  visibility: hidden;
+  opacity: 1;
+  visibility: visible;
   transition: all 0.3s ease;
 }
 
@@ -1576,10 +1570,6 @@ body:has(#post-detail.active) .tab-progress {
   display: none !important;
 }
 
-.tab-progress.show {
-  opacity: 1;
-  visibility: visible;
-}
 
 .progress-dot {
   width: 8px;
