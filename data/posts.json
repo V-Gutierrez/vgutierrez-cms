@@ -61,5 +61,15 @@
     "tags": [],
     "published": true,
     "contentFile": "posts/how-ai-is-quietly-shaping-the-way-we-speak-think-and-create.json"
+  },
+  {
+    "id": "974cf6fe5466462d846eb4c057b2ef80",
+    "slug": "to-my-future-self",
+    "title": "To my future self...",
+    "date": "2025-08-29",
+    "excerpt": "",
+    "tags": [],
+    "published": true,
+    "contentFile": "posts/to-my-future-self.json"
   }
 ]

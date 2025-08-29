@@ -94,6 +94,30 @@ const formatDate = (iso) =>
     month: "long",
     day: "numeric",
   });
+
+const formatRelativeTime = (dateString) => {
+  const postDate = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - postDate);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return "today";
+  } else if (diffDays === 1) {
+    return "yesterday";
+  } else if (diffDays < 7) {
+    return `${diffDays} days ago`;
+  } else if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+  } else if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30);
+    return months === 1 ? "1 month ago" : `${months} months ago`;
+  } else {
+    const years = Math.floor(diffDays / 365);
+    return years === 1 ? "1 year ago" : `${years} years ago`;
+  }
+};
 const updateActiveByDataAttr = (selector, dataKey, value) => {
   $$(selector).forEach((el) =>
     el.classList.toggle("active", el.dataset[dataKey] === value),
@@ -256,7 +280,7 @@ const templates = {
   blogCard: (post) => `
     <article class="blog-post" data-slug="${post.slug}" onclick="showPost('${post.slug}')">
       <h3 class="blog-post-title">${post.title}</h3>
-      <div class="blog-post-date">${formatDate(post.date)}</div>
+      <div class="blog-post-date">${formatRelativeTime(post.date)}</div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
       ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
     </article>
