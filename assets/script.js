@@ -280,9 +280,11 @@ const templates = {
   blogCard: (post) => `
     <article class="blog-post" data-slug="${post.slug}" onclick="showPost('${post.slug}')">
       <h3 class="blog-post-title">${post.title}</h3>
-      <div class="blog-post-date">${formatRelativeTime(post.date)}</div>
+      <div class="blog-post-meta">
+        <span class="blog-post-date">${formatRelativeTime(post.date)}</span>
+        ${post.readingTime ? `<span class="reading-time">${post.readingTime} min read</span>` : ""}
+      </div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
-      ${post.readingTime ? `<div class="reading-time">${post.readingTime} min read</div>` : ""}
     </article>
   `,
 };
