@@ -294,11 +294,20 @@ function injectReadingTimes(posts) {
   posts.forEach((post) => {
     if (!post || !post.slug || !post.readingTime) return;
     const card = document.querySelector(`.blog-post[data-slug="${post.slug}"]`);
-    if (card && !card.querySelector(".reading-time")) {
-      const rt = document.createElement("div");
+    const metaDiv = card?.querySelector(".blog-post-meta");
+    if (card && metaDiv && !card.querySelector(".reading-time")) {
+      // Create separator and reading time elements
+      const separator = document.createElement("span");
+      separator.className = "meta-separator";
+      separator.textContent = "•";
+      
+      const rt = document.createElement("span");
       rt.className = "reading-time";
       rt.textContent = `${post.readingTime} min read`;
-      card.appendChild(rt);
+      
+      // Add to meta div
+      metaDiv.appendChild(separator);
+      metaDiv.appendChild(rt);
     }
   });
 }
