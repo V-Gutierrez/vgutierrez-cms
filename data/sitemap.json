@@ -3,22 +3,22 @@
     {
       "url": "/",
       "title": "Home",
-      "lastModified": "2025-09-11"
+      "lastModified": "2025-09-12"
     },
     {
       "url": "/#portfolio",
       "title": "Portfolio",
-      "lastModified": "2025-09-11"
+      "lastModified": "2025-09-12"
     },
     {
       "url": "/#gallery",
       "title": "Gallery",
-      "lastModified": "2025-09-11"
+      "lastModified": "2025-09-12"
     },
     {
       "url": "/#blog",
       "title": "Blog",
-      "lastModified": "2025-09-11"
+      "lastModified": "2025-09-12"
     }
   ],
   "posts": [
@@ -50,7 +50,7 @@
     {
       "url": "/#post/to-my-future-self",
       "title": "To my future self...",
-      "lastModified": "2025-08-29"
+      "lastModified": "2025-09-10"
     }
   ],
   "projects": [
