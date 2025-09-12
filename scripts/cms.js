@@ -93,6 +93,124 @@ function isValidDateFormat(dateString) {
          testDate.getDate() === dayNum;
 }
 
+// Sitemap generation
+const SITEMAP_CONFIG = {
+  baseUrl: 'https://www.victorgutierrez.com.br',
+  staticPages: [
+    {
+      url: '/',
+      title: 'Home',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    },
+    {
+      url: '/#portfolio',
+      title: 'Portfolio', 
+      lastModified: () => new Date().toISOString().split('T')[0]
+    },
+    {
+      url: '/#gallery',
+      title: 'Gallery',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    },
+    {
+      url: '/#blog',
+      title: 'Blog',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    }
+  ]
+};
+
+async function generateSitemapJson() {
+  const posts = await loadPosts();
+  const projects = await loadProjects();
+  
+  // Get today's date for filtering published posts
+  const now = new Date();
+  const today = now.getFullYear() + '-' + 
+    String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+    String(now.getDate()).padStart(2, '0');
+  
+  // Filter published posts with date <= today
+  const publishedPosts = posts.filter(post => 
+    post.published && post.date <= today
+  );
+  
+  // Static pages
+  const staticPages = SITEMAP_CONFIG.staticPages.map(page => ({
+    url: page.url,
+    title: page.title,
+    lastModified: page.lastModified()
+  }));
+  
+  // Dynamic post URLs (JavaScript routing with # prefix)  
+  const postPages = publishedPosts.map(post => ({
+    url: `/#post/${post.slug}`,
+    title: post.title,
+    lastModified: post.date
+  }));
+  
+  // Project pages (if any are featured/public)
+  const featuredProjects = projects.filter(project => project.featured);
+  const projectPages = featuredProjects.map(project => ({
+    url: `/#portfolio/${project.slug}`,
+    title: project.title, 
+    lastModified: project.endDate === 'ongoing' ? today : project.endDate
+  }));
+  
+  return {
+    pages: staticPages,
+    posts: postPages,
+    projects: projectPages
+  };
+}
+
+async function generateSitemapXml() {
+  const sitemapData = await generateSitemapJson();
+  const now = new Date().toISOString().split('T')[0];
+  
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  
+  // Add all URLs from sitemap.json
+  const allPages = [
+    ...sitemapData.pages,
+    ...sitemapData.posts,
+    ...sitemapData.projects
+  ];
+  
+  allPages.forEach(page => {
+    xml += '  <url>\n';
+    xml += `    <loc>${SITEMAP_CONFIG.baseUrl}${page.url}</loc>\n`;
+    xml += `    <lastmod>${page.lastModified}</lastmod>\n`;
+    xml += '  </url>\n';
+  });
+  
+  xml += '</urlset>';
+  return xml;
+}
+
+async function updateSitemaps() {
+  try {
+    // Generate and save sitemap.json
+    const sitemapJson = await generateSitemapJson();
+    await fs.writeFile(
+      path.join(DATA_DIR, 'sitemap.json'), 
+      JSON.stringify(sitemapJson, null, 2)
+    );
+    
+    // Generate and save sitemap.xml  
+    const sitemapXml = await generateSitemapXml();
+    await fs.writeFile(
+      path.join(__dirname, '..', 'sitemap.xml'),
+      sitemapXml
+    );
+    
+    console.log('🗺️  Sitemaps updated successfully!');
+  } catch (error) {
+    console.error('⚠️  Error updating sitemaps:', error.message);
+  }
+}
+
 // Blog
 async function loadPosts() {
   try { return JSON.parse(await fs.readFile(path.join(DATA_DIR, 'posts.json'), 'utf8')); } catch { return []; }
@@ -170,6 +288,7 @@ async function blogCreate() {
   await fs.writeFile(path.join(POSTS_DIR, `${slug}.json`), JSON.stringify(postContent, null, 2));
   posts.push(postIndex);
   await savePosts(posts);
+  await updateSitemaps();
   console.log(`\n✅ Post created successfully with slug: ${slug}`);
 }
 async function blogList() {
@@ -253,6 +372,7 @@ async function blogEdit() {
 
   await fs.writeFile(contentPath, JSON.stringify(fullPost, null, 2));
   await savePosts(posts);
+  await updateSitemaps();
   console.log('\n✅ Post updated successfully!');
 }
 async function blogDelete() {
@@ -269,6 +389,7 @@ async function blogDelete() {
   try { await fs.unlink(contentPath); } catch(_) {}
   posts.splice(idx, 1);
   await savePosts(posts);
+  await updateSitemaps();
   console.log('\n✅ Post deleted successfully!');
 }
 
@@ -309,6 +430,7 @@ async function projectCreate() {
   };
   projects.push(newProject);
   await saveProjects(projects);
+  await updateSitemaps();
   console.log(`\n✅ Project created successfully with slug: ${slug}`);
 }
 async function projectList() {
@@ -348,6 +470,7 @@ async function projectEdit() {
     p.slug = await ensureUniqueSlug(baseSlug, otherProjects);
   }
   await saveProjects(projects);
+  await updateSitemaps();
   console.log('\n✅ Project updated successfully!');
 }
 async function projectDelete() {
@@ -361,6 +484,7 @@ async function projectDelete() {
   if (!ok) return console.log('Delete cancelled.');
   projects.splice(idx, 1);
   await saveProjects(projects);
+  await updateSitemaps();
   console.log('\n✅ Project deleted successfully!');
 }
 
@@ -645,13 +769,15 @@ async function main() {
     console.log('2. Projects');
     console.log('3. Profile');
     console.log('4. Gallery');
-    console.log('5. Exit');
-    const choice = await cli.ask('\nChoose a section (1-5): ');
+    console.log('5. Update Sitemaps');
+    console.log('6. Exit');
+    const choice = await cli.ask('\nChoose a section (1-6): ');
     if (choice === '1') await menuBlog();
     else if (choice === '2') await menuProjects();
     else if (choice === '3') await menuProfile();
     else if (choice === '4') await menuGallery();
-    else if (choice === '5') { console.log('👋 Goodbye!'); cli.close(); return; }
+    else if (choice === '5') await updateSitemaps();
+    else if (choice === '6') { console.log('👋 Goodbye!'); cli.close(); return; }
     else console.log('Invalid option.');
   }
 }
