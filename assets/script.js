@@ -282,7 +282,7 @@ const templates = {
       <h3 class="blog-post-title">${post.title}</h3>
       <div class="blog-post-meta">
         <span class="blog-post-date">${formatRelativeTime(post.date)}</span>
-        ${post.readingTime ? `<span class="reading-time">${post.readingTime} min read</span>` : ""}
+        ${post.readingTime ? `<span class="meta-separator">•</span><span class="reading-time">${post.readingTime} min read</span>` : ""}
       </div>
       <p class="blog-post-excerpt">${post.excerpt}</p>
     </article>

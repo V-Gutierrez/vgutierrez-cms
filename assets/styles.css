@@ -1001,8 +1001,8 @@ main {
 
 .blog-post-meta {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
@@ -1030,6 +1030,12 @@ main {
   border-radius: 12px;
   font-size: 0.8rem;
   border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.meta-separator {
+  color: #666;
+  font-size: 0.9rem;
+  user-select: none;
 }
 
 .reading-time {
