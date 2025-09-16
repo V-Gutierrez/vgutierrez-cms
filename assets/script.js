@@ -885,7 +885,7 @@ function updateProfileData(profile) {
     heroContent += `<p class="description">${personalInfo.description}</p>`;
   }
 
-  // Add social links and CV download
+  // Add social links
   heroContent += '<div class="social-links">';
 
   if (personalInfo.github) {
@@ -906,23 +906,7 @@ function updateProfileData(profile) {
     `;
   }
 
-  if (personalInfo.whatsApp) {
-    heroContent += `
-      <a href="${personalInfo.whatsApp}" target="_blank" rel="noopener noreferrer" class="social-link">
-        <span class="social-icon">
-<img src="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/whatsapp.png" alt="WhatsApp" style="width: 20px; height: 20px;">
-</span>
 
-      </a>
-    `;
-  }
-
-  // Add CV download button (always available)
-  heroContent += `
-    <a href="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/assets/Victor_Gutierrez_CV_2025_EN.pdf" download="Victor_Gutierrez_CV_2025_EN.pdf" class="social-link">
-      <span class="social-icon">📄</span>
-    </a>
-  `;
 
   heroContent += "</div>";
 
