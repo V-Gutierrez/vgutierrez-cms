@@ -3,22 +3,22 @@
     {
       "url": "/",
       "title": "Home",
-      "lastModified": "2025-09-12"
+      "lastModified": "2025-09-25"
     },
     {
       "url": "/#portfolio",
       "title": "Portfolio",
-      "lastModified": "2025-09-12"
+      "lastModified": "2025-09-25"
     },
     {
       "url": "/#gallery",
       "title": "Gallery",
-      "lastModified": "2025-09-12"
+      "lastModified": "2025-09-25"
     },
     {
       "url": "/#blog",
       "title": "Blog",
-      "lastModified": "2025-09-12"
+      "lastModified": "2025-09-25"
     }
   ],
   "posts": [
@@ -57,7 +57,7 @@
     {
       "url": "/#portfolio/digital-transformation",
       "title": "Digital Transformation",
-      "lastModified": "2025-09-11"
+      "lastModified": "2025-09-25"
     },
     {
       "url": "/#portfolio/high-traffic-system-optimization",

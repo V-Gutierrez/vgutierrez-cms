@@ -353,28 +353,31 @@ class CMSApp {
     }
 
     createGalleryCard(item) {
+        // Use slug if available, otherwise use id, otherwise use title
+        const identifier = item.slug || item.id || item.title;
+
         return `
-            <div class="item-card" data-slug="${item.slug}">
-                <img src="${item.thumbnail || item.image}" alt="${item.title}" class="gallery-item-image">
+            <div class="item-card" data-slug="${identifier}">
+                <img src="${item.image}" alt="${item.title}" class="gallery-item-image">
                 <div class="item-card-header">
                     <h3 class="item-card-title">${item.title}</h3>
                     <div class="item-card-meta">
-                        <span class="tag">${item.category}</span>
+                        <span class="tag">${item.category || 'uncategorized'}</span>
                         ${item.featured ? '<i class="fas fa-star" title="Item em destaque"></i>' : ''}
                     </div>
                 </div>
                 <div class="item-card-body">
                     <p class="item-card-description">${item.description || 'Sem descrição'}</p>
                     <div class="item-card-tags">
-                        ${item.tags.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        ${item.tags.length > 2 ? `<span class="tag">+${item.tags.length - 2}</span>` : ''}
+                        ${(item.tags || []).slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        ${(item.tags || []).length > 2 ? `<span class="tag">+${(item.tags || []).length - 2}</span>` : ''}
                     </div>
                 </div>
                 <div class="item-card-actions">
-                    <button class="btn btn-small btn-primary" onclick="app.editItem('gallery', '${item.slug}')">
+                    <button class="btn btn-small btn-primary" onclick="app.editItem('gallery', '${identifier}')">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-small btn-danger" onclick="app.deleteItem('gallery', '${item.slug}')">
+                    <button class="btn btn-small btn-danger" onclick="app.deleteItem('gallery', '${identifier}')">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -810,10 +813,6 @@ class CMSApp {
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">URL da Thumbnail (opcional)</label>
-                <input type="url" class="form-input" id="gallery-thumbnail-url" value="${item?.thumbnail || ''}">
-            </div>
-            <div class="form-group">
                 <div class="form-checkbox">
                     <input type="checkbox" id="gallery-featured" ${item?.featured ? 'checked' : ''}>
                     <label for="gallery-featured">Item em Destaque</label>
@@ -1209,7 +1208,6 @@ class CMSApp {
                 formData.tags = document.getElementById('gallery-tags')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
                 formData.dimensions = document.getElementById('gallery-dimensions')?.value || '';
                 formData.imageUrl = document.getElementById('gallery-image-url')?.value || '';
-                formData.thumbnailUrl = document.getElementById('gallery-thumbnail-url')?.value || '';
                 formData.featured = document.getElementById('gallery-featured')?.checked || false;
                 break;
         }

@@ -23,9 +23,24 @@ router.get('/', async (req, res) => {
 router.get('/:slug', async (req, res) => {
   try {
     const gallery = await loadJsonFile('gallery.json');
-    const item = gallery.find(i => i.slug === req.params.slug);
+    const { slug } = req.params;
+
+    // First try to find by slug
+    let item = gallery.find(i => i.slug === slug);
+
+    // If not found by slug, try to find by id (for backward compatibility)
+    if (!item) {
+      item = gallery.find(i => i.id.toString() === slug);
+    }
+
+    // If still not found, try to find by title as slug (for legacy items)
+    if (!item) {
+      item = gallery.find(i => i.title === slug);
+    }
 
     if (!item) {
+      console.log(`Gallery item not found for slug: ${slug}`);
+      console.log('Available items:', gallery.map(i => ({ id: i.id, slug: i.slug, title: i.title })));
       return res.status(404).json({ error: 'Gallery item not found' });
     }
 
@@ -48,7 +63,6 @@ router.post('/', async (req, res) => {
       tags,
       dimensions,
       imageUrl,
-      thumbnailUrl,
       featured,
       published
     } = req.body;
@@ -71,7 +85,6 @@ router.post('/', async (req, res) => {
       technique: technique || '',
       year: year || new Date().getFullYear(),
       image: imageUrl,
-      thumbnail: thumbnailUrl || imageUrl,
       tags: Array.isArray(tags)
         ? tags
         : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
@@ -102,16 +115,24 @@ router.put('/:slug', async (req, res) => {
       tags,
       dimensions,
       imageUrl,
-      thumbnailUrl,
       featured,
       published
     } = req.body;
     const { slug: currentSlug } = req.params;
 
     const gallery = await loadJsonFile('gallery.json');
-    const item = gallery.find(i => i.slug === currentSlug);
+
+    // Find item with same logic as GET
+    let item = gallery.find(i => i.slug === currentSlug);
+    if (!item) {
+      item = gallery.find(i => i.id.toString() === currentSlug);
+    }
+    if (!item) {
+      item = gallery.find(i => i.title === currentSlug);
+    }
 
     if (!item) {
+      console.log(`Gallery item not found for update: ${currentSlug}`);
       return res.status(404).json({ error: 'Gallery item not found' });
     }
 
@@ -130,14 +151,18 @@ router.put('/:slug', async (req, res) => {
     }
     if (dimensions !== undefined) item.dimensions = dimensions;
     if (imageUrl !== undefined) item.image = imageUrl;
-    if (thumbnailUrl !== undefined) item.thumbnail = thumbnailUrl;
     if (featured !== undefined) item.featured = !!featured;
     if (published !== undefined) item.published = !!published;
 
-    // Update slug if title changed
+    // Update slug if title changed (ensure item has a slug)
+    if (!item.slug) {
+      // Create slug for legacy items
+      item.slug = await ensureUniqueSlug(generateSlug(item.title), gallery.filter(g => g.id !== item.id));
+    }
+
     if (title && title !== oldTitle) {
       const baseSlug = generateSlug(title);
-      const otherItems = gallery.filter(i => i.slug !== currentSlug);
+      const otherItems = gallery.filter(i => i.id !== item.id);
       item.slug = await ensureUniqueSlug(baseSlug, otherItems);
     }
 
@@ -154,9 +179,18 @@ router.delete('/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
     const gallery = await loadJsonFile('gallery.json');
-    const itemIndex = gallery.findIndex(i => i.slug === slug);
+
+    // Find item index with same logic as GET
+    let itemIndex = gallery.findIndex(i => i.slug === slug);
+    if (itemIndex === -1) {
+      itemIndex = gallery.findIndex(i => i.id.toString() === slug);
+    }
+    if (itemIndex === -1) {
+      itemIndex = gallery.findIndex(i => i.title === slug);
+    }
 
     if (itemIndex === -1) {
+      console.log(`Gallery item not found for deletion: ${slug}`);
       return res.status(404).json({ error: 'Gallery item not found' });
     }
 

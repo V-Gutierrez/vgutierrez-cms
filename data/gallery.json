@@ -2,8 +2,8 @@
   {
     "id": 1,
     "title": "allons-y",
-    "description": "A minimalist sketch of a tiled hallway with clean lines and perspective depth.",
-    "category": "digital art",
+    "description": "A minimalist sketch of a tiled hallway with clean lines and perspective depth..",
+    "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/hallway.jpeg",
     "tags": [
       "sketch",
@@ -11,7 +11,11 @@
       "minimalism"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "allons-y",
+    "technique": "",
+    "year": 2025,
+    "dimensions": ""
   },
   {
     "id": 2,
@@ -26,7 +30,8 @@
       "clouds"
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "st"
   },
   {
     "id": 3,
@@ -41,7 +46,8 @@
       "landscape"
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "sunset"
   },
   {
     "id": 4,
@@ -56,7 +62,8 @@
       "illustration"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "cvr"
   },
   {
     "id": 5,
@@ -71,7 +78,8 @@
       "minimalism"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "clty"
   },
   {
     "id": 6,
@@ -85,7 +93,8 @@
       "color"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "cat"
   },
   {
     "id": 7,
@@ -99,7 +108,8 @@
       "abstract"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "sphere-line"
   },
   {
     "id": 8,
@@ -114,7 +124,8 @@
       "field"
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "stormy"
   },
   {
     "id": 9,
@@ -129,7 +140,8 @@
       "red"
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "void"
   },
   {
     "id": 10,
@@ -144,7 +156,8 @@
       "motion"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "lights"
   },
   {
     "id": 11,
@@ -159,7 +172,8 @@
       "sketch"
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "cockpit-sketch"
   },
   {
     "id": 12,
@@ -174,7 +188,8 @@
       "sky"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "de-gaulle"
   },
   {
     "id": 13,
@@ -189,7 +204,8 @@
       "star"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "pr"
   },
   {
     "id": 14,
@@ -204,7 +220,8 @@
       "sketch"
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "fk-memo"
   },
   {
     "id": 15,
@@ -219,7 +236,8 @@
       "line"
     ],
     "featured": false,
-    "published": true
+    "published": true,
+    "slug": "bp"
   },
   {
     "id": 131,
@@ -227,12 +245,12 @@
     "description": "Congresso - Argentina",
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/skynight.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/skynight-thumb.jpeg",
     "tags": [
       ""
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "congresso"
   },
   {
     "id": 132,
@@ -240,12 +258,12 @@
     "description": "-",
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/racing.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/racing-thumb.jpeg",
     "tags": [
       ""
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "racing"
   },
   {
     "id": 133,
@@ -255,12 +273,12 @@
     "technique": "-",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/eif.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/eif-thumb.jpeg",
     "tags": [
       ""
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "eiffel"
   },
   {
     "id": 134,
@@ -270,12 +288,12 @@
     "technique": "",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lille_opera.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/lille_opera-thumb.jpeg",
     "tags": [
       ""
     ],
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "lille-centre"
   },
   {
     "id": 135,
@@ -285,22 +303,21 @@
     "technique": "",
     "year": 2024,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/lavalle.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/lavalle-thumb.jpeg",
     "tags": [],
     "dimensions": "",
     "featured": true,
-    "published": true
+    "published": true,
+    "slug": "lavalle"
   },
   {
     "id": "d642ed433f19447da9baf9bdc6dc346d",
     "slug": "nose",
     "title": "nose",
     "description": "",
-    "category": "",
+    "category": "uncategorized",
     "technique": "",
     "year": 2025,
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/nose.jpeg",
-    "thumbnail": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/thumbnails/nose-thumb.jpeg",
     "tags": [],
     "dimensions": "",
     "featured": true,
