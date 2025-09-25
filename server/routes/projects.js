@@ -81,6 +81,14 @@ router.post('/', async (req, res) => {
     projects.push(newProject);
     await saveJsonFile('projects.json', projects);
 
+    // Update sitemaps
+    try {
+      const { updateSitemaps } = require('../utils/cms-utils');
+      await updateSitemaps();
+    } catch (sitemapError) {
+      console.warn('Failed to update sitemaps:', sitemapError.message);
+    }
+
     res.status(201).json(newProject);
   } catch (error) {
     console.error('Error creating project:', error);
@@ -138,6 +146,15 @@ router.put('/:slug', async (req, res) => {
     }
 
     await saveJsonFile('projects.json', projects);
+
+    // Update sitemaps
+    try {
+      const { updateSitemaps } = require('../utils/cms-utils');
+      await updateSitemaps();
+    } catch (sitemapError) {
+      console.warn('Failed to update sitemaps:', sitemapError.message);
+    }
+
     res.json(project);
   } catch (error) {
     console.error('Error updating project:', error);
@@ -159,6 +176,14 @@ router.delete('/:slug', async (req, res) => {
     const project = projects[projectIndex];
     projects.splice(projectIndex, 1);
     await saveJsonFile('projects.json', projects);
+
+    // Update sitemaps
+    try {
+      const { updateSitemaps } = require('../utils/cms-utils');
+      await updateSitemaps();
+    } catch (sitemapError) {
+      console.warn('Failed to update sitemaps:', sitemapError.message);
+    }
 
     res.json({ message: 'Project deleted successfully', deletedProject: project });
   } catch (error) {

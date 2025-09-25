@@ -105,10 +105,128 @@ async function saveJsonFile(filename, data) {
   await fs.writeFile(filepath, JSON.stringify(data, null, 2));
 }
 
-// Sitemap generation (simplified for now)
+// Sitemap generation
+const SITEMAP_CONFIG = {
+  baseUrl: 'https://www.victorgutierrez.com.br',
+  staticPages: [
+    {
+      url: '/',
+      title: 'Home',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    },
+    {
+      url: '/#portfolio',
+      title: 'Portfolio',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    },
+    {
+      url: '/#gallery',
+      title: 'Gallery',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    },
+    {
+      url: '/#blog',
+      title: 'Blog',
+      lastModified: () => new Date().toISOString().split('T')[0]
+    }
+  ]
+};
+
+async function generateSitemapJson() {
+  try {
+    const posts = await loadJsonFile('posts.json');
+    const projects = await loadJsonFile('projects.json');
+
+    // Get today's date for filtering published posts
+    const now = new Date();
+    const today = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
+
+    // Filter published posts with date <= today
+    const publishedPosts = posts.filter(post =>
+      post.published && post.date <= today
+    );
+
+    // Static pages
+    const staticPages = SITEMAP_CONFIG.staticPages.map(page => ({
+      url: page.url,
+      title: page.title,
+      lastModified: page.lastModified()
+    }));
+
+    // Dynamic post URLs (JavaScript routing with # prefix)
+    const postPages = publishedPosts.map(post => ({
+      url: `/#post/${post.slug}`,
+      title: post.title,
+      lastModified: post.date
+    }));
+
+    // Project pages (if any are featured/public)
+    const featuredProjects = projects.filter(project => project.featured);
+    const projectPages = featuredProjects.map(project => ({
+      url: `/#portfolio/${project.slug}`,
+      title: project.title,
+      lastModified: project.endDate === 'ongoing' ? today : project.endDate
+    }));
+
+    return {
+      pages: staticPages,
+      posts: postPages,
+      projects: projectPages
+    };
+  } catch (error) {
+    console.error('Error generating sitemap JSON:', error);
+    throw error;
+  }
+}
+
+async function generateSitemapXml() {
+  try {
+    const sitemapData = await generateSitemapJson();
+    const now = new Date().toISOString().split('T')[0];
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+    // Add all URLs from sitemap.json
+    const allPages = [
+      ...sitemapData.pages,
+      ...sitemapData.posts,
+      ...sitemapData.projects
+    ];
+
+    allPages.forEach(page => {
+      xml += '  <url>\n';
+      xml += `    <loc>${SITEMAP_CONFIG.baseUrl}${page.url}</loc>\n`;
+      xml += `    <lastmod>${page.lastModified}</lastmod>\n`;
+      xml += '  </url>\n';
+    });
+
+    xml += '</urlset>';
+    return xml;
+  } catch (error) {
+    console.error('Error generating sitemap XML:', error);
+    throw error;
+  }
+}
+
 async function updateSitemaps() {
-  // This can be enhanced later if needed
-  console.log('📍 Sitemap update requested (implementation pending)');
+  try {
+    // Generate and save sitemap.json
+    const sitemapJson = await generateSitemapJson();
+    await saveJsonFile('sitemap.json', sitemapJson);
+
+    // Generate and save sitemap.xml
+    const sitemapXml = await generateSitemapXml();
+    const rootDir = path.join(DATA_DIR, '..');
+    await fs.writeFile(path.join(rootDir, 'sitemap.xml'), sitemapXml);
+
+    console.log('🗺️  Sitemaps updated successfully!');
+  } catch (error) {
+    console.error('⚠️  Error updating sitemaps:', error.message);
+    throw error;
+  }
 }
 
 module.exports = {

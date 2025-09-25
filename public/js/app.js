@@ -106,29 +106,35 @@ class CMSApp {
     setupSearchAndFilters() {
         // Blog search and filters
         document.getElementById('blog-search')?.addEventListener('input', (e) => {
-            this.filterItems('blog', e.target.value);
+            const statusFilter = document.getElementById('blog-status-filter')?.value || '';
+            this.filterItems('blog', e.target.value, { status: statusFilter });
         });
 
         document.getElementById('blog-status-filter')?.addEventListener('change', (e) => {
-            this.filterItems('blog', null, { status: e.target.value });
+            const searchTerm = document.getElementById('blog-search')?.value || '';
+            this.filterItems('blog', searchTerm, { status: e.target.value });
         });
 
         // Projects search and filters
         document.getElementById('projects-search')?.addEventListener('input', (e) => {
-            this.filterItems('projects', e.target.value);
+            const statusFilter = document.getElementById('projects-status-filter')?.value || '';
+            this.filterItems('projects', e.target.value, { status: statusFilter });
         });
 
         document.getElementById('projects-status-filter')?.addEventListener('change', (e) => {
-            this.filterItems('projects', null, { status: e.target.value });
+            const searchTerm = document.getElementById('projects-search')?.value || '';
+            this.filterItems('projects', searchTerm, { status: e.target.value });
         });
 
         // Gallery search and filters
         document.getElementById('gallery-search')?.addEventListener('input', (e) => {
-            this.filterItems('gallery', e.target.value);
+            const categoryFilter = document.getElementById('gallery-category-filter')?.value || '';
+            this.filterItems('gallery', e.target.value, { category: categoryFilter });
         });
 
         document.getElementById('gallery-category-filter')?.addEventListener('change', (e) => {
-            this.filterItems('gallery', null, { category: e.target.value });
+            const searchTerm = document.getElementById('gallery-search')?.value || '';
+            this.filterItems('gallery', searchTerm, { category: e.target.value });
         });
     }
 
@@ -439,6 +445,11 @@ class CMSApp {
         if (type === 'blog') {
             await this.initializeContentEditor();
         }
+
+        // Setup file upload for gallery
+        if (type === 'gallery') {
+            this.setupImageUpload();
+        }
     }
 
     async editItem(type, slug) {
@@ -480,6 +491,11 @@ class CMSApp {
             // Initialize editor for blog posts
             if (type === 'blog') {
                 await this.initializeContentEditor(item.content);
+            }
+
+            // Setup file upload for gallery
+            if (type === 'gallery') {
+                this.setupImageUpload();
             }
 
         } catch (error) {
@@ -570,6 +586,61 @@ class CMSApp {
         }
 
         this.currentEditingItem = null;
+    }
+
+    setupImageUpload() {
+        const uploadBtn = document.getElementById('upload-image-btn');
+        const fileInput = document.getElementById('gallery-image-upload');
+        const statusSpan = document.getElementById('upload-status');
+        const imageUrlInput = document.getElementById('gallery-image-url');
+
+        if (!uploadBtn || !fileInput || !statusSpan || !imageUrlInput) return;
+
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                this.showToast('error', 'Arquivo inválido', 'Por favor, selecione uma imagem');
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                this.showToast('error', 'Arquivo muito grande', 'Tamanho máximo: 5MB');
+                return;
+            }
+
+            try {
+                statusSpan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fazendo upload...';
+                uploadBtn.disabled = true;
+
+                const uploadResult = await api.uploadFile(file);
+
+                // Update the image URL input with the uploaded file URL
+                imageUrlInput.value = uploadResult.url;
+
+                statusSpan.innerHTML = '<i class="fas fa-check text-green-500"></i> Upload concluído!';
+                this.showToast('success', 'Upload realizado com sucesso!');
+
+                // Clear the status after 3 seconds
+                setTimeout(() => {
+                    statusSpan.innerHTML = '';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Upload failed:', error);
+                statusSpan.innerHTML = '<i class="fas fa-times text-red-500"></i> Falha no upload';
+                this.showToast('error', 'Erro no upload', error.message);
+            } finally {
+                uploadBtn.disabled = false;
+            }
+        });
     }
 
     showToast(type, title, message = '') {
@@ -725,8 +796,18 @@ class CMSApp {
                 <input type="text" class="form-input" id="gallery-dimensions" value="${item?.dimensions || ''}" placeholder="e.g., 1920x1080">
             </div>
             <div class="form-group">
-                <label class="form-label">URL da Imagem</label>
-                <input type="url" class="form-input" id="gallery-image-url" value="${item?.image || ''}" required>
+                <label class="form-label">Imagem</label>
+                <div class="upload-section">
+                    <input type="file" id="gallery-image-upload" accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn-secondary" id="upload-image-btn">
+                        <i class="fas fa-upload"></i> Fazer Upload da Imagem
+                    </button>
+                    <span class="upload-status" id="upload-status"></span>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label">URL da Imagem (ou use upload acima)</label>
+                    <input type="url" class="form-input" id="gallery-image-url" value="${item?.image || ''}" required>
+                </div>
             </div>
             <div class="form-group">
                 <label class="form-label">URL da Thumbnail (opcional)</label>
@@ -783,31 +864,420 @@ class CMSApp {
     }
 
     createSkillsForm() {
-        // Implementation for skills form
-        return '<p>Skills form implementation...</p>';
+        const skills = this.data.profile?.skills || {};
+        const categories = Object.keys(skills);
+
+        return `
+            <form id="skills-form">
+                <div class="skills-section">
+                    <h3>Categorias de Habilidades</h3>
+                    <div id="skills-categories">
+                        ${categories.map(category => `
+                            <div class="skill-category" data-category="${category}">
+                                <div class="category-header">
+                                    <h4>${category}</h4>
+                                    <button type="button" class="btn btn-small btn-danger" onclick="app.removeSkillCategory('${category}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="category-skills">
+                                    ${skills[category]?.map((skill, index) => `
+                                        <div class="skill-item">
+                                            <input type="text" class="form-input" value="${skill}" data-category="${category}" data-index="${index}">
+                                            <button type="button" class="btn btn-small btn-danger" onclick="app.removeSkill('${category}', ${index})">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    `).join('') || ''}
+                                    <button type="button" class="btn btn-small btn-secondary" onclick="app.addSkill('${category}')">
+                                        <i class="fas fa-plus"></i> Adicionar Skill
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="add-category">
+                        <div class="form-group">
+                            <label class="form-label">Nova Categoria</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <input type="text" id="new-category-name" class="form-input" placeholder="Nome da categoria">
+                                <button type="button" class="btn btn-primary" onclick="app.addSkillCategory()">
+                                    <i class="fas fa-plus"></i> Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar Habilidades</button>
+            </form>
+        `;
     }
 
     createTechnicalStackForm() {
-        // Implementation for technical stack form
-        return '<p>Technical stack form implementation...</p>';
+        const technicalStack = this.data.profile?.technicalStack || {};
+        const categories = Object.keys(technicalStack);
+
+        return `
+            <form id="technical-stack-form">
+                <div class="technical-stack-section">
+                    <h3>Stack Técnico</h3>
+                    <div id="technical-categories">
+                        ${categories.map(category => `
+                            <div class="technical-category" data-category="${category}">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        ${category}
+                                        <button type="button" class="btn btn-small btn-danger" onclick="app.removeTechnicalCategory('${category}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </label>
+                                    <input type="text" class="form-input" name="${category}" value="${technicalStack[category]?.join(', ') || ''}" placeholder="Tecnologias separadas por vírgula">
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="add-technical-category">
+                        <div class="form-group">
+                            <label class="form-label">Nova Categoria Técnica</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <input type="text" id="new-technical-category-name" class="form-input" placeholder="Nome da categoria (ex: Linguagens, Frameworks)">
+                                <button type="button" class="btn btn-primary" onclick="app.addTechnicalCategory()">
+                                    <i class="fas fa-plus"></i> Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar Stack Técnico</button>
+            </form>
+        `;
     }
 
     createSiteSettingsForm() {
-        // Implementation for site settings form
-        return '<p>Site settings form implementation...</p>';
+        const siteSettings = this.data.profile?.siteSettings || {};
+
+        return `
+            <form id="site-settings-form">
+                <div class="form-group">
+                    <label class="form-label">Título do Site</label>
+                    <input type="text" class="form-input" name="siteTitle" value="${siteSettings.siteTitle || ''}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descrição do Site</label>
+                    <textarea class="form-textarea" name="siteDescription" rows="3" required>${siteSettings.siteDescription || ''}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tema</label>
+                    <select class="form-select" name="theme">
+                        <option value="dark" ${siteSettings.theme === 'dark' ? 'selected' : ''}>Escuro</option>
+                        <option value="light" ${siteSettings.theme === 'light' ? 'selected' : ''}>Claro</option>
+                        <option value="auto" ${siteSettings.theme === 'auto' ? 'selected' : ''}>Automático</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Cor Primária</label>
+                    <input type="color" class="form-input" name="primaryColor" value="${siteSettings.primaryColor || '#3b82f6'}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">URL do Site</label>
+                    <input type="url" class="form-input" name="siteUrl" value="${siteSettings.siteUrl || 'https://www.victorgutierrez.com.br'}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Google Analytics ID (opcional)</label>
+                    <input type="text" class="form-input" name="googleAnalyticsId" value="${siteSettings.googleAnalyticsId || ''}" placeholder="GA_TRACKING_ID">
+                </div>
+
+                <div class="form-group">
+                    <div class="form-checkbox">
+                        <input type="checkbox" name="enableComments" ${siteSettings.enableComments ? 'checked' : ''}>
+                        <label>Habilitar sistema de comentários</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-checkbox">
+                        <input type="checkbox" name="enableNewsletter" ${siteSettings.enableNewsletter ? 'checked' : ''}>
+                        <label>Habilitar newsletter</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar Configurações do Site</button>
+            </form>
+        `;
     }
 
-    // Data processing methods (to be implemented)
+    // Helper methods for skills management
+    addSkillCategory() {
+        const categoryName = document.getElementById('new-category-name')?.value.trim();
+        if (!categoryName) return;
+
+        if (!this.data.profile.skills[categoryName]) {
+            this.data.profile.skills[categoryName] = [];
+            this.showProfileTab('skills');
+            document.getElementById('new-category-name').value = '';
+        } else {
+            this.showToast('error', 'Categoria já existe');
+        }
+    }
+
+    removeSkillCategory(category) {
+        if (confirm(`Tem certeza que deseja remover a categoria "${category}"?`)) {
+            delete this.data.profile.skills[category];
+            this.showProfileTab('skills');
+        }
+    }
+
+    addSkill(category) {
+        if (!this.data.profile.skills[category]) {
+            this.data.profile.skills[category] = [];
+        }
+        this.data.profile.skills[category].push('');
+        this.showProfileTab('skills');
+    }
+
+    removeSkill(category, index) {
+        if (this.data.profile.skills[category]) {
+            this.data.profile.skills[category].splice(index, 1);
+            this.showProfileTab('skills');
+        }
+    }
+
+    addTechnicalCategory() {
+        const categoryName = document.getElementById('new-technical-category-name')?.value.trim();
+        if (!categoryName) return;
+
+        if (!this.data.profile.technicalStack[categoryName]) {
+            this.data.profile.technicalStack[categoryName] = [];
+            this.showProfileTab('technical');
+            document.getElementById('new-technical-category-name').value = '';
+        } else {
+            this.showToast('error', 'Categoria já existe');
+        }
+    }
+
+    removeTechnicalCategory(category) {
+        if (confirm(`Tem certeza que deseja remover a categoria "${category}"?`)) {
+            delete this.data.profile.technicalStack[category];
+            this.showProfileTab('technical');
+        }
+    }
+
+    // Data processing methods
     async createNewItem() {
-        // Implementation for creating new items
+        const formData = this.collectFormData();
+
+        try {
+            let newItem;
+
+            switch (this.currentSection) {
+                case 'blog':
+                    // Get content from editor
+                    if (this.currentEditor) {
+                        formData.content = this.currentEditor.getValue();
+                    }
+
+                    newItem = await api.createBlogPost(formData);
+                    this.data.blog.push({
+                        id: newItem.id,
+                        slug: newItem.slug,
+                        title: newItem.title,
+                        date: newItem.date,
+                        excerpt: newItem.excerpt,
+                        tags: newItem.tags,
+                        published: newItem.published,
+                        contentFile: `posts/${newItem.slug}.json`
+                    });
+                    break;
+
+                case 'projects':
+                    newItem = await api.createProject(formData);
+                    this.data.projects.push(newItem);
+                    break;
+
+                case 'gallery':
+                    newItem = await api.createGalleryItem(formData);
+                    this.data.gallery.push(newItem);
+                    break;
+            }
+
+            return newItem;
+        } catch (error) {
+            console.error('Error creating item:', error);
+            throw error;
+        }
     }
 
     async updateItem() {
-        // Implementation for updating existing items
+        const formData = this.collectFormData();
+        const { type, slug } = this.currentEditingItem;
+
+        try {
+            let updatedItem;
+
+            switch (type) {
+                case 'blog':
+                    // Get content from editor
+                    if (this.currentEditor) {
+                        formData.content = this.currentEditor.getValue();
+                    }
+
+                    updatedItem = await api.updateBlogPost(slug, formData);
+
+                    // Update local data
+                    const blogIndex = this.data.blog.findIndex(p => p.slug === slug);
+                    if (blogIndex !== -1) {
+                        this.data.blog[blogIndex] = {
+                            id: updatedItem.id,
+                            slug: updatedItem.slug,
+                            title: updatedItem.title,
+                            date: updatedItem.date,
+                            excerpt: updatedItem.excerpt,
+                            tags: updatedItem.tags,
+                            published: updatedItem.published,
+                            contentFile: `posts/${updatedItem.slug}.json`
+                        };
+                    }
+                    break;
+
+                case 'projects':
+                    updatedItem = await api.updateProject(slug, formData);
+
+                    // Update local data
+                    const projectIndex = this.data.projects.findIndex(p => p.slug === slug);
+                    if (projectIndex !== -1) {
+                        this.data.projects[projectIndex] = updatedItem;
+                    }
+                    break;
+
+                case 'gallery':
+                    updatedItem = await api.updateGalleryItem(slug, formData);
+
+                    // Update local data
+                    const galleryIndex = this.data.gallery.findIndex(i => i.slug === slug);
+                    if (galleryIndex !== -1) {
+                        this.data.gallery[galleryIndex] = updatedItem;
+                    }
+                    break;
+            }
+
+            return updatedItem;
+        } catch (error) {
+            console.error('Error updating item:', error);
+            throw error;
+        }
+    }
+
+    collectFormData() {
+        const formData = {};
+
+        // Collect data based on current section
+        switch (this.currentSection) {
+            case 'blog':
+                formData.title = document.getElementById('blog-title')?.value || '';
+                formData.excerpt = document.getElementById('blog-excerpt')?.value || '';
+                formData.tags = document.getElementById('blog-tags')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
+                formData.date = document.getElementById('blog-date')?.value || '';
+                formData.published = document.getElementById('blog-published')?.checked || false;
+                break;
+
+            case 'projects':
+                formData.title = document.getElementById('project-title')?.value || '';
+                formData.description = document.getElementById('project-description')?.value || '';
+                formData.category = document.getElementById('project-category')?.value || '';
+                formData.technologies = document.getElementById('project-technologies')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
+                formData.status = document.getElementById('project-status')?.value || 'planned';
+                formData.startDate = document.getElementById('project-start-date')?.value || '';
+                formData.endDate = document.getElementById('project-end-date')?.value || '';
+                formData.featured = document.getElementById('project-featured')?.checked || false;
+                break;
+
+            case 'gallery':
+                formData.title = document.getElementById('gallery-title')?.value || '';
+                formData.description = document.getElementById('gallery-description')?.value || '';
+                formData.category = document.getElementById('gallery-category')?.value || 'photography';
+                formData.technique = document.getElementById('gallery-technique')?.value || '';
+                formData.year = parseInt(document.getElementById('gallery-year')?.value) || new Date().getFullYear();
+                formData.tags = document.getElementById('gallery-tags')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
+                formData.dimensions = document.getElementById('gallery-dimensions')?.value || '';
+                formData.imageUrl = document.getElementById('gallery-image-url')?.value || '';
+                formData.thumbnailUrl = document.getElementById('gallery-thumbnail-url')?.value || '';
+                formData.featured = document.getElementById('gallery-featured')?.checked || false;
+                break;
+        }
+
+        return formData;
     }
 
     filterItems(type, searchTerm, filters = {}) {
-        // Implementation for filtering items
+        const items = this.data[type] || [];
+        let filteredItems = [...items];
+
+        // Apply search filter
+        if (searchTerm && searchTerm.trim()) {
+            const search = searchTerm.toLowerCase().trim();
+            filteredItems = filteredItems.filter(item => {
+                return item.title?.toLowerCase().includes(search) ||
+                       item.description?.toLowerCase().includes(search) ||
+                       item.excerpt?.toLowerCase().includes(search) ||
+                       item.tags?.some(tag => tag.toLowerCase().includes(search)) ||
+                       item.technologies?.some(tech => tech.toLowerCase().includes(search));
+            });
+        }
+
+        // Apply status filter
+        if (filters.status && filters.status.trim()) {
+            if (type === 'blog') {
+                const published = filters.status === 'published';
+                filteredItems = filteredItems.filter(item => item.published === published);
+            } else if (type === 'projects') {
+                filteredItems = filteredItems.filter(item => item.status === filters.status);
+            }
+        }
+
+        // Apply category filter
+        if (filters.category && filters.category.trim()) {
+            if (type === 'gallery') {
+                filteredItems = filteredItems.filter(item => item.category === filters.category);
+            } else if (type === 'projects') {
+                filteredItems = filteredItems.filter(item => item.category === filters.category);
+            }
+        }
+
+        // Render filtered items
+        this.renderFilteredItems(type, filteredItems);
+    }
+
+    renderFilteredItems(type, items) {
+        const gridId = `${type}-grid`;
+        const grid = document.getElementById(gridId);
+
+        if (!grid) return;
+
+        if (items.length === 0) {
+            grid.innerHTML = '<p class="no-data">Nenhum item encontrado</p>';
+            return;
+        }
+
+        switch (type) {
+            case 'blog':
+                grid.innerHTML = items.map(item => this.createBlogCard(item)).join('');
+                break;
+            case 'projects':
+                grid.innerHTML = items.map(item => this.createProjectCard(item)).join('');
+                break;
+            case 'gallery':
+                grid.innerHTML = items.map(item => this.createGalleryCard(item)).join('');
+                break;
+        }
     }
 }
 

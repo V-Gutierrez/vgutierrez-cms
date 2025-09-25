@@ -107,6 +107,14 @@ router.post('/', async (req, res) => {
     posts.push(postIndex);
     await saveJsonFile('posts.json', posts);
 
+    // Update sitemaps
+    try {
+      const { updateSitemaps } = require('../utils/cms-utils');
+      await updateSitemaps();
+    } catch (sitemapError) {
+      console.warn('Failed to update sitemaps:', sitemapError.message);
+    }
+
     res.status(201).json(postContent);
   } catch (error) {
     console.error('Error creating post:', error);
@@ -193,6 +201,14 @@ router.put('/:slug', async (req, res) => {
     await fs.writeFile(finalContentPath, JSON.stringify(fullPost, null, 2));
     await saveJsonFile('posts.json', posts);
 
+    // Update sitemaps
+    try {
+      const { updateSitemaps } = require('../utils/cms-utils');
+      await updateSitemaps();
+    } catch (sitemapError) {
+      console.warn('Failed to update sitemaps:', sitemapError.message);
+    }
+
     res.json(fullPost);
   } catch (error) {
     console.error('Error updating post:', error);
@@ -224,6 +240,14 @@ router.delete('/:slug', async (req, res) => {
     // Remove from index
     posts.splice(postIndex, 1);
     await saveJsonFile('posts.json', posts);
+
+    // Update sitemaps
+    try {
+      const { updateSitemaps } = require('../utils/cms-utils');
+      await updateSitemaps();
+    } catch (sitemapError) {
+      console.warn('Failed to update sitemaps:', sitemapError.message);
+    }
 
     res.json({ message: 'Post deleted successfully', deletedPost: post });
   } catch (error) {

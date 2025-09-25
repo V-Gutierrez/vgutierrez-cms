@@ -149,63 +149,6 @@ class EditorManager {
         });
     }
 
-    // Helper method to validate HTML content
-    validateHTML(content) {
-        try {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(content, 'text/html');
-            const errors = doc.querySelector('parsererror');
-            return { valid: !errors, errors: errors ? errors.textContent : null };
-        } catch (error) {
-            return { valid: false, errors: error.message };
-        }
-    }
-
-    // Helper method to format HTML content
-    formatHTML(content) {
-        try {
-            // Simple HTML formatting
-            let formatted = content
-                .replace(/></g, '>\n<')
-                .replace(/^\s+|\s+$/gm, '')
-                .split('\n')
-                .map((line, index, array) => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return '';
-
-                    const indentLevel = this.getIndentLevel(trimmed, array, index);
-                    return '  '.repeat(indentLevel) + trimmed;
-                })
-                .filter(line => line.length > 0)
-                .join('\n');
-
-            return formatted;
-        } catch (error) {
-            console.error('Error formatting HTML:', error);
-            return content;
-        }
-    }
-
-    getIndentLevel(line, lines, index) {
-        // Simple indentation logic for HTML
-        let level = 0;
-
-        for (let i = 0; i < index; i++) {
-            const prevLine = lines[i].trim();
-            if (prevLine.match(/<[^\/][^>]*[^\/]>$/)) {
-                level++;
-            }
-            if (prevLine.match(/<\/[^>]+>$/)) {
-                level--;
-            }
-        }
-
-        if (line.match(/^<\/[^>]+>$/)) {
-            level--;
-        }
-
-        return Math.max(0, level);
-    }
 }
 
 // Create global editor manager instance
