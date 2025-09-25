@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+console.log('🚀 Iniciando Victor Gutierrez CMS - Web App');
+console.log('==========================================\n');
+
+// Check if dependencies are installed
+const nodeModulesPath = path.join(__dirname, 'node_modules');
+if (!fs.existsSync(nodeModulesPath)) {
+    console.log('📦 Instalando dependências...');
+    try {
+        execSync('npm install', { stdio: 'inherit' });
+        console.log('✅ Dependências instaladas com sucesso!\n');
+    } catch (error) {
+        console.error('❌ Erro ao instalar dependências:', error.message);
+        process.exit(1);
+    }
+}
+
+// Check if server directory exists
+const serverPath = path.join(__dirname, 'server');
+if (!fs.existsSync(serverPath)) {
+    console.error('❌ Diretório server/ não encontrado!');
+    console.log('💡 Verifique se você está na raiz do projeto.');
+    process.exit(1);
+}
+
+// Check if public directory exists
+const publicPath = path.join(__dirname, 'public');
+if (!fs.existsSync(publicPath)) {
+    console.error('❌ Diretório public/ não encontrado!');
+    console.log('💡 Verifique se você está na raiz do projeto.');
+    process.exit(1);
+}
+
+// Start the server
+console.log('🌟 Iniciando servidor...');
+console.log('🔗 URL: http://localhost:3001/admin');
+console.log('⌨️  Pressione Ctrl+C para parar o servidor\n');
+
+try {
+    execSync('node server/app.js', { stdio: 'inherit' });
+} catch (error) {
+    if (error.signal !== 'SIGINT') {
+        console.error('❌ Erro ao iniciar servidor:', error.message);
+        process.exit(1);
+    }
+}
+
+console.log('\n👋 Servidor parado. Até logo!');

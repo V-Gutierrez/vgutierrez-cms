@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victor Gutierrez CMS - Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.43.0/min/vs/loader.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>Carregando CMS...</p>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-cogs"></i> VG CMS</h2>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="menu-item" data-section="blog">
+                    <i class="fas fa-blog"></i>
+                    <span>Blog Posts</span>
+                </li>
+                <li class="menu-item" data-section="projects">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Projetos</span>
+                </li>
+                <li class="menu-item" data-section="gallery">
+                    <i class="fas fa-images"></i>
+                    <span>Galeria</span>
+                </li>
+                <li class="menu-item" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="primary-action" style="display: none;">
+                        <i class="fas fa-plus"></i>
+                        <span>Novo Item</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section id="section-dashboard" class="content-section active">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-blog"></i>
+                            <div class="stat-info">
+                                <h3 id="blog-count">-</h3>
+                                <p>Posts no Blog</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-project-diagram"></i>
+                            <div class="stat-info">
+                                <h3 id="projects-count">-</h3>
+                                <p>Projetos</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-images"></i>
+                            <div class="stat-info">
+                                <h3 id="gallery-count">-</h3>
+                                <p>Itens na Galeria</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h2>Atividade Recente</h2>
+                        <div class="activity-list" id="recent-activity">
+                            <p class="no-data">Carregando atividades...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Blog Section -->
+                <section id="section-blog" class="content-section">
+                    <div class="section-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="blog-search" placeholder="Buscar posts...">
+                        </div>
+                        <div class="filters">
+                            <select id="blog-status-filter">
+                                <option value="">Todos os status</option>
+                                <option value="published">Publicado</option>
+                                <option value="draft">Rascunho</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="items-grid" id="blog-grid">
+                        <p class="no-data">Carregando posts...</p>
+                    </div>
+                </section>
+
+                <!-- Projects Section -->
+                <section id="section-projects" class="content-section">
+                    <div class="section-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="projects-search" placeholder="Buscar projetos...">
+                        </div>
+                        <div class="filters">
+                            <select id="projects-status-filter">
+                                <option value="">Todos os status</option>
+                                <option value="completed">Concluído</option>
+                                <option value="in-progress">Em progresso</option>
+                                <option value="planned">Planejado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="items-grid" id="projects-grid">
+                        <p class="no-data">Carregando projetos...</p>
+                    </div>
+                </section>
+
+                <!-- Gallery Section -->
+                <section id="section-gallery" class="content-section">
+                    <div class="section-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="gallery-search" placeholder="Buscar na galeria...">
+                        </div>
+                        <div class="filters">
+                            <select id="gallery-category-filter">
+                                <option value="">Todas as categorias</option>
+                                <option value="photography">Fotografia</option>
+                                <option value="digital-art">Arte Digital</option>
+                                <option value="drawings">Desenhos</option>
+                                <option value="mixed-media">Mídia Mista</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="items-grid gallery-grid" id="gallery-grid">
+                        <p class="no-data">Carregando galeria...</p>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="section-profile" class="content-section">
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" data-tab="personal">Informações Pessoais</button>
+                        <button class="tab-btn" data-tab="skills">Habilidades</button>
+                        <button class="tab-btn" data-tab="technical">Stack Técnico</button>
+                        <button class="tab-btn" data-tab="site">Configurações do Site</button>
+                    </div>
+
+                    <div class="profile-content" id="profile-content">
+                        <p class="no-data">Carregando perfil...</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Create/Edit -->
+    <div class="modal" id="item-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Novo Item</h3>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">Cancelar</button>
+                <button class="btn btn-primary" id="modal-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
