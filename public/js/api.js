@@ -59,34 +59,6 @@ class API {
         });
     }
 
-    // Projects API methods
-    async getProjects() {
-        return this.request('/projects');
-    }
-
-    async getProject(slug) {
-        return this.request(`/projects/${slug}`);
-    }
-
-    async createProject(data) {
-        return this.request('/projects', {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
-    }
-
-    async updateProject(slug, data) {
-        return this.request(`/projects/${slug}`, {
-            method: 'PUT',
-            body: JSON.stringify(data)
-        });
-    }
-
-    async deleteProject(slug) {
-        return this.request(`/projects/${slug}`, {
-            method: 'DELETE'
-        });
-    }
 
     // Gallery API methods
     async getGalleryItems() {

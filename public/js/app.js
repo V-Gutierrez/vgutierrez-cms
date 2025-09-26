@@ -6,7 +6,6 @@ class CMSApp {
         this.currentEditorId = null;
         this.data = {
             blog: [],
-            projects: [],
             gallery: [],
             profile: null
         };
@@ -35,15 +34,13 @@ class CMSApp {
     async loadData() {
         try {
             // Load all data in parallel
-            const [blog, projects, gallery, profile] = await Promise.all([
+            const [blog, gallery, profile] = await Promise.all([
                 api.getBlogPosts(),
-                api.getProjects(),
                 api.getGalleryItems(),
                 api.getProfile()
             ]);
 
             this.data.blog = blog;
-            this.data.projects = projects;
             this.data.gallery = gallery;
             this.data.profile = profile;
         } catch (error) {
@@ -115,16 +112,6 @@ class CMSApp {
             this.filterItems('blog', searchTerm, { status: e.target.value });
         });
 
-        // Projects search and filters
-        document.getElementById('projects-search')?.addEventListener('input', (e) => {
-            const statusFilter = document.getElementById('projects-status-filter')?.value || '';
-            this.filterItems('projects', e.target.value, { status: statusFilter });
-        });
-
-        document.getElementById('projects-status-filter')?.addEventListener('change', (e) => {
-            const searchTerm = document.getElementById('projects-search')?.value || '';
-            this.filterItems('projects', searchTerm, { status: e.target.value });
-        });
 
         // Gallery search and filters
         document.getElementById('gallery-search')?.addEventListener('input', (e) => {
@@ -163,7 +150,6 @@ class CMSApp {
         const titles = {
             dashboard: 'Dashboard',
             blog: 'Blog Posts',
-            projects: 'Projetos',
             gallery: 'Galeria',
             profile: 'Perfil'
         };
@@ -175,7 +161,7 @@ class CMSApp {
             primaryAction.style.display = 'none';
         } else {
             primaryAction.style.display = 'flex';
-            primaryAction.querySelector('span').textContent = `Novo ${section === 'blog' ? 'Post' : section === 'projects' ? 'Projeto' : 'Item'}`;
+            primaryAction.querySelector('span').textContent = `Novo ${section === 'blog' ? 'Post' : 'Item'}`;
         }
     }
 
@@ -186,9 +172,6 @@ class CMSApp {
                 break;
             case 'blog':
                 this.renderBlogSection();
-                break;
-            case 'projects':
-                this.renderProjectsSection();
                 break;
             case 'gallery':
                 this.renderGallerySection();
@@ -202,7 +185,6 @@ class CMSApp {
     renderDashboard() {
         // Update stats
         document.getElementById('blog-count').textContent = this.data.blog.length;
-        document.getElementById('projects-count').textContent = this.data.projects.length;
         document.getElementById('gallery-count').textContent = this.data.gallery.length;
 
         // Render recent activity
@@ -225,18 +207,7 @@ class CMSApp {
                 action: 'Publicado'
             }));
 
-        // Get recent projects
-        const recentProjects = this.data.projects
-            .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
-            .slice(0, 2)
-            .map(project => ({
-                type: 'project',
-                title: project.title,
-                date: project.startDate,
-                action: project.status === 'completed' ? 'Concluído' : 'Atualizado'
-            }));
-
-        activities.push(...recentPosts, ...recentProjects);
+        activities.push(...recentPosts);
         activities.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         if (activities.length === 0) {
@@ -263,13 +234,10 @@ class CMSApp {
     }
 
     renderProjectsSection() {
-        const grid = document.getElementById('projects-grid');
-        if (this.data.projects.length === 0) {
             grid.innerHTML = '<p class="no-data">Nenhum projeto encontrado</p>';
             return;
         }
 
-        grid.innerHTML = this.data.projects.map(project => this.createProjectCard(project)).join('');
     }
 
     renderGallerySection() {
@@ -341,10 +309,8 @@ class CMSApp {
                     </div>
                 </div>
                 <div class="item-card-actions">
-                    <button class="btn btn-small btn-primary" onclick="app.editItem('projects', '${project.slug}')">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-small btn-danger" onclick="app.deleteItem('projects', '${project.slug}')">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -415,8 +381,6 @@ class CMSApp {
             case 'blog':
                 this.createItem('blog');
                 break;
-            case 'projects':
-                this.createItem('projects');
                 break;
             case 'gallery':
                 this.createItem('gallery');
@@ -428,13 +392,11 @@ class CMSApp {
         const modalTitle = document.getElementById('modal-title');
         const modalBody = document.getElementById('modal-body');
 
-        modalTitle.textContent = `Novo ${type === 'blog' ? 'Post' : type === 'projects' ? 'Projeto' : 'Item da Galeria'}`;
 
         switch (type) {
             case 'blog':
                 modalBody.innerHTML = this.createBlogForm();
                 break;
-            case 'projects':
                 modalBody.innerHTML = this.createProjectForm();
                 break;
             case 'gallery':
@@ -463,7 +425,6 @@ class CMSApp {
                 case 'blog':
                     item = await api.getBlogPost(slug);
                     break;
-                case 'projects':
                     item = await api.getProject(slug);
                     break;
                 case 'gallery':
@@ -474,13 +435,11 @@ class CMSApp {
             const modalTitle = document.getElementById('modal-title');
             const modalBody = document.getElementById('modal-body');
 
-            modalTitle.textContent = `Editar ${type === 'blog' ? 'Post' : type === 'projects' ? 'Projeto' : 'Item da Galeria'}`;
 
             switch (type) {
                 case 'blog':
                     modalBody.innerHTML = this.createBlogForm(item);
                     break;
-                case 'projects':
                     modalBody.innerHTML = this.createProjectForm(item);
                     break;
                 case 'gallery':
@@ -517,9 +476,7 @@ class CMSApp {
                     await api.deleteBlogPost(slug);
                     this.data.blog = this.data.blog.filter(item => item.slug !== slug);
                     break;
-                case 'projects':
                     await api.deleteProject(slug);
-                    this.data.projects = this.data.projects.filter(item => item.slug !== slug);
                     break;
                 case 'gallery':
                     await api.deleteGalleryItem(slug);
@@ -1097,9 +1054,7 @@ class CMSApp {
                     });
                     break;
 
-                case 'projects':
                     newItem = await api.createProject(formData);
-                    this.data.projects.push(newItem);
                     break;
 
                 case 'gallery':
@@ -1147,13 +1102,10 @@ class CMSApp {
                     }
                     break;
 
-                case 'projects':
                     updatedItem = await api.updateProject(slug, formData);
 
                     // Update local data
-                    const projectIndex = this.data.projects.findIndex(p => p.slug === slug);
                     if (projectIndex !== -1) {
-                        this.data.projects[projectIndex] = updatedItem;
                     }
                     break;
 
@@ -1188,7 +1140,6 @@ class CMSApp {
                 formData.published = document.getElementById('blog-published')?.checked || false;
                 break;
 
-            case 'projects':
                 formData.title = document.getElementById('project-title')?.value || '';
                 formData.description = document.getElementById('project-description')?.value || '';
                 formData.category = document.getElementById('project-category')?.value || '';
@@ -1236,7 +1187,6 @@ class CMSApp {
             if (type === 'blog') {
                 const published = filters.status === 'published';
                 filteredItems = filteredItems.filter(item => item.published === published);
-            } else if (type === 'projects') {
                 filteredItems = filteredItems.filter(item => item.status === filters.status);
             }
         }
@@ -1245,7 +1195,6 @@ class CMSApp {
         if (filters.category && filters.category.trim()) {
             if (type === 'gallery') {
                 filteredItems = filteredItems.filter(item => item.category === filters.category);
-            } else if (type === 'projects') {
                 filteredItems = filteredItems.filter(item => item.category === filters.category);
             }
         }
@@ -1269,7 +1218,6 @@ class CMSApp {
             case 'blog':
                 grid.innerHTML = items.map(item => this.createBlogCard(item)).join('');
                 break;
-            case 'projects':
                 grid.innerHTML = items.map(item => this.createProjectCard(item)).join('');
                 break;
             case 'gallery':

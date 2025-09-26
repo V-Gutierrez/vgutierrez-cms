@@ -71,14 +71,13 @@ const CONFIG = {
   BREAKPOINT: 1025,
   API_BASE:
     "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data",
-  BATCH: { posts: 5, projects: 6 },
+  BATCH: { posts: 5 },
   DURATIONS: { tabFade: 300, tabEnter: 500 },
 };
 
 const PATHS = {
   posts: "posts.json",
   post: (slug) => `posts/${slug}.json`,
-  projects: "projects.json",
   gallery: "gallery.json",
 };
 
@@ -152,7 +151,7 @@ function showTab(tabName, updateURL = true) {
     isTransitioning = false;
   } else {
     // Desktop: keep animated transitions
-    const tabOrder = ["home", "portfolio", "gallery", "blog", "post-detail"];
+    const tabOrder = ["home", "gallery", "blog", "post-detail"];
     const currentIndex = tabOrder.indexOf(currentTab);
     const newIndex = tabOrder.indexOf(tabName);
 
@@ -625,197 +624,11 @@ async function loadBlogPosts() {
   }
 }
 
-// Project display configuration
-const MAX_PROJECTS_INITIAL = CONFIG.BATCH.projects || 6;
-let allProjects = [];
-let displayedProjectsCount = 0;
 
-// Load portfolio projects from GitHub
-async function loadProjects() {
-  const container = document.querySelector(".portfolio-grid");
 
-  try {
-    if (container) {
-      container.innerHTML = '<div class="loading">Loading projects...</div>';
-    }
 
-    const response = await fetch(`${CONFIG.API_BASE}/${PATHS.projects}`);
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
 
-    const projects = await response.json();
-
-    // Show only featured projects or all projects if no featured ones
-    const featuredProjects = projects.filter((project) => project.featured);
-    const projectsToShow =
-      featuredProjects.length > 0 ? featuredProjects : projects;
-
-    // Randomize project order
-    const sortedProjects = projectsToShow.sort(() => Math.random() - 0.5);
-
-    // Store all projects for progressive loading
-    allProjects = sortedProjects;
-    displayedProjectsCount = 0;
-
-    // Initially show limited number of projects
-    renderProjectsWithLimit();
-
-    // Update easter egg data
-    if (window.vg) window.vg.projects = sortedProjects;
-  } catch (error) {
-    console.error("Error loading projects:", error);
-
-    if (container) {
-      container.innerHTML = `
-        <div class="loading" style="color: #ff6b6b;">
-          <h3>⚠️ Unable to load projects</h3>
-          <p><strong>Error:</strong> ${error.message}</p>
-          <p>Check if the GitHub repository and data files exist</p>
-        </div>
-      `;
-    }
-  }
-}
-
-// Render projects with progressive loading
-function renderProjectsWithLimit() {
-  const container = document.querySelector(".portfolio-grid");
-  if (!container) return;
-
-  if (!allProjects || allProjects.length === 0) {
-    container.innerHTML = '<div class="loading">No projects available</div>';
-    return;
-  }
-
-  // Calculate how many projects to show
-  const projectsToShow = Math.min(
-    displayedProjectsCount + MAX_PROJECTS_INITIAL,
-    allProjects.length,
-  );
-  const projectsSlice = allProjects.slice(0, projectsToShow);
-
-  // Clear container and render projects
-  container.innerHTML = "";
-  renderProjects(projectsSlice);
-
-  // Update displayed count
-  displayedProjectsCount = projectsToShow;
-
-  // Add project counter and load more button
-  addProjectControls(container);
-}
-
-// Add project counter and load more button
-function addProjectControls(container) {
-  const portfolioSection = container.closest("section");
-  if (!portfolioSection) return;
-
-  // Remove existing controls
-  const existingControls = portfolioSection.querySelector(".project-controls");
-  if (existingControls) {
-    existingControls.remove();
-  }
-
-  // Create controls container
-  const controlsDiv = document.createElement("div");
-  controlsDiv.className = "project-controls";
-
-  // Project counter
-  const counter = document.createElement("div");
-  counter.className = "project-counter";
-  counter.innerHTML = `Showing ${displayedProjectsCount} of ${allProjects.length} projects`;
-
-  // Load more button (only if there are more projects)
-  if (displayedProjectsCount < allProjects.length) {
-    const loadMoreBtn = document.createElement("button");
-    loadMoreBtn.className = "load-more-btn";
-    loadMoreBtn.innerHTML = `Load More Projects (+${Math.min(MAX_PROJECTS_INITIAL, allProjects.length - displayedProjectsCount)})`;
-    loadMoreBtn.onclick = loadMoreProjects;
-    controlsDiv.appendChild(loadMoreBtn);
-  }
-
-  controlsDiv.appendChild(counter);
-  portfolioSection.appendChild(controlsDiv);
-}
-
-// Generate HTML for a single project
-// Project card template (unified: includes tech, metrics, status)
-if (!window.templates) window.templates = {};
-window.templates.projectCard = (project) => `
-  <div class="project-card">
-    <div class="project-image ${project.image ? "" : "no-image"}">
-      ${project.image ? `<img src="${project.image}" alt="${project.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='${project.category || "Project"}';">` : project.category || "Project"}
-    </div>
-    <div class="project-content">
-      <h3 class="project-title">${project.title || "Untitled Project"}</h3>
-      <p class="project-description">${project.description || "No description available"}</p>
-            ${project.status ? `<div class="project-status ${project.status}">${formatStatus(project.status)}</div>` : ""}
-    </div>
-  </div>
-`;
-
-function generateProjectHTML(project) {
-  // Backwards-compatible alias to the new template
-  return window.templates.projectCard(project);
-}
-
-// Load more projects function
-function loadMoreProjects() {
-  const newProjectsStart = displayedProjectsCount;
-  const newProjectsEnd = Math.min(
-    displayedProjectsCount + MAX_PROJECTS_INITIAL,
-    allProjects.length,
-  );
-  const newProjects = allProjects.slice(newProjectsStart, newProjectsEnd);
-
-  // Render new projects with animation
-  const container = document.querySelector(".portfolio-grid");
-  if (container) {
-    const newProjectsHtml = newProjects
-      .map((project) => generateProjectHTML(project))
-      .join("");
-
-    // Create temporary container for new projects
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = newProjectsHtml;
-
-    // Add new projects with fade-in animation
-    Array.from(tempDiv.children).forEach((projectElement, index) => {
-      projectElement.style.opacity = "0";
-      projectElement.style.transform = "translateY(20px)";
-      container.appendChild(projectElement);
-
-      // Trigger animation after a small delay for each project
-      setTimeout(() => {
-        projectElement.style.transition = "all 0.5s ease";
-        projectElement.style.opacity = "1";
-        projectElement.style.transform = "translateY(0)";
-      }, index * 100);
-    });
-  }
-
-  // Update displayed count
-  displayedProjectsCount = newProjectsEnd;
-
-  // Update controls
-  const portfolioSection = container.closest("section");
-  if (portfolioSection) {
-    addProjectControls(container);
-  }
-
-  // Smooth scroll to new projects
-  setTimeout(() => {
-    const firstNewProject = container.children[newProjectsStart];
-    if (firstNewProject) {
-      firstNewProject.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, 200);
-}
 
 // Load profile data from GitHub
 async function loadProfile() {
@@ -933,33 +746,7 @@ function updateProfileData(profile) {
   }
 }
 
-// Update project rendering to handle GitHub data (uses unified template)
-function renderProjects(projects) {
-  const container = document.querySelector(".portfolio-grid");
-  if (!container) return;
 
-  if (!projects || projects.length === 0) {
-    container.innerHTML = '<div class="loading">No projects available</div>';
-    return;
-  }
-
-  container.innerHTML = projects
-    .map((project) => window.templates.projectCard(project))
-    .join("");
-}
-
-// Format metric keys for display
-function formatMetricKey(key) {
-  return key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (str) => str.toUpperCase())
-    .replace(/_/g, " ");
-}
-
-// Format status for display
-function formatStatus(status) {
-  return status.replace(/-/g, " ").toUpperCase();
-}
 
 // Easter egg for console explorers
 function showEasterEgg() {
@@ -989,13 +776,12 @@ function showEasterEgg() {
     "color: #ffd700; font-weight: bold; font-size: 14px;",
   );
   console.log(
-    '%cTry typing "vg.projects", "vg.profile", "vg.gallery", or "vg.bug" to inspect the data!',
+    '%cTry typing "vg.profile", "vg.gallery", or "vg.bug" to inspect the data!',
     "color: #cccccc; font-style: italic;",
   );
 
   // Make data available for exploration
   window.vg = {
-    projects: [],
     profile: null,
     blogPosts: [],
     gallery: [],
@@ -1127,7 +913,7 @@ function handleTouchEnd(e) {
       return;
     }
 
-    const tabOrder = ["home", "portfolio", "gallery", "blog"];
+    const tabOrder = ["home", "gallery", "blog"];
     const currentIndex = tabOrder.indexOf(currentTab);
 
     if (deltaX > 0 && currentIndex > 0) {
@@ -1190,7 +976,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Load content from GitHub or use fallbacks
   loadProfile();
-  loadProjects();
   loadBlogPosts();
 
   // Setup gallery
@@ -1256,7 +1041,7 @@ async function loadGalleryImages() {
       featured: image.featured,
     }));
 
-    // Shuffle like projects section
+    // Shuffle gallery images
     galleryImages = galleryImages.sort(() => Math.random() - 0.5);
 
     renderGallery();
@@ -1294,7 +1079,7 @@ function renderGallery(filter) {
     return;
   }
 
-  // Randomize order each render to mimic projects behavior on filter
+  // Randomize order each render on filter
   const randomized = list.sort(() => Math.random() - 0.5);
 
   container.innerHTML = randomized

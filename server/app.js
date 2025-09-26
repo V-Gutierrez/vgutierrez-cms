@@ -55,7 +55,6 @@ const cmsUtils = require('./utils/cms-utils');
 
 // Routes
 app.use('/api/blog', require('./routes/blog'));
-app.use('/api/projects', require('./routes/projects'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/gallery', require('./routes/gallery'));
 
