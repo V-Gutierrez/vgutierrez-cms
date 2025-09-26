@@ -19,6 +19,16 @@ function generateSlug(title) {
     .trim();
 }
 
+function slugifyFilename(filename) {
+  return filename
+    .toLowerCase()
+    .replace(/[^\w\s-_.]/g, '') // Keep underscores and dots for extensions
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+    .trim();
+}
+
 async function ensureUniqueSlug(baseSlug, existingItems, slugField = 'slug') {
   let slug = baseSlug;
   let counter = 1;
@@ -235,6 +245,7 @@ module.exports = {
   IMAGES_DIR,
   generateId,
   generateSlug,
+  slugifyFilename,
   ensureUniqueSlug,
   estimateReadingTime,
   getCurrentDateForUser,

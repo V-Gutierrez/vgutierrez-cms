@@ -30,7 +30,8 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     const name = path.basename(file.originalname, ext);
-    cb(null, `${name}-${Date.now()}${ext}`);
+    const slugifiedName = cmsUtils.slugifyFilename(name);
+    cb(null, `${slugifiedName}-${Date.now()}${ext}`);
   }
 });
 
