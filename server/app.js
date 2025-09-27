@@ -3,6 +3,14 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs').promises;
+const { exec } = require('child_process');
+const { promisify } = require('util');
+
+// Import utility functions
+const cmsUtils = require('./utils/cms-utils');
+
+// Promisify exec for async/await usage
+const execAsync = promisify(exec);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -51,9 +59,6 @@ const upload = multer({
   }
 });
 
-// Import utility functions
-const cmsUtils = require('./utils/cms-utils');
-
 // Routes
 app.use('/api/blog', require('./routes/blog'));
 app.use('/api/profile', require('./routes/profile'));
@@ -76,6 +81,118 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
   } catch (error) {
     console.error('Upload error:', error);
     res.status(500).json({ error: 'Upload failed' });
+  }
+});
+
+// Git operations endpoints
+app.post('/api/git/commit', async (req, res) => {
+  try {
+    // Check if we're in a git repository
+    try {
+      await execAsync('git status', { cwd: process.cwd() });
+    } catch (error) {
+      return res.status(400).json({ error: 'Não é um repositório Git válido' });
+    }
+
+    // Check if there are changes to commit
+    const { stdout: statusOutput } = await execAsync('git status --porcelain', { cwd: process.cwd() });
+
+    if (!statusOutput.trim()) {
+      return res.json({
+        message: 'Nenhuma mudança para commit',
+        hasChanges: false
+      });
+    }
+
+    // Add all changes
+    await execAsync('git add .', { cwd: process.cwd() });
+
+    // Create commit with timestamp
+    const timestamp = new Date().toLocaleString('pt-BR');
+    const commitMessage = `Update content via CMS - ${timestamp}`;
+
+    const { stdout: commitOutput } = await execAsync(
+      `git commit -m "${commitMessage}"`,
+      { cwd: process.cwd() }
+    );
+
+    res.json({
+      message: 'Commit realizado com sucesso!',
+      details: commitOutput.trim(),
+      hasChanges: true,
+      commitMessage
+    });
+
+  } catch (error) {
+    console.error('Git commit error:', error);
+    res.status(500).json({
+      error: 'Erro ao fazer commit',
+      details: error.message
+    });
+  }
+});
+
+app.post('/api/git/push', async (req, res) => {
+  try {
+    // Check if we're in a git repository
+    try {
+      await execAsync('git status', { cwd: process.cwd() });
+    } catch (error) {
+      return res.status(400).json({ error: 'Não é um repositório Git válido' });
+    }
+
+    // Check if there are commits to push
+    try {
+      const { stdout } = await execAsync('git status --porcelain -b', { cwd: process.cwd() });
+      const statusLines = stdout.split('\n');
+      const branchLine = statusLines.find(line => line.startsWith('##'));
+
+      if (branchLine && branchLine.includes('[ahead')) {
+        // There are commits to push
+      } else if (branchLine && !branchLine.includes('[')) {
+        // Branch is up to date
+        return res.json({
+          message: 'Repositório já está atualizado',
+          upToDate: true
+        });
+      }
+    } catch (error) {
+      // Continue with push attempt
+    }
+
+    // Get current branch
+    const { stdout: branchOutput } = await execAsync('git branch --show-current', { cwd: process.cwd() });
+    const currentBranch = branchOutput.trim() || 'main';
+
+    // Push to remote
+    const { stdout: pushOutput } = await execAsync(
+      `git push origin ${currentBranch}`,
+      { cwd: process.cwd(), timeout: 30000 }
+    );
+
+    res.json({
+      message: 'Push realizado com sucesso!',
+      details: pushOutput.trim(),
+      branch: currentBranch
+    });
+
+  } catch (error) {
+    console.error('Git push error:', error);
+
+    // Handle specific Git errors
+    let errorMessage = 'Erro ao fazer push';
+    if (error.message.includes('no upstream branch')) {
+      errorMessage = 'Branch não configurado para push. Configure o upstream primeiro.';
+    } else if (error.message.includes('Authentication failed')) {
+      errorMessage = 'Falha na autenticação. Verifique suas credenciais Git.';
+    } else if (error.message.includes('rejected')) {
+      errorMessage = 'Push rejeitado. Faça pull das mudanças remotas primeiro.';
+    }
+
+    res.status(500).json({
+      error: errorMessage,
+      details: error.message
+    });
   }
 });
 

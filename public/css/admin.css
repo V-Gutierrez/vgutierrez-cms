@@ -193,6 +193,62 @@ body {
     background-color: #4b5563;
 }
 
+/* Git Buttons */
+.btn-git-commit {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.btn-git-commit:hover {
+    background-color: #d97706;
+}
+
+.btn-git-commit:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.btn-git-push {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-git-push:hover {
+    background-color: #059669;
+}
+
+.btn-git-push:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Git Button Loading States */
+.btn-git-commit.loading,
+.btn-git-push.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-git-commit.loading::after,
+.btn-git-push.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 .btn-danger {
     background-color: #ef4444;
     color: white;

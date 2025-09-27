@@ -46,6 +46,13 @@ try {
 } catch (error) {
     if (error.signal !== 'SIGINT') {
         console.error('❌ Erro ao iniciar servidor:', error.message);
+        if (error.stdout) {
+            console.log('📄 Stdout:', error.stdout.toString());
+        }
+        if (error.stderr) {
+            console.log('📄 Stderr:', error.stderr.toString());
+        }
+        console.log('📄 Código de saída:', error.status);
         process.exit(1);
     }
 }

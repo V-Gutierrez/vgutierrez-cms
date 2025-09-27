@@ -27,22 +27,58 @@ class CMSApp {
         } catch (error) {
             console.error('App initialization failed:', error);
             this.showToast('error', 'Erro ao carregar o CMS', error.message);
+
+            // Always hide loading screen, even on error
             document.getElementById('loading-screen').classList.add('hidden');
+
+            // Show a basic interface even if data loading failed
+            this.setupEventListeners();
+            this.renderDashboardWithDefaults();
         }
     }
 
     async loadData() {
         try {
-            // Load all data in parallel
-            const [blog, gallery, profile] = await Promise.all([
+            // Load all data in parallel with individual error handling
+            const results = await Promise.allSettled([
                 api.getBlogPosts(),
                 api.getGalleryItems(),
                 api.getProfile()
             ]);
 
-            this.data.blog = blog;
-            this.data.gallery = gallery;
-            this.data.profile = profile;
+            // Handle blog data
+            if (results[0].status === 'fulfilled') {
+                this.data.blog = results[0].value;
+            } else {
+                console.warn('Failed to load blog data:', results[0].reason);
+                this.data.blog = [];
+                this.showToast('warning', 'Aviso', 'Não foi possível carregar os posts do blog');
+            }
+
+            // Handle gallery data
+            if (results[1].status === 'fulfilled') {
+                this.data.gallery = results[1].value;
+            } else {
+                console.warn('Failed to load gallery data:', results[1].reason);
+                this.data.gallery = [];
+                this.showToast('warning', 'Aviso', 'Não foi possível carregar a galeria');
+            }
+
+            // Handle profile data
+            if (results[2].status === 'fulfilled') {
+                this.data.profile = results[2].value;
+            } else {
+                console.warn('Failed to load profile data:', results[2].reason);
+                this.data.profile = { personalInfo: {}, skills: {}, technicalStack: {}, siteSettings: {} };
+                this.showToast('warning', 'Aviso', 'Não foi possível carregar o perfil');
+            }
+
+            // Check if all failed
+            const allFailed = results.every(result => result.status === 'rejected');
+            if (allFailed) {
+                throw new Error('Todos os endpoints da API falharam');
+            }
+
         } catch (error) {
             console.error('Error loading data:', error);
             throw error;
@@ -97,6 +133,15 @@ class CMSApp {
         // Responsive sidebar toggle
         document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
             document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Git buttons
+        document.getElementById('git-commit-btn')?.addEventListener('click', () => {
+            this.handleGitCommit();
+        });
+
+        document.getElementById('git-push-btn')?.addEventListener('click', () => {
+            this.handleGitPush();
         });
     }
 
@@ -191,6 +236,16 @@ class CMSApp {
         this.renderRecentActivity();
     }
 
+    renderDashboardWithDefaults() {
+        // Update stats with fallback values
+        document.getElementById('blog-count').textContent = this.data.blog?.length || 0;
+        document.getElementById('gallery-count').textContent = this.data.gallery?.length || 0;
+
+        // Render recent activity with empty state
+        const activityContainer = document.getElementById('recent-activity');
+        activityContainer.innerHTML = '<p class="no-data">Não foi possível carregar atividades recentes</p>';
+    }
+
     renderRecentActivity() {
         const activityContainer = document.getElementById('recent-activity');
         const activities = [];
@@ -233,12 +288,6 @@ class CMSApp {
         grid.innerHTML = this.data.blog.map(post => this.createBlogCard(post)).join('');
     }
 
-    renderProjectsSection() {
-            grid.innerHTML = '<p class="no-data">Nenhum projeto encontrado</p>';
-            return;
-        }
-
-    }
 
     renderGallerySection() {
         const grid = document.getElementById('gallery-grid');
@@ -291,32 +340,6 @@ class CMSApp {
         `;
     }
 
-    createProjectCard(project) {
-        return `
-            <div class="item-card" data-slug="${project.slug}">
-                <div class="item-card-header">
-                    <h3 class="item-card-title">${project.title}</h3>
-                    <div class="item-card-meta">
-                        <span class="status-badge status-${project.status}">${this.getStatusText(project.status)}</span>
-                        ${project.featured ? '<i class="fas fa-star" title="Projeto em destaque"></i>' : ''}
-                    </div>
-                </div>
-                <div class="item-card-body">
-                    <p class="item-card-description">${project.description}</p>
-                    <div class="item-card-tags">
-                        ${project.technologies.slice(0, 3).map(tech => `<span class="tag">${tech}</span>`).join('')}
-                        ${project.technologies.length > 3 ? `<span class="tag">+${project.technologies.length - 3}</span>` : ''}
-                    </div>
-                </div>
-                <div class="item-card-actions">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-    }
 
     createGalleryCard(item) {
         // Use slug if available, otherwise use id, otherwise use title
@@ -397,8 +420,6 @@ class CMSApp {
             case 'blog':
                 modalBody.innerHTML = this.createBlogForm();
                 break;
-                modalBody.innerHTML = this.createProjectForm();
-                break;
             case 'gallery':
                 modalBody.innerHTML = this.createGalleryForm();
                 break;
@@ -425,8 +446,6 @@ class CMSApp {
                 case 'blog':
                     item = await api.getBlogPost(slug);
                     break;
-                    item = await api.getProject(slug);
-                    break;
                 case 'gallery':
                     item = await api.getGalleryItem(slug);
                     break;
@@ -439,8 +458,6 @@ class CMSApp {
             switch (type) {
                 case 'blog':
                     modalBody.innerHTML = this.createBlogForm(item);
-                    break;
-                    modalBody.innerHTML = this.createProjectForm(item);
                     break;
                 case 'gallery':
                     modalBody.innerHTML = this.createGalleryForm(item);
@@ -475,8 +492,6 @@ class CMSApp {
                 case 'blog':
                     await api.deleteBlogPost(slug);
                     this.data.blog = this.data.blog.filter(item => item.slug !== slug);
-                    break;
-                    await api.deleteProject(slug);
                     break;
                 case 'gallery':
                     await api.deleteGalleryItem(slug);
@@ -608,8 +623,15 @@ class CMSApp {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
 
+        const iconMap = {
+            'success': 'check-circle',
+            'error': 'exclamation-circle',
+            'warning': 'exclamation-triangle',
+            'info': 'info-circle'
+        };
+
         toast.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <i class="fas fa-${iconMap[type] || 'info-circle'}"></i>
             <div class="toast-content">
                 <div class="toast-title">${title}</div>
                 ${message ? `<div class="toast-message">${message}</div>` : ''}
@@ -677,48 +699,6 @@ class CMSApp {
         `;
     }
 
-    createProjectForm(item = null) {
-        return `
-            <div class="form-group">
-                <label class="form-label">Título</label>
-                <input type="text" class="form-input" id="project-title" value="${item?.title || ''}" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Descrição</label>
-                <textarea class="form-textarea" id="project-description" rows="4" required>${item?.description || ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Categoria</label>
-                <input type="text" class="form-input" id="project-category" value="${item?.category || ''}">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Tecnologias (separadas por vírgula)</label>
-                <input type="text" class="form-input" id="project-technologies" value="${item?.technologies?.join(', ') || ''}">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Status</label>
-                <select class="form-select" id="project-status">
-                    <option value="planned" ${item?.status === 'planned' ? 'selected' : ''}>Planejado</option>
-                    <option value="in-progress" ${item?.status === 'in-progress' ? 'selected' : ''}>Em Progresso</option>
-                    <option value="completed" ${item?.status === 'completed' ? 'selected' : ''}>Concluído</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Data de Início</label>
-                <input type="date" class="form-input" id="project-start-date" value="${item?.startDate || ''}">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Data de Fim</label>
-                <input type="text" class="form-input" id="project-end-date" value="${item?.endDate || ''}" placeholder="YYYY-MM-DD ou 'ongoing'">
-            </div>
-            <div class="form-group">
-                <div class="form-checkbox">
-                    <input type="checkbox" id="project-featured" ${item?.featured ? 'checked' : ''}>
-                    <label for="project-featured">Projeto em Destaque</label>
-                </div>
-            </div>
-        `;
-    }
 
     createGalleryForm(item = null) {
         return `
@@ -1054,9 +1034,6 @@ class CMSApp {
                     });
                     break;
 
-                    newItem = await api.createProject(formData);
-                    break;
-
                 case 'gallery':
                     newItem = await api.createGalleryItem(formData);
                     this.data.gallery.push(newItem);
@@ -1102,12 +1079,6 @@ class CMSApp {
                     }
                     break;
 
-                    updatedItem = await api.updateProject(slug, formData);
-
-                    // Update local data
-                    if (projectIndex !== -1) {
-                    }
-                    break;
 
                 case 'gallery':
                     updatedItem = await api.updateGalleryItem(slug, formData);
@@ -1140,15 +1111,6 @@ class CMSApp {
                 formData.published = document.getElementById('blog-published')?.checked || false;
                 break;
 
-                formData.title = document.getElementById('project-title')?.value || '';
-                formData.description = document.getElementById('project-description')?.value || '';
-                formData.category = document.getElementById('project-category')?.value || '';
-                formData.technologies = document.getElementById('project-technologies')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
-                formData.status = document.getElementById('project-status')?.value || 'planned';
-                formData.startDate = document.getElementById('project-start-date')?.value || '';
-                formData.endDate = document.getElementById('project-end-date')?.value || '';
-                formData.featured = document.getElementById('project-featured')?.checked || false;
-                break;
 
             case 'gallery':
                 formData.title = document.getElementById('gallery-title')?.value || '';
@@ -1223,6 +1185,75 @@ class CMSApp {
             case 'gallery':
                 grid.innerHTML = items.map(item => this.createGalleryCard(item)).join('');
                 break;
+        }
+    }
+
+    // Git operations
+    async handleGitCommit() {
+        const commitBtn = document.getElementById('git-commit-btn');
+        const originalContent = commitBtn.innerHTML;
+
+        try {
+            // Set loading state
+            commitBtn.classList.add('loading');
+            commitBtn.disabled = true;
+
+            const response = await fetch('/api/git/commit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                this.showToast('success', 'Git Commit', result.message);
+            } else {
+                throw new Error(result.error || 'Erro no commit');
+            }
+
+        } catch (error) {
+            console.error('Git commit failed:', error);
+            this.showToast('error', 'Erro no Git Commit', error.message);
+        } finally {
+            // Reset button state
+            commitBtn.classList.remove('loading');
+            commitBtn.disabled = false;
+        }
+    }
+
+    async handleGitPush() {
+        const pushBtn = document.getElementById('git-push-btn');
+        const originalContent = pushBtn.innerHTML;
+
+        try {
+            // Set loading state
+            pushBtn.classList.add('loading');
+            pushBtn.disabled = true;
+
+            const response = await fetch('/api/git/push', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                this.showToast('success', 'Git Push', result.message);
+            } else {
+                throw new Error(result.error || 'Erro no push');
+            }
+
+        } catch (error) {
+            console.error('Git push failed:', error);
+            this.showToast('error', 'Erro no Git Push', error.message);
+        } finally {
+            // Reset button state
+            pushBtn.classList.remove('loading');
+            pushBtn.disabled = false;
         }
     }
 }
