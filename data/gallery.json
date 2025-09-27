@@ -255,15 +255,16 @@
   {
     "id": 132,
     "title": "racing",
-    "description": "-",
+    "description": "- Libertadores 2025?",
     "category": "photography",
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/racing.jpeg",
-    "tags": [
-      ""
-    ],
+    "tags": [],
     "featured": true,
     "published": true,
-    "slug": "racing"
+    "slug": "racing",
+    "technique": "",
+    "year": 2025,
+    "dimensions": ""
   },
   {
     "id": 133,
