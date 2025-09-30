@@ -269,10 +269,7 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
 });
 
 // Blog functionality
-let blogPosts = [];
-const MAX_POSTS_INITIAL = CONFIG.BATCH.posts || 5;
 let allBlogPosts = [];
-let displayedPostsCount = 0;
 
 // Templates
 const templates = {
@@ -311,18 +308,8 @@ function injectReadingTimes(posts) {
   });
 }
 
-// Sample blog posts (replace with your GitHub API endpoint)
-const samplePosts = [];
-
-// Initialize blog posts
-function initializeBlog() {
-  allBlogPosts = samplePosts;
-  displayedPostsCount = 0;
-  renderBlogPostsWithLimit();
-}
-
-// Render blog posts with progressive loading
-function renderBlogPostsWithLimit() {
+// Render all blog posts
+function renderBlogPosts() {
   const container = document.getElementById("blog-posts");
   if (!container) return;
 
@@ -331,134 +318,10 @@ function renderBlogPostsWithLimit() {
     return;
   }
 
-  // Calculate how many posts to show
-  const postsToShow = Math.min(
-    displayedPostsCount + MAX_POSTS_INITIAL,
-    allBlogPosts.length,
-  );
-  const postsSlice = allBlogPosts.slice(0, postsToShow);
-
-  // Clear container and render posts
-  container.innerHTML = "";
-  renderBlogPosts(postsSlice);
-
-  // Update displayed count
-  displayedPostsCount = postsToShow;
-
-  // Add blog controls
-  addBlogControls(container);
+  const postsHtml = allBlogPosts.map(templates.blogCard).join("");
+  container.innerHTML = postsHtml;
 }
 
-// Render blog posts
-function renderBlogPosts(posts) {
-  const container = document.getElementById("blog-posts");
-  if (!container) return;
-
-  const postsHtml = posts.map(templates.blogCard).join("");
-  if (displayedPostsCount === 0) {
-    container.innerHTML = postsHtml;
-  } else {
-    container.innerHTML += postsHtml;
-  }
-}
-
-// Add blog counter and load more button
-function addBlogControls(container) {
-  const blogSection = container.closest("section");
-  if (!blogSection) return;
-
-  // Remove existing controls
-  const existingControls = blogSection.querySelector(".blog-controls");
-  if (existingControls) {
-    existingControls.remove();
-  }
-
-  // Create controls container
-  const controlsDiv = document.createElement("div");
-  controlsDiv.className = "blog-controls";
-
-  // Post counter
-  const counter = document.createElement("div");
-  counter.className = "blog-counter";
-  counter.innerHTML = `Showing ${displayedPostsCount} of ${allBlogPosts.length} posts`;
-
-  // Load more button (only if there are more posts)
-  if (displayedPostsCount < allBlogPosts.length) {
-    const loadMoreBtn = document.createElement("button");
-    loadMoreBtn.className = "load-more-btn";
-    loadMoreBtn.innerHTML = `Load More Posts (+${Math.min(MAX_POSTS_INITIAL, allBlogPosts.length - displayedPostsCount)})`;
-    loadMoreBtn.onclick = loadMoreBlogPosts;
-    controlsDiv.appendChild(loadMoreBtn);
-  }
-
-  controlsDiv.appendChild(counter);
-  blogSection.appendChild(controlsDiv);
-}
-
-// Load more blog posts function
-async function loadMoreBlogPosts() {
-  const newPostsStart = displayedPostsCount;
-  const newPostsEnd = Math.min(
-    displayedPostsCount + MAX_POSTS_INITIAL,
-    allBlogPosts.length,
-  );
-  const newPosts = allBlogPosts.slice(newPostsStart, newPostsEnd);
-
-  // Render new posts with animation
-  const container = document.getElementById("blog-posts");
-  if (container) {
-    const newPostsHtml = newPosts.map(templates.blogCard).join("");
-
-    // Create temporary container for new posts
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = newPostsHtml;
-
-    // Add new posts with fade-in animation
-    Array.from(tempDiv.children).forEach((postElement, index) => {
-      postElement.style.opacity = "0";
-      postElement.style.transform = "translateY(20px)";
-      container.appendChild(postElement);
-
-      // Trigger animation after a small delay for each post
-      setTimeout(() => {
-        postElement.style.transition = "all 0.5s ease";
-        postElement.style.opacity = "1";
-        postElement.style.transform = "translateY(0)";
-      }, index * 100);
-    });
-  }
-
-  // Update displayed count
-  displayedPostsCount = newPostsEnd;
-
-  // Load full content for new posts
-  await loadFullContentForPosts(newPosts);
-  // Inject reading time for newly loaded posts
-  injectReadingTimes(newPosts);
-
-  // Update controls
-  const blogSection = container.closest("section");
-  if (blogSection) {
-    addBlogControls(container);
-  }
-
-  // Smooth scroll to new posts
-  setTimeout(() => {
-    const firstNewPost = container.children[newPostsStart];
-    if (firstNewPost) {
-      firstNewPost.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, 200);
-}
-
-// Generate HTML for a single blog post
-function generateBlogPostHTML(post) {
-  // Backwards-compatible alias to the new template
-  return templates.blogCard(post);
-}
 
 // Load full content for displayed posts only
 async function loadFullContentForPosts(postsSubset) {
@@ -513,12 +376,9 @@ function showPost(postSlug, updateURL = true) {
         month: "long",
         day: "numeric",
       })}</p>
-            <div class="post-share">
+      <div class="post-share">
         <button class="share-button" onclick="sharePost('${postSlug}')">
-          <div class="share-content">
-            <span class="share-command">[user@site]$ share link</span>
-            <span class="share-feedback"></span>
-          </div>
+          <span class="share-text">Share</span>
           <span class="share-icon">📤</span>
         </button>
       </div>
@@ -641,6 +501,7 @@ async function loadProfile() {
 
     const profile = await response.json();
     updateProfileData(profile);
+    updateFooter(profile);
 
     // Update easter egg data
     if (window.vg) window.vg.profile = profile;
@@ -676,137 +537,33 @@ function updateProfileData(profile) {
   }
 
   const personalInfo = profile.personalInfo;
-  const heroText = document.querySelector(".hero-text");
-
-  if (!heroText) return;
-
-  // Build hero content
-  let heroContent = "";
-
-  if (personalInfo.subtitle) {
-    const parts = personalInfo.subtitle.split("&");
-    if (parts.length > 1) {
-      heroContent += `<h1 id="hero-title">${parts[0].trim()} & <span>${parts[1].trim()}</span></h1>`;
-    } else {
-      heroContent += `<h1 id="hero-title">${personalInfo.subtitle}</h1>`;
-    }
-  } else {
-    heroContent += "<h1 id='hero-title'>Profile information not available</h1>";
-  }
-
-  if (personalInfo.description) {
-    heroContent += `<p class="description">${personalInfo.description}</p>`;
-  }
-
-  // Add social links
-  heroContent += '<div class="social-links">';
-
-  if (personalInfo.github) {
-    heroContent += `
-      <a href="${personalInfo.github}" target="_blank" rel="noopener noreferrer" class="social-link">
-        <span class="social-icon"><img src="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/github.png" alt="GitHub" style="width: 20px; height: 20px;"></span>
-      </a>
-    `;
-  }
-
-  if (personalInfo.linkedin) {
-    heroContent += `
-      <a href="${personalInfo.linkedin}" target="_blank" rel="noopener noreferrer" class="social-link">
-        <span class="social-icon">
-<img src="https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/linkedin.png" alt="LinkedIn" style="width: 20px; height: 20px;">
-</span>
-      </a>
-    `;
-  }
-
-
-
-  heroContent += "</div>";
-
-  // Add languages section to hero content
-
-  heroText.innerHTML = heroContent;
-
-  // Apply typewriter effect to the hero title on first render
-  const heroTitle = document.getElementById("hero-title");
-  if (heroTitle && !heroTitle.dataset.typewriterDone) {
-    const titleText = heroTitle.textContent;
-    heroTitle.dataset.typewriterDone = "true";
-    typewriterEffect(heroTitle, titleText);
-  }
 
   // Update profile image
   const profilePlaceholder = document.querySelector(".profile-placeholder");
   if (profilePlaceholder) {
     if (personalInfo.profileImage) {
-      profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || "Profile"}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.style.display='none'; this.parentElement.innerHTML='Profile Image';">`;
+      profilePlaceholder.innerHTML = `<img src="${personalInfo.profileImage}" alt="${personalInfo.name || "Profile"}" class="profile-image">`;
     } else {
       profilePlaceholder.innerHTML = "Profile Image";
     }
   }
 }
 
+// Update footer with profile data
+function updateFooter(profile) {
+  if (!profile || !profile.personalInfo) return;
 
+  const personalInfo = profile.personalInfo;
+  const footerGithub = document.getElementById("footer-github");
+  const footerLinkedin = document.getElementById("footer-linkedin");
 
-// Easter egg for console explorers
-function showEasterEgg() {
-  console.log(`
-  ╔══════════════════════════════════════════════════════════════╗
-  ║                                                              ║
-  ║  👨‍💻 Hey there, fellow developer! 🕵️‍♀️                          ║
-  ║                                                              ║
-  ║  You found the secret console easter egg! 🥚                 ║
-  ║                                                              ║
-  ║  Since you're here, here are some fun facts:                 ║
-  ║  • This site is 100% vanilla JS (no frameworks!)             ║
-  ║  • Uses GitHub Pages as a headless CMS                       ║
-  ║  • Built with performance and simplicity in mind             ║
-  ║  • Features smooth tab animations with cubic-bezier          ║
-  ║                                                              ║
-  ║  Want to see the source? Check it out:                       ║
-  ║  🔗 https://github.com/V-Gutierrez/vgutierrez-cms            ║
-  ║                                                              ║
-  ║  Keep exploring! There might be more secrets... 👀           ║
-  ║                                                              ║
-  ╚══════════════════════════════════════════════════════════════╝
-  `);
+  if (footerGithub && personalInfo.github) {
+    footerGithub.href = personalInfo.github;
+  }
 
-  console.log(
-    "%c🚀 Pro tip:",
-    "color: #ffd700; font-weight: bold; font-size: 14px;",
-  );
-  console.log(
-    '%cTry typing "vg.profile", "vg.gallery", or "vg.bug" to inspect the data!',
-    "color: #cccccc; font-style: italic;",
-  );
-
-  // Make data available for exploration
-  window.vg = {
-    profile: null,
-    blogPosts: [],
-    gallery: [],
-    greeting: () => console.log("👋 Hello from Victor Gutierrez!"),
-    contact: () =>
-      console.log(
-        "📫 Want to get in touch? Check the social links on the homepage!",
-      ),
-    bug: {
-      title: "🐛 The Post-Detail Refresh Bug",
-      description: "A charming little bug in the routing system",
-      reproduction: [
-        "1. Navigate to any blog post (e.g., click on a post from the blog section)",
-        "2. Notice you're now on route #post/ID and can read the post normally",
-        "3. Refresh the page (F5 or Ctrl+R)",
-        "4. 🐛 Bug occurs: Page loads but post content disappears",
-        "5. Post data isn't loaded yet when router tries to show the post",
-      ],
-      technicalCause:
-        "Race condition between blog data loading and initial route navigation",
-      workaround: "Navigate back to blog and click the post again",
-      severity: "Low - doesn't break core functionality",
-      status: "Known and documented ✨",
-    },
-  };
+  if (footerLinkedin && personalInfo.linkedin) {
+    footerLinkedin.href = personalInfo.linkedin;
+  }
 }
 
 // Intersection Observer for scroll-triggered animations
@@ -955,9 +712,6 @@ function resetTouchFeedback() {
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize routing system
   Router.init();
-
-  // Show easter egg for console users
-  showEasterEgg();
 
   // Setup scroll-triggered animations
   setupScrollAnimations();
@@ -1152,11 +906,10 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Terminal-themed share functionality for posts
+// Share functionality for posts
 function sharePost(postSlug) {
   const shareButton = document.querySelector(".share-button");
-  const shareCommand = shareButton.querySelector(".share-command");
-  const shareFeedback = shareButton.querySelector(".share-feedback");
+  const shareText = shareButton.querySelector(".share-text");
   const shareIcon = shareButton.querySelector(".share-icon");
 
   // Get post data for native sharing
@@ -1174,124 +927,75 @@ function sharePost(postSlug) {
         url: postUrl,
       })
       .then(() => {
-        showShareSuccess(
-          shareButton,
-          shareCommand,
-          shareFeedback,
-          shareIcon,
-          "shared",
-        );
+        showShareSuccess(shareButton, shareText, shareIcon, "shared");
       })
       .catch((error) => {
         // User cancelled or error occurred, fallback to clipboard
         if (error.name !== "AbortError") {
-          copyToClipboard(
-            postUrl,
-            shareButton,
-            shareCommand,
-            shareFeedback,
-            shareIcon,
-          );
+          copyToClipboard(postUrl, shareButton, shareText, shareIcon);
         }
       });
   } else {
     // Fallback to clipboard copy
-    copyToClipboard(
-      postUrl,
-      shareButton,
-      shareCommand,
-      shareFeedback,
-      shareIcon,
-    );
+    copyToClipboard(postUrl, shareButton, shareText, shareIcon);
   }
 }
 
-function copyToClipboard(
-  postUrl,
-  shareButton,
-  shareCommand,
-  shareFeedback,
-  shareIcon,
-) {
+function copyToClipboard(postUrl, shareButton, shareText, shareIcon) {
   // Try to copy to clipboard
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard
       .writeText(postUrl)
       .then(() => {
-        showShareSuccess(
-          shareButton,
-          shareCommand,
-          shareFeedback,
-          shareIcon,
-          "copied",
-        );
+        showShareSuccess(shareButton, shareText, shareIcon, "copied");
       })
       .catch(() => {
-        showShareFallback(
-          postUrl,
-          shareButton,
-          shareCommand,
-          shareFeedback,
-          shareIcon,
-        );
+        showShareFallback(postUrl, shareButton, shareText, shareIcon);
       });
   } else {
     // Fallback for older browsers or non-secure contexts
-    showShareFallback(
-      postUrl,
-      shareButton,
-      shareCommand,
-      shareFeedback,
-      shareIcon,
-    );
+    showShareFallback(postUrl, shareButton, shareText, shareIcon);
   }
 }
 
-function showShareSuccess(
-  shareButton,
-  shareCommand,
-  shareFeedback,
-  shareIcon,
-  type,
-) {
+function showShareSuccess(shareButton, shareText, shareIcon, type) {
+  // Store original text
+  const originalText = shareText.textContent;
+  const originalIcon = shareIcon.textContent;
+
   // Add success state
   shareButton.classList.add("success");
 
   if (type === "shared") {
-    shareCommand.textContent = "[user@site]$ shared successfully!";
+    shareText.textContent = "Shared!";
     shareIcon.textContent = "✅";
   } else {
-    shareCommand.textContent = "[user@site]$ link copied successfully!";
-    shareIcon.textContent = "📋";
+    shareText.textContent = "Link Copied!";
+    shareIcon.textContent = "✓";
   }
 
-  shareFeedback.innerHTML = '<span class="terminal-cursor"></span>';
-
-  // Reset after 3 seconds
+  // Reset after 2.5 seconds
   setTimeout(() => {
     shareButton.classList.remove("success");
-    shareCommand.textContent = "[user@site]$ cp link --clipboard";
-    shareIcon.textContent = "📤";
-    shareFeedback.innerHTML = "";
-  }, 3000);
+    shareText.textContent = originalText;
+    shareIcon.textContent = originalIcon;
+  }, 2500);
 }
 
-function showShareFallback(
-  postUrl,
-  shareButton,
-  shareCommand,
-  shareFeedback,
-  shareIcon,
-) {
+function showShareFallback(postUrl, shareButton, shareText, shareIcon) {
+  // Store original content
+  const originalHTML = shareButton.innerHTML;
+
   // Add fallback state
   shareButton.classList.add("fallback");
-  shareCommand.textContent = "[user@site]$ select and copy:";
-  shareIcon.textContent = "⚠️";
-  shareFeedback.innerHTML = `<input type="text" value="${postUrl}" readonly onclick="this.select()" style="background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 2px 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; margin-left: 8px; width: 250px;">`;
+  shareButton.innerHTML = `
+    <span class="share-feedback">Copy link manually:</span>
+    <input type="text" value="${postUrl}" readonly class="share-url-input" onclick="this.select()">
+  `;
 
   // Auto-select the URL
   setTimeout(() => {
-    const input = shareFeedback.querySelector("input");
+    const input = shareButton.querySelector(".share-url-input");
     if (input) {
       input.focus();
       input.select();
@@ -1301,8 +1005,6 @@ function showShareFallback(
   // Reset after 10 seconds
   setTimeout(() => {
     shareButton.classList.remove("fallback");
-    shareCommand.textContent = "[user@site]$ cp link --clipboard";
-    shareIcon.textContent = "📤";
-    shareFeedback.innerHTML = "";
+    shareButton.innerHTML = originalHTML;
   }, 10000);
 }
