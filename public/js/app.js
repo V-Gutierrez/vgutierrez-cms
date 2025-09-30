@@ -743,6 +743,33 @@ class CMSApp {
         return `
             <form id="profile-form">
                 <div class="form-group">
+                    <label class="form-label">Imagem de Perfil</label>
+                    <div class="profile-image-upload">
+                        <div class="profile-image-preview">
+                            <img id="profile-preview-img" src="${info.profileImage || ''}" alt="Profile"
+                                 style="${info.profileImage ? '' : 'display:none;'}">
+                            <div id="profile-preview-placeholder" class="profile-preview-placeholder"
+                                 style="${info.profileImage ? 'display:none;' : ''}">
+                                Nenhuma imagem
+                            </div>
+                        </div>
+                        <div class="profile-upload-zone" id="profile-upload-zone">
+                            <input type="file" id="profile-image-input" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none;">
+                            <div class="upload-zone-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Arraste uma imagem ou clique para selecionar</p>
+                                <small>JPEG, PNG ou WebP (máx. 5MB)</small>
+                            </div>
+                            <div class="upload-progress" id="upload-progress" style="display:none;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="upload-progress-fill"></div>
+                                </div>
+                                <span class="progress-text" id="upload-progress-text">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="form-label">Nome</label>
                     <input type="text" class="form-input" name="name" value="${info.name || ''}" required>
                 </div>
@@ -757,10 +784,6 @@ class CMSApp {
                 <div class="form-group">
                     <label class="form-label">GitHub</label>
                     <input type="url" class="form-input" name="github" value="${info.github || ''}">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Imagem de Perfil (URL)</label>
-                    <input type="url" class="form-input" name="profileImage" value="${info.profileImage || ''}">
                 </div>
                 <button type="submit" class="btn btn-primary">Salvar Perfil</button>
             </form>
@@ -778,6 +801,131 @@ class CMSApp {
                 e.preventDefault();
                 this.saveProfileData();
             });
+        }
+
+        // Setup image upload
+        this.setupProfileImageUpload();
+    }
+
+    setupProfileImageUpload() {
+        const uploadZone = document.getElementById('profile-upload-zone');
+        const fileInput = document.getElementById('profile-image-input');
+        const previewImg = document.getElementById('profile-preview-img');
+        const previewPlaceholder = document.getElementById('profile-preview-placeholder');
+
+        if (!uploadZone || !fileInput) return;
+
+        // Click to upload
+        uploadZone.addEventListener('click', (e) => {
+            if (!e.target.closest('.upload-progress')) {
+                fileInput.click();
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                await this.handleProfileImageUpload(file);
+            }
+        });
+
+        // Drag and drop
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-over');
+        });
+
+        uploadZone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                await this.handleProfileImageUpload(file);
+            }
+        });
+    }
+
+    async handleProfileImageUpload(file) {
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            this.showToast('error', 'Tipo de arquivo inválido', 'Apenas JPEG, PNG e WebP são permitidos');
+            return;
+        }
+
+        // Validate file size (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            this.showToast('error', 'Arquivo muito grande', 'Tamanho máximo: 5MB');
+            return;
+        }
+
+        const uploadProgress = document.getElementById('upload-progress');
+        const uploadProgressFill = document.getElementById('upload-progress-fill');
+        const uploadProgressText = document.getElementById('upload-progress-text');
+        const uploadZoneContent = document.querySelector('.upload-zone-content');
+        const previewImg = document.getElementById('profile-preview-img');
+        const previewPlaceholder = document.getElementById('profile-preview-placeholder');
+
+        try {
+            // Show progress
+            uploadZoneContent.style.display = 'none';
+            uploadProgress.style.display = 'block';
+
+            // Create FormData
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // Upload with progress
+            const response = await fetch('/api/profile/upload-image', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Upload falhou');
+            }
+
+            const result = await response.json();
+
+            // Update progress to 100%
+            uploadProgressFill.style.width = '100%';
+            uploadProgressText.textContent = '100%';
+
+            // Update preview
+            previewImg.src = result.url;
+            previewImg.style.display = 'block';
+            previewPlaceholder.style.display = 'none';
+
+            // Update profile data
+            this.data.profile.personalInfo.profileImage = result.url;
+
+            // Show success
+            this.showToast('success', 'Imagem enviada com sucesso!');
+
+            // Update Git status
+            this.updateGitStatus();
+
+            // Reset progress after delay
+            setTimeout(() => {
+                uploadProgress.style.display = 'none';
+                uploadZoneContent.style.display = 'block';
+                uploadProgressFill.style.width = '0%';
+                uploadProgressText.textContent = '0%';
+            }, 1000);
+
+        } catch (error) {
+            console.error('Upload error:', error);
+            this.showToast('error', 'Erro ao enviar imagem', error.message);
+
+            // Reset UI
+            uploadProgress.style.display = 'none';
+            uploadZoneContent.style.display = 'block';
         }
     }
 

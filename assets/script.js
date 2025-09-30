@@ -347,15 +347,6 @@ async function loadFullContentForPosts(postsSubset) {
   }
 }
 
-// Backwards-compatible wrappers (to avoid touching all callers at once)
-async function loadFullContentForDisplayedPosts() {
-  const displayed = allBlogPosts.slice(0, displayedPostsCount);
-  return loadFullContentForPosts(displayed);
-}
-
-async function loadFullContentForNewPosts(newPosts) {
-  return loadFullContentForPosts(newPosts);
-}
 
 // Show individual post
 function showPost(postSlug, updateURL = true) {
@@ -432,20 +423,16 @@ async function loadBlogPosts() {
     // Sort posts by date (newest first)
     publishedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    // Store all posts for progressive loading
+    // Store all posts
     allBlogPosts = publishedPosts;
-    displayedPostsCount = 0;
 
-    // Initially show limited number of posts
-    renderBlogPostsWithLimit();
+    // Render all posts
+    renderBlogPosts();
 
-    // Load full content for displayed posts only (performance optimization)
-    await loadFullContentForDisplayedPosts();
-    // Inject reading time into visible cards after content loads
-    injectReadingTimes(allBlogPosts.slice(0, displayedPostsCount));
-
-    // Update easter egg data
-    if (window.vg) window.vg.blogPosts = allBlogPosts;
+    // Load full content for all posts
+    await loadFullContentForPosts(allBlogPosts);
+    // Inject reading time into all cards after content loads
+    injectReadingTimes(allBlogPosts);
 
     // Load initial route after blog posts are loaded
     Router.loadInitialRoute();
@@ -475,9 +462,6 @@ async function loadBlogPosts() {
                   </div>
               `;
     }
-
-    // Fall back to sample data
-    initializeBlog();
 
     // Still try to load initial route (for non-post routes)
     Router.loadInitialRoute();
