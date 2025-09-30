@@ -10,6 +10,7 @@ class CMSApp {
             profile: null
         };
 
+        this.gitStatusInterval = null;
         this.init();
     }
 
@@ -22,6 +23,9 @@ class CMSApp {
 
             // Hide loading screen
             document.getElementById('loading-screen').classList.add('hidden');
+
+            // Start Git status monitoring
+            this.startGitStatusMonitoring();
 
             this.showToast('success', 'CMS carregado com sucesso!');
         } catch (error) {
@@ -122,13 +126,6 @@ class CMSApp {
         // Search and filter events
         this.setupSearchAndFilters();
 
-        // Profile tabs
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const tab = e.currentTarget.dataset.tab;
-                this.showProfileTab(tab);
-            });
-        });
 
         // Responsive sidebar toggle
         document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
@@ -306,8 +303,9 @@ class CMSApp {
             return;
         }
 
-        // Show personal info tab by default
-        this.showProfileTab('personal');
+        // Show simplified profile form
+        content.innerHTML = this.createSimplifiedProfileForm();
+        this.setupProfileForm();
     }
 
     createBlogCard(post) {
@@ -374,30 +372,6 @@ class CMSApp {
         `;
     }
 
-    showProfileTab(tab) {
-        // Update active tab
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-
-        // Render tab content
-        const content = document.getElementById('profile-content');
-        switch (tab) {
-            case 'personal':
-                content.innerHTML = this.createPersonalInfoForm();
-                break;
-            case 'skills':
-                content.innerHTML = this.createSkillsForm();
-                break;
-            case 'technical':
-                content.innerHTML = this.createTechnicalStackForm();
-                break;
-            case 'site':
-                content.innerHTML = this.createSiteSettingsForm();
-                break;
-        }
-    }
 
     handlePrimaryAction() {
         switch (this.currentSection) {
@@ -501,6 +475,9 @@ class CMSApp {
 
             this.renderSection(this.currentSection);
             this.showToast('success', 'Item excluído com sucesso!');
+
+            // Update Git status after deleting content
+            this.updateGitStatus();
         } catch (error) {
             this.showToast('error', 'Erro ao excluir item', error.message);
         }
@@ -523,6 +500,9 @@ class CMSApp {
             this.closeModal();
             this.renderSection(this.currentSection);
             this.showToast('success', 'Item salvo com sucesso!');
+
+            // Update Git status after saving content
+            this.updateGitStatus();
         } catch (error) {
             this.showToast('error', 'Erro ao salvar item', error.message);
         } finally {
@@ -758,29 +738,17 @@ class CMSApp {
         `;
     }
 
-    createPersonalInfoForm() {
+    createSimplifiedProfileForm() {
         const info = this.data.profile?.personalInfo || {};
         return `
-            <form id="personal-info-form">
+            <form id="profile-form">
                 <div class="form-group">
                     <label class="form-label">Nome</label>
                     <input type="text" class="form-input" name="name" value="${info.name || ''}" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Título</label>
-                    <input type="text" class="form-input" name="title" value="${info.title || ''}">
-                </div>
-                <div class="form-group">
                     <label class="form-label">Subtítulo</label>
                     <input type="text" class="form-input" name="subtitle" value="${info.subtitle || ''}">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Localização</label>
-                    <input type="text" class="form-input" name="location" value="${info.location || ''}">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" name="email" value="${info.email || ''}">
                 </div>
                 <div class="form-group">
                     <label class="form-label">LinkedIn</label>
@@ -791,219 +759,52 @@ class CMSApp {
                     <input type="url" class="form-input" name="github" value="${info.github || ''}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Descrição</label>
-                    <textarea class="form-textarea" name="description" rows="5">${info.description || ''}</textarea>
+                    <label class="form-label">Imagem de Perfil (URL)</label>
+                    <input type="url" class="form-input" name="profileImage" value="${info.profileImage || ''}">
                 </div>
-                <button type="submit" class="btn btn-primary">Salvar Informações Pessoais</button>
+                <button type="submit" class="btn btn-primary">Salvar Perfil</button>
             </form>
         `;
     }
 
-    createSkillsForm() {
-        const skills = this.data.profile?.skills || {};
-        const categories = Object.keys(skills);
 
-        return `
-            <form id="skills-form">
-                <div class="skills-section">
-                    <h3>Categorias de Habilidades</h3>
-                    <div id="skills-categories">
-                        ${categories.map(category => `
-                            <div class="skill-category" data-category="${category}">
-                                <div class="category-header">
-                                    <h4>${category}</h4>
-                                    <button type="button" class="btn btn-small btn-danger" onclick="app.removeSkillCategory('${category}')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                                <div class="category-skills">
-                                    ${skills[category]?.map((skill, index) => `
-                                        <div class="skill-item">
-                                            <input type="text" class="form-input" value="${skill}" data-category="${category}" data-index="${index}">
-                                            <button type="button" class="btn btn-small btn-danger" onclick="app.removeSkill('${category}', ${index})">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    `).join('') || ''}
-                                    <button type="button" class="btn btn-small btn-secondary" onclick="app.addSkill('${category}')">
-                                        <i class="fas fa-plus"></i> Adicionar Skill
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
 
-                    <div class="add-category">
-                        <div class="form-group">
-                            <label class="form-label">Nova Categoria</label>
-                            <div style="display: flex; gap: 1rem;">
-                                <input type="text" id="new-category-name" class="form-input" placeholder="Nome da categoria">
-                                <button type="button" class="btn btn-primary" onclick="app.addSkillCategory()">
-                                    <i class="fas fa-plus"></i> Adicionar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <button type="submit" class="btn btn-primary">Salvar Habilidades</button>
-            </form>
-        `;
-    }
-
-    createTechnicalStackForm() {
-        const technicalStack = this.data.profile?.technicalStack || {};
-        const categories = Object.keys(technicalStack);
-
-        return `
-            <form id="technical-stack-form">
-                <div class="technical-stack-section">
-                    <h3>Stack Técnico</h3>
-                    <div id="technical-categories">
-                        ${categories.map(category => `
-                            <div class="technical-category" data-category="${category}">
-                                <div class="form-group">
-                                    <label class="form-label">
-                                        ${category}
-                                        <button type="button" class="btn btn-small btn-danger" onclick="app.removeTechnicalCategory('${category}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </label>
-                                    <input type="text" class="form-input" name="${category}" value="${technicalStack[category]?.join(', ') || ''}" placeholder="Tecnologias separadas por vírgula">
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <div class="add-technical-category">
-                        <div class="form-group">
-                            <label class="form-label">Nova Categoria Técnica</label>
-                            <div style="display: flex; gap: 1rem;">
-                                <input type="text" id="new-technical-category-name" class="form-input" placeholder="Nome da categoria (ex: Linguagens, Frameworks)">
-                                <button type="button" class="btn btn-primary" onclick="app.addTechnicalCategory()">
-                                    <i class="fas fa-plus"></i> Adicionar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Salvar Stack Técnico</button>
-            </form>
-        `;
-    }
-
-    createSiteSettingsForm() {
-        const siteSettings = this.data.profile?.siteSettings || {};
-
-        return `
-            <form id="site-settings-form">
-                <div class="form-group">
-                    <label class="form-label">Título do Site</label>
-                    <input type="text" class="form-input" name="siteTitle" value="${siteSettings.siteTitle || ''}" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Descrição do Site</label>
-                    <textarea class="form-textarea" name="siteDescription" rows="3" required>${siteSettings.siteDescription || ''}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Tema</label>
-                    <select class="form-select" name="theme">
-                        <option value="dark" ${siteSettings.theme === 'dark' ? 'selected' : ''}>Escuro</option>
-                        <option value="light" ${siteSettings.theme === 'light' ? 'selected' : ''}>Claro</option>
-                        <option value="auto" ${siteSettings.theme === 'auto' ? 'selected' : ''}>Automático</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Cor Primária</label>
-                    <input type="color" class="form-input" name="primaryColor" value="${siteSettings.primaryColor || '#3b82f6'}">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">URL do Site</label>
-                    <input type="url" class="form-input" name="siteUrl" value="${siteSettings.siteUrl || 'https://www.victorgutierrez.com.br'}">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Google Analytics ID (opcional)</label>
-                    <input type="text" class="form-input" name="googleAnalyticsId" value="${siteSettings.googleAnalyticsId || ''}" placeholder="GA_TRACKING_ID">
-                </div>
-
-                <div class="form-group">
-                    <div class="form-checkbox">
-                        <input type="checkbox" name="enableComments" ${siteSettings.enableComments ? 'checked' : ''}>
-                        <label>Habilitar sistema de comentários</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="form-checkbox">
-                        <input type="checkbox" name="enableNewsletter" ${siteSettings.enableNewsletter ? 'checked' : ''}>
-                        <label>Habilitar newsletter</label>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Salvar Configurações do Site</button>
-            </form>
-        `;
-    }
-
-    // Helper methods for skills management
-    addSkillCategory() {
-        const categoryName = document.getElementById('new-category-name')?.value.trim();
-        if (!categoryName) return;
-
-        if (!this.data.profile.skills[categoryName]) {
-            this.data.profile.skills[categoryName] = [];
-            this.showProfileTab('skills');
-            document.getElementById('new-category-name').value = '';
-        } else {
-            this.showToast('error', 'Categoria já existe');
+    // Setup profile form event handlers
+    setupProfileForm() {
+        const form = document.getElementById('profile-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveProfileData();
+            });
         }
     }
 
-    removeSkillCategory(category) {
-        if (confirm(`Tem certeza que deseja remover a categoria "${category}"?`)) {
-            delete this.data.profile.skills[category];
-            this.showProfileTab('skills');
-        }
-    }
+    async saveProfileData() {
+        const form = document.getElementById('profile-form');
+        if (!form) return;
 
-    addSkill(category) {
-        if (!this.data.profile.skills[category]) {
-            this.data.profile.skills[category] = [];
-        }
-        this.data.profile.skills[category].push('');
-        this.showProfileTab('skills');
-    }
+        const formData = new FormData(form);
+        const profileData = {
+            personalInfo: {
+                name: formData.get('name'),
+                subtitle: formData.get('subtitle'),
+                linkedin: formData.get('linkedin'),
+                github: formData.get('github'),
+                profileImage: formData.get('profileImage')
+            }
+        };
 
-    removeSkill(category, index) {
-        if (this.data.profile.skills[category]) {
-            this.data.profile.skills[category].splice(index, 1);
-            this.showProfileTab('skills');
-        }
-    }
+        try {
+            await api.updateProfilePersonal(profileData.personalInfo);
+            this.data.profile.personalInfo = { ...this.data.profile.personalInfo, ...profileData.personalInfo };
+            this.showToast('success', 'Perfil atualizado com sucesso!');
 
-    addTechnicalCategory() {
-        const categoryName = document.getElementById('new-technical-category-name')?.value.trim();
-        if (!categoryName) return;
-
-        if (!this.data.profile.technicalStack[categoryName]) {
-            this.data.profile.technicalStack[categoryName] = [];
-            this.showProfileTab('technical');
-            document.getElementById('new-technical-category-name').value = '';
-        } else {
-            this.showToast('error', 'Categoria já existe');
-        }
-    }
-
-    removeTechnicalCategory(category) {
-        if (confirm(`Tem certeza que deseja remover a categoria "${category}"?`)) {
-            delete this.data.profile.technicalStack[category];
-            this.showProfileTab('technical');
+            // Update Git status after saving content
+            this.updateGitStatus();
+        } catch (error) {
+            this.showToast('error', 'Erro ao salvar perfil', error.message);
         }
     }
 
@@ -1254,6 +1055,101 @@ class CMSApp {
             // Reset button state
             pushBtn.classList.remove('loading');
             pushBtn.disabled = false;
+        }
+    }
+
+    // Git status monitoring
+    startGitStatusMonitoring() {
+        // Update immediately
+        this.updateGitStatus();
+
+        // Set up polling every 30 seconds
+        this.gitStatusInterval = setInterval(() => {
+            this.updateGitStatus();
+        }, 30000);
+    }
+
+    stopGitStatusMonitoring() {
+        if (this.gitStatusInterval) {
+            clearInterval(this.gitStatusInterval);
+            this.gitStatusInterval = null;
+        }
+    }
+
+    async updateGitStatus() {
+        try {
+            const response = await fetch('/api/git/status');
+            if (response.ok) {
+                const status = await response.json();
+                this.updateGitButtons(status);
+            }
+        } catch (error) {
+            console.log('Git status check failed:', error.message);
+            // Silently fail - don't show errors for git status
+        }
+    }
+
+    updateGitButtons(status) {
+        const commitBtn = document.getElementById('git-commit-btn');
+        const pushBtn = document.getElementById('git-push-btn');
+        const commitBadge = document.getElementById('commit-badge');
+        const pushBadge = document.getElementById('push-badge');
+
+        // Update commit button
+        if (status.hasUncommittedChanges) {
+            commitBtn.classList.add('has-changes');
+            commitBtn.classList.remove('no-changes');
+            commitBtn.disabled = false;
+
+            // Show badge with count
+            commitBadge.textContent = status.changedFiles;
+            commitBadge.style.display = 'flex';
+            commitBadge.classList.add('animate');
+
+            // Update tooltip
+            const fileText = status.changedFiles === 1 ? 'arquivo modificado' : 'arquivos modificados';
+            commitBtn.title = `${status.changedFiles} ${fileText} - Clique para fazer commit`;
+
+            setTimeout(() => {
+                commitBadge.classList.remove('animate');
+            }, 600);
+        } else {
+            commitBtn.classList.remove('has-changes');
+            commitBtn.classList.add('no-changes');
+            commitBtn.disabled = true;
+
+            // Hide badge
+            commitBadge.style.display = 'none';
+            commitBtn.title = 'Nenhuma mudança para commit';
+        }
+
+        // Update push button
+        if (status.hasUnpushedCommits) {
+            pushBtn.classList.add('has-commits');
+            pushBtn.classList.remove('no-commits');
+            pushBtn.disabled = false;
+
+            // Show badge with count
+            pushBadge.textContent = status.commitsAhead;
+            pushBadge.style.display = 'flex';
+            pushBadge.classList.add('animate');
+
+            // Update tooltip
+            const commitText = status.commitsAhead === 1 ? 'commit para enviar' : 'commits para enviar';
+            pushBtn.title = `${status.commitsAhead} ${commitText} - Clique para fazer push`;
+
+            setTimeout(() => {
+                pushBadge.classList.remove('animate');
+            }, 600);
+        } else {
+            pushBtn.classList.remove('has-commits');
+            pushBtn.classList.add('no-commits');
+            pushBtn.disabled = true;
+
+            // Hide badge
+            pushBadge.style.display = 'none';
+            pushBtn.title = status.branchStatus === 'up-to-date' ?
+                'Repositório sincronizado' : 'Nenhum commit para enviar';
         }
     }
 }

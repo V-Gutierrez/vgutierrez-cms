@@ -85,6 +85,68 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 });
 
 // Git operations endpoints
+app.get('/api/git/status', async (req, res) => {
+  try {
+    // Check if we're in a git repository
+    try {
+      await execAsync('git status', { cwd: process.cwd() });
+    } catch (error) {
+      return res.status(400).json({ error: 'Não é um repositório Git válido' });
+    }
+
+    // Check for uncommitted changes
+    const { stdout: statusOutput } = await execAsync('git status --porcelain', { cwd: process.cwd() });
+    const hasUncommittedChanges = statusOutput.trim().length > 0;
+
+    // Count different types of changes
+    const lines = statusOutput.trim().split('\n').filter(Boolean);
+    const fileDetails = {
+      modified: lines.filter(line => line.startsWith(' M') || line.startsWith('M ')).length,
+      added: lines.filter(line => line.startsWith('A ') || line.startsWith('??')).length,
+      deleted: lines.filter(line => line.startsWith(' D') || line.startsWith('D ')).length,
+      total: lines.length
+    };
+
+    // Check for unpushed commits
+    let hasUnpushedCommits = false;
+    let commitsAhead = 0;
+    let branchStatus = 'up-to-date';
+
+    try {
+      const { stdout: branchInfo } = await execAsync('git status --porcelain -b', { cwd: process.cwd() });
+      const branchLine = branchInfo.split('\n')[0];
+
+      if (branchLine.includes('[ahead')) {
+        hasUnpushedCommits = true;
+        const match = branchLine.match(/\[ahead (\d+)\]/);
+        commitsAhead = match ? parseInt(match[1]) : 1;
+        branchStatus = 'ahead';
+      } else if (branchLine.includes('[behind')) {
+        branchStatus = 'behind';
+      }
+    } catch (error) {
+      // If there's no remote, we can't check ahead/behind status
+      console.log('Could not check remote status:', error.message);
+    }
+
+    res.json({
+      hasUncommittedChanges,
+      hasUnpushedCommits,
+      changedFiles: fileDetails.total,
+      commitsAhead,
+      fileDetails,
+      branchStatus
+    });
+
+  } catch (error) {
+    console.error('Git status error:', error);
+    res.status(500).json({
+      error: 'Erro ao verificar status Git',
+      details: error.message
+    });
+  }
+});
+
 app.post('/api/git/commit', async (req, res) => {
   try {
     // Check if we're in a git repository

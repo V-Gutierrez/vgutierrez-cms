@@ -94,45 +94,10 @@ class API {
         return this.request('/profile');
     }
 
-    async updateProfile(data) {
-        return this.request('/profile', {
-            method: 'PUT',
-            body: JSON.stringify(data)
-        });
-    }
-
     async updateProfilePersonal(data) {
         return this.request('/profile/personal', {
             method: 'PUT',
             body: JSON.stringify({ personalInfo: data })
-        });
-    }
-
-    async updateProfileSkills(data) {
-        return this.request('/profile/skills', {
-            method: 'PUT',
-            body: JSON.stringify({ skills: data })
-        });
-    }
-
-    async updateProfileTechnicalStack(data) {
-        return this.request('/profile/technical-stack', {
-            method: 'PUT',
-            body: JSON.stringify({ technicalStack: data })
-        });
-    }
-
-    async updateProfileSiteSettings(data) {
-        return this.request('/profile/site-settings', {
-            method: 'PUT',
-            body: JSON.stringify({ siteSettings: data })
-        });
-    }
-
-    async updateProfileLanguages(data) {
-        return this.request('/profile/languages', {
-            method: 'PUT',
-            body: JSON.stringify({ languages: data })
         });
     }
 

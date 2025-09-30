@@ -57,10 +57,12 @@
                     <button class="btn btn-git-commit" id="git-commit-btn" title="Fazer commit das mudanças">
                         <i class="fas fa-code-branch"></i>
                         <span>Commit</span>
+                        <span class="btn-badge commit-badge" id="commit-badge" style="display: none;">0</span>
                     </button>
                     <button class="btn btn-git-push" id="git-push-btn" title="Fazer push para o repositório">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <span>Push</span>
+                        <span class="btn-badge push-badge" id="push-badge" style="display: none;">0</span>
                     </button>
                     <button class="btn btn-primary" id="primary-action" style="display: none;">
                         <i class="fas fa-plus"></i>
@@ -145,13 +147,6 @@
 
                 <!-- Profile Section -->
                 <section id="section-profile" class="content-section">
-                    <div class="profile-tabs">
-                        <button class="tab-btn active" data-tab="personal">Informações Pessoais</button>
-                        <button class="tab-btn" data-tab="skills">Habilidades</button>
-                        <button class="tab-btn" data-tab="technical">Stack Técnico</button>
-                        <button class="tab-btn" data-tab="site">Configurações do Site</button>
-                    </div>
-
                     <div class="profile-content" id="profile-content">
                         <p class="no-data">Carregando perfil...</p>
                     </div>
