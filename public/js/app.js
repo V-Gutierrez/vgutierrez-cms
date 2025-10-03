@@ -7,6 +7,7 @@ class CMSApp {
         this.data = {
             blog: [],
             gallery: [],
+            library: [],
             profile: null
         };
 
@@ -47,7 +48,8 @@ class CMSApp {
             const results = await Promise.allSettled([
                 api.getBlogPosts(),
                 api.getGalleryItems(),
-                api.getProfile()
+                api.getProfile(),
+                api.getImageLibrary()
             ]);
 
             // Handle blog data
@@ -75,6 +77,15 @@ class CMSApp {
                 console.warn('Failed to load profile data:', results[2].reason);
                 this.data.profile = { personalInfo: {}, skills: {}, technicalStack: {}, siteSettings: {} };
                 this.showToast('warning', 'Aviso', 'Não foi possível carregar o perfil');
+            }
+
+            // Handle library data
+            if (results[3].status === 'fulfilled') {
+                this.data.library = results[3].value;
+            } else {
+                console.warn('Failed to load library data:', results[3].reason);
+                this.data.library = [];
+                this.showToast('warning', 'Aviso', 'Não foi possível carregar a biblioteca de imagens');
             }
 
             // Check if all failed
@@ -193,6 +204,7 @@ class CMSApp {
             dashboard: 'Dashboard',
             blog: 'Blog Posts',
             gallery: 'Galeria',
+            library: 'Biblioteca de Imagens',
             profile: 'Perfil'
         };
 
@@ -201,6 +213,9 @@ class CMSApp {
         const primaryAction = document.getElementById('primary-action');
         if (section === 'dashboard' || section === 'profile') {
             primaryAction.style.display = 'none';
+        } else if (section === 'library') {
+            primaryAction.style.display = 'flex';
+            primaryAction.querySelector('span').textContent = 'Upload de Imagem';
         } else {
             primaryAction.style.display = 'flex';
             primaryAction.querySelector('span').textContent = `Novo ${section === 'blog' ? 'Post' : 'Item'}`;
@@ -217,6 +232,9 @@ class CMSApp {
                 break;
             case 'gallery':
                 this.renderGallerySection();
+                break;
+            case 'library':
+                this.renderLibrarySection();
                 break;
             case 'profile':
                 this.renderProfileSection();
@@ -350,7 +368,6 @@ class CMSApp {
                     <h3 class="item-card-title">${item.title}</h3>
                     <div class="item-card-meta">
                         <span class="tag">${item.category || 'uncategorized'}</span>
-                        ${item.featured ? '<i class="fas fa-star" title="Item em destaque"></i>' : ''}
                     </div>
                 </div>
                 <div class="item-card-body">
@@ -361,6 +378,9 @@ class CMSApp {
                     </div>
                 </div>
                 <div class="item-card-actions">
+                    <button class="btn btn-small btn-secondary" onclick="app.copyImageUrl('${item.image}')" title="Copiar link da imagem">
+                        <i class="fas fa-link"></i>
+                    </button>
                     <button class="btn btn-small btn-primary" onclick="app.editItem('gallery', '${identifier}')">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -378,9 +398,11 @@ class CMSApp {
             case 'blog':
                 this.createItem('blog');
                 break;
-                break;
             case 'gallery':
                 this.createItem('gallery');
+                break;
+            case 'library':
+                this.uploadToLibraryPrompt();
                 break;
         }
     }
@@ -521,6 +543,11 @@ class CMSApp {
             );
             this.currentEditor = editor;
             this.currentEditorId = editorId;
+
+            // Setup blog image upload after editor is ready
+            setTimeout(() => {
+                this.setupBlogImageUpload();
+            }, 100);
         }
     }
 
@@ -673,6 +700,18 @@ class CMSApp {
                 </div>
             </div>
             <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-images"></i> Imagens do Post
+                </label>
+                <div class="blog-images-section">
+                    <input type="file" id="blog-images-upload" accept="image/*" multiple style="display:none;">
+                    <button type="button" class="btn btn-secondary" id="blog-upload-images-btn">
+                        <i class="fas fa-upload"></i> Upload de Imagens
+                    </button>
+                    <div id="blog-images-preview" class="images-preview-grid"></div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="form-label">Conteúdo</label>
                 <div id="content-editor" class="editor-container"></div>
             </div>
@@ -727,12 +766,6 @@ class CMSApp {
                 <div class="form-group" style="margin-top: 1rem;">
                     <label class="form-label">URL da Imagem (ou use upload acima)</label>
                     <input type="url" class="form-input" id="gallery-image-url" value="${item?.image || ''}" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-checkbox">
-                    <input type="checkbox" id="gallery-featured" ${item?.featured ? 'checked' : ''}>
-                    <label for="gallery-featured">Item em Destaque</label>
                 </div>
             </div>
         `;
@@ -1070,7 +1103,6 @@ class CMSApp {
                 formData.tags = document.getElementById('gallery-tags')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
                 formData.dimensions = document.getElementById('gallery-dimensions')?.value || '';
                 formData.imageUrl = document.getElementById('gallery-image-url')?.value || '';
-                formData.featured = document.getElementById('gallery-featured')?.checked || false;
                 break;
         }
 
@@ -1135,6 +1167,302 @@ class CMSApp {
                 grid.innerHTML = items.map(item => this.createGalleryCard(item)).join('');
                 break;
         }
+    }
+
+    // Library methods
+    renderLibrarySection() {
+        const grid = document.getElementById('library-grid');
+
+        if (this.data.library.length === 0) {
+            grid.innerHTML = '<p class="no-data">Nenhuma imagem encontrada</p>';
+            return;
+        }
+
+        grid.innerHTML = this.data.library.map(image => this.createLibraryImageCard(image)).join('');
+    }
+
+    createLibraryImageCard(image) {
+        const typeBadge = {
+            'gallery': 'Galeria',
+            'profile': 'Perfil',
+            'projects': 'Projetos',
+            'blog': 'Blog'
+        };
+
+        return `
+            <div class="library-card" data-type="${image.type}">
+                <img src="${image.localUrl || image.url}" alt="${image.title || image.filename}"
+                     onerror="this.src='${image.url}'">
+                <div class="library-card-info">
+                    <span class="type-badge type-${image.type}">${typeBadge[image.type] || image.type}</span>
+                    <p class="filename" title="${image.filename || image.title}">
+                        ${image.title || image.filename || 'Sem nome'}
+                    </p>
+                    ${image.description ? `<p class="description">${image.description}</p>` : ''}
+                </div>
+                <div class="library-card-actions">
+                    <button class="btn btn-small btn-secondary"
+                            onclick="app.copyImageUrl('${image.url}')"
+                            title="Copiar link GitHub">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    ${image.source !== 'gallery' ?
+                        `<button class="btn btn-small btn-primary"
+                                 onclick="app.promoteImageToGallery('${image.filename}')"
+                                 title="Adicionar à Galeria">
+                            <i class="fas fa-images"></i>
+                        </button>` :
+                        `<span class="badge-gallery" title="Já está na galeria">
+                            <i class="fas fa-check"></i>
+                        </span>`
+                    }
+                    <button class="btn btn-small btn-danger"
+                            onclick="app.deleteLibraryImage('${image.filename}', '${image.type}')"
+                            title="Deletar imagem">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    async copyImageUrl(url) {
+        try {
+            await navigator.clipboard.writeText(url);
+            this.showToast('success', 'Link copiado!');
+        } catch (error) {
+            console.error('Failed to copy:', error);
+            this.showToast('error', 'Erro ao copiar');
+        }
+    }
+
+    uploadToLibraryPrompt() {
+        // Create hidden file input
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.multiple = true;
+
+        fileInput.addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                await this.handleLibraryImagesUpload(files);
+            }
+        });
+
+        fileInput.click();
+    }
+
+    async handleLibraryImagesUpload(files) {
+        const totalFiles = files.length;
+        let uploaded = 0;
+        let failed = 0;
+
+        this.showToast('info', 'Upload iniciado', `Enviando ${totalFiles} imagem(ns)...`);
+
+        for (const file of files) {
+            try {
+                const result = await api.uploadToLibrary(file, 'blog');
+
+                // Add to library data
+                this.data.library.unshift({
+                    source: 'registry',
+                    type: result.type,
+                    filename: result.filename,
+                    url: result.url,
+                    localUrl: result.localUrl,
+                    createdAt: new Date().toISOString()
+                });
+
+                uploaded++;
+            } catch (error) {
+                console.error('Upload failed for', file.name, error);
+                failed++;
+            }
+        }
+
+        // Show result
+        if (uploaded > 0) {
+            this.showToast('success', 'Upload concluído',
+                `${uploaded} imagem(ns) enviada(s)${failed > 0 ? `, ${failed} falhou(aram)` : ''}`);
+
+            // Render library with updated data
+            this.renderLibrarySection();
+
+            // Update Git status
+            this.updateGitStatus();
+        } else {
+            this.showToast('error', 'Upload falhou', 'Nenhuma imagem foi enviada');
+        }
+    }
+
+    async reloadLibrary() {
+        try {
+            this.data.library = await api.getImageLibrary();
+        } catch (error) {
+            console.error('Failed to reload library:', error);
+        }
+    }
+
+    async promoteImageToGallery(filename) {
+        // Find image in library
+        const image = this.data.library.find(img => img.filename === filename);
+        if (!image) {
+            this.showToast('error', 'Erro', 'Imagem não encontrada');
+            return;
+        }
+
+        // Prompt for gallery metadata
+        const title = prompt('Título para a galeria:', image.title || '');
+        if (!title) return;
+
+        const description = prompt('Descrição:', image.description || '');
+        const category = prompt('Categoria (photography, digital-art, drawings, mixed-media):', 'photography');
+        const tags = prompt('Tags (separadas por vírgula):', '');
+
+        try {
+            const metadata = {
+                title,
+                description,
+                category,
+                tags: tags ? tags.split(',').map(t => t.trim()) : []
+            };
+
+            const newGalleryItem = await api.promoteToGallery(filename, metadata);
+
+            // Update local data
+            this.data.gallery.push(newGalleryItem);
+
+            this.showToast('success', 'Adicionado à galeria!', `"${title}" foi adicionado à galeria`);
+
+            // Reload library to update status
+            await this.reloadLibrary();
+            this.renderLibrarySection();
+
+            // Update Git status
+            this.updateGitStatus();
+        } catch (error) {
+            console.error('Failed to promote to gallery:', error);
+            this.showToast('error', 'Erro', 'Não foi possível adicionar à galeria');
+        }
+    }
+
+    async deleteLibraryImage(filename, type) {
+        if (!confirm(`Tem certeza que deseja deletar a imagem "${filename}"?`)) {
+            return;
+        }
+
+        try {
+            await api.deleteImage(type, filename);
+
+            // Remove from local data
+            this.data.library = this.data.library.filter(img => img.filename !== filename);
+
+            // Re-render library
+            this.renderLibrarySection();
+
+            this.showToast('success', 'Imagem deletada', 'A imagem foi removida com sucesso');
+
+            // Update Git status
+            this.updateGitStatus();
+        } catch (error) {
+            console.error('Failed to delete image:', error);
+            this.showToast('error', 'Erro ao deletar', 'Não foi possível deletar a imagem');
+        }
+    }
+
+    // Blog image upload methods
+    setupBlogImageUpload() {
+        const uploadBtn = document.getElementById('blog-upload-images-btn');
+        const fileInput = document.getElementById('blog-images-upload');
+        const previewContainer = document.getElementById('blog-images-preview');
+
+        if (!uploadBtn || !fileInput) return;
+
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                await this.handleBlogImagesUpload(files);
+            }
+            // Reset input
+            e.target.value = '';
+        });
+    }
+
+    async handleBlogImagesUpload(files) {
+        const previewContainer = document.getElementById('blog-images-preview');
+        const totalFiles = files.length;
+
+        this.showToast('info', 'Upload iniciado', `Enviando ${totalFiles} imagem(ns)...`);
+
+        for (const file of files) {
+            try {
+                const result = await api.uploadToLibrary(file, 'blog');
+
+                // Add preview
+                const previewItem = document.createElement('div');
+                previewItem.className = 'image-preview-item';
+                previewItem.innerHTML = `
+                    <img src="${result.localUrl}" alt="${result.filename}">
+                    <div class="image-preview-actions">
+                        <button type="button" class="btn btn-tiny btn-secondary"
+                                onclick="app.copyImageUrl('${result.url}')"
+                                title="Copiar link">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button type="button" class="btn btn-tiny btn-primary"
+                                onclick="app.insertImageInEditor('${result.url}')"
+                                title="Inserir no editor">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <p class="image-preview-name">${result.filename}</p>
+                `;
+                previewContainer.appendChild(previewItem);
+
+            } catch (error) {
+                console.error('Upload failed for', file.name, error);
+                this.showToast('error', 'Upload falhou', `Erro ao enviar ${file.name}`);
+            }
+        }
+
+        this.showToast('success', 'Upload concluído', `${totalFiles} imagem(ns) enviada(s)`);
+
+        // Update Git status
+        this.updateGitStatus();
+    }
+
+    insertImageInEditor(url) {
+        if (!this.currentEditor) {
+            this.showToast('error', 'Editor não disponível', 'Não foi possível inserir a imagem');
+            return;
+        }
+
+        const imageHtml = `\n<img src="${url}" alt="Imagem do post" style="width: 100%; max-width: 800px; border-radius: 8px; margin: 1rem 0;" />\n`;
+
+        // Get current cursor position
+        const position = this.currentEditor.getPosition();
+        const range = new monaco.Range(
+            position.lineNumber,
+            position.column,
+            position.lineNumber,
+            position.column
+        );
+
+        // Insert image HTML at cursor
+        this.currentEditor.executeEdits('insert-image', [{
+            range: range,
+            text: imageHtml
+        }]);
+
+        // Set focus back to editor
+        this.currentEditor.focus();
+
+        this.showToast('success', 'Imagem inserida', 'Imagem inserida no editor');
     }
 
     // Git operations

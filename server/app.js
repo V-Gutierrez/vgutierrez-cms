@@ -63,6 +63,7 @@ const upload = multer({
 app.use('/api/blog', require('./routes/blog'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/gallery', require('./routes/gallery'));
+app.use('/api/images', require('./routes/images'));
 
 // File upload endpoint
 app.post('/api/upload', upload.single('image'), async (req, res) => {

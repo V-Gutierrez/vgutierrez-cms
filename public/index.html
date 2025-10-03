@@ -41,6 +41,10 @@
                     <i class="fas fa-images"></i>
                     <span>Galeria</span>
                 </li>
+                <li class="menu-item" data-section="library">
+                    <i class="fas fa-photo-video"></i>
+                    <span>Biblioteca de Imagens</span>
+                </li>
                 <li class="menu-item" data-section="profile">
                     <i class="fas fa-user"></i>
                     <span>Perfil</span>
@@ -124,24 +128,15 @@
 
                 <!-- Gallery Section -->
                 <section id="section-gallery" class="content-section">
-                    <div class="section-controls">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="gallery-search" placeholder="Buscar na galeria...">
-                        </div>
-                        <div class="filters">
-                            <select id="gallery-category-filter">
-                                <option value="">Todas as categorias</option>
-                                <option value="photography">Fotografia</option>
-                                <option value="digital-art">Arte Digital</option>
-                                <option value="drawings">Desenhos</option>
-                                <option value="mixed-media">Mídia Mista</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="items-grid gallery-grid" id="gallery-grid">
                         <p class="no-data">Carregando galeria...</p>
+                    </div>
+                </section>
+
+                <!-- Library Section -->
+                <section id="section-library" class="content-section">
+                    <div class="library-grid" id="library-grid">
+                        <p class="no-data">Carregando biblioteca de imagens...</p>
                     </div>
                 </section>
 

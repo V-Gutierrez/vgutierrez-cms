@@ -128,6 +128,71 @@ class API {
     async healthCheck() {
         return this.request('/health');
     }
+
+    // Image Library API methods
+    async getImageLibrary() {
+        return this.request('/images/library');
+    }
+
+    async uploadToLibrary(file, type = 'blog', description = '') {
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('type', type);
+        formData.append('description', description);
+
+        try {
+            const response = await fetch('/api/images/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Library upload failed:', error);
+            throw error;
+        }
+    }
+
+    async uploadGalleryImage(file, description = '') {
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('description', description);
+
+        try {
+            const response = await fetch('/api/gallery/upload-image', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Gallery image upload failed:', error);
+            throw error;
+        }
+    }
+
+    async promoteToGallery(filename, metadata) {
+        return this.request(`/images/promote-to-gallery/${filename}`, {
+            method: 'POST',
+            body: JSON.stringify(metadata)
+        });
+    }
+
+    async deleteImage(type, filename) {
+        return this.request(`/images/${type}/${filename}`, {
+            method: 'DELETE'
+        });
+    }
 }
 
 // Create global API instance

@@ -1,12 +1,51 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs').promises;
 const {
   generateId,
   generateSlug,
   ensureUniqueSlug,
   loadJsonFile,
-  saveJsonFile
+  saveJsonFile,
+  slugifyFilename
 } = require('../utils/cms-utils');
+
+// Configure multer for gallery image uploads
+const storage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '..', '..', 'data', 'images', 'gallery');
+    try {
+      await fs.mkdir(uploadPath, { recursive: true });
+    } catch (error) {
+      console.error('Error creating gallery upload directory:', error);
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const name = path.basename(file.originalname, ext);
+    const slugifiedName = slugifyFilename(name);
+    cb(null, `${slugifiedName}-${Date.now()}${ext}`);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
 
 // GET /api/gallery - List all gallery items
 router.get('/', async (req, res) => {
@@ -202,6 +241,52 @@ router.delete('/:slug', async (req, res) => {
   } catch (error) {
     console.error('Error deleting gallery item:', error);
     res.status(500).json({ error: 'Failed to delete gallery item' });
+  }
+});
+
+// POST /api/gallery/upload-image - Upload image for gallery
+router.post('/upload-image', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Local URL for immediate preview
+    const localUrl = `/data/images/gallery/${req.file.filename}`;
+
+    // GitHub URL for production
+    const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${req.file.filename}`;
+
+    // Update registry
+    const registryPath = path.join('images', 'registry.json');
+    let registry = [];
+    try {
+      registry = await loadJsonFile(registryPath);
+    } catch (error) {
+      console.log('Registry not found, creating new one');
+    }
+
+    const newEntry = {
+      type: 'gallery',
+      filename: req.file.filename,
+      url: githubUrl,
+      description: req.body.description || '',
+      createdAt: new Date().toISOString()
+    };
+
+    registry.push(newEntry);
+    await saveJsonFile(registryPath, registry);
+
+    res.json({
+      url: githubUrl,
+      localUrl: localUrl,
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      size: req.file.size
+    });
+  } catch (error) {
+    console.error('Gallery image upload error:', error);
+    res.status(500).json({ error: 'Upload failed', details: error.message });
   }
 });
 
