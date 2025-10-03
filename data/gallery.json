@@ -190,7 +190,7 @@
     "description": "",
     "technique": "",
     "year": 2025,
-    "image": "/data/images/img_5473-1759522752515.jpeg",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/img_5473-1759522752515.jpeg",
     "dimensions": "",
     "published": true
   },
@@ -201,7 +201,7 @@
     "description": "Uncanny street",
     "technique": "",
     "year": 2025,
-    "image": "/data/images/img_5736-1759528240382.jpeg",
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/img_5736-1759528240382.jpeg",
     "dimensions": "",
     "published": true
   }

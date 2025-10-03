@@ -101,10 +101,11 @@ class API {
         });
     }
 
-    // File upload method
-    async uploadFile(file) {
+    // File upload method (generic - defaults to 'blog' type)
+    async uploadFile(file, type = 'blog') {
         const formData = new FormData();
         formData.append('image', file);
+        formData.append('type', type);
 
         try {
             const response = await fetch('/api/upload', {
@@ -122,6 +123,11 @@ class API {
             console.error('File upload failed:', error);
             throw error;
         }
+    }
+
+    // Upload to specific library type (blog, gallery, profile, etc.)
+    async uploadToLibrary(file, type = 'blog') {
+        return this.uploadFile(file, type);
     }
 
     // Health check

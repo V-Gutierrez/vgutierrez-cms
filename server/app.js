@@ -31,7 +31,9 @@ app.use('/data', express.static(path.join(__dirname, '..', 'data')));
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
-    const uploadPath = path.join(__dirname, '..', 'data', 'images');
+    // Default to 'blog' subfolder to maintain organized structure
+    const type = req.body.type || 'blog';
+    const uploadPath = path.join(__dirname, '..', 'data', 'images', type);
     try {
       await fs.mkdir(uploadPath, { recursive: true });
     } catch (error) {
@@ -76,9 +78,16 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const imageUrl = `/data/images/${req.file.filename}`;
+    // Extract type from body or default to 'blog'
+    const type = req.body.type || 'blog';
+
+    // Generate both local and GitHub URLs following standardized format
+    const localUrl = `/data/images/${type}/${req.file.filename}`;
+    const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/${type}/${req.file.filename}`;
+
     res.json({
-      url: imageUrl,
+      url: githubUrl,
+      localUrl: localUrl,
       filename: req.file.filename,
       originalName: req.file.originalname,
       size: req.file.size

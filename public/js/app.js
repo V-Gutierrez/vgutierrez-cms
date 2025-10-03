@@ -638,7 +638,8 @@ class CMSApp {
 					'<i class="fas fa-spinner fa-spin"></i> Fazendo upload...';
 				uploadBtn.disabled = true;
 
-				const uploadResult = await api.uploadFile(file);
+				// Use gallery-specific upload endpoint
+				const uploadResult = await api.uploadGalleryImage(file);
 
 				// Update the image URL input with the uploaded file URL
 				imageUrlInput.value = uploadResult.url;
