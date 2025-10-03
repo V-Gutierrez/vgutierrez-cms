@@ -182,5 +182,16 @@
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/nose.jpeg",
     "dimensions": "",
     "published": true
+  },
+  {
+    "id": "47ef38bae9bb4d63a32780d731d8d576",
+    "slug": "teste",
+    "title": "Teste",
+    "description": "Oi",
+    "technique": "",
+    "year": 2025,
+    "image": "/data/images/img_5473-1759522752515.jpeg",
+    "dimensions": "",
+    "published": true
   }
 ]

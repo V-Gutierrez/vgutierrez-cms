@@ -82,8 +82,9 @@ router.get('/library', async (req, res) => {
           const ext = path.extname(filename).toLowerCase();
           if (!allowedExtensions.includes(ext)) continue;
 
-          // Generate GitHub URL
+          // Generate GitHub URL and Local URL
           const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/${type}/${filename}`;
+          const localUrl = `/data/images/${type}/${filename}`;
 
           // Check if this URL is in gallery
           const isInGallery = galleryUrls.has(githubUrl);
@@ -103,6 +104,7 @@ router.get('/library', async (req, res) => {
           allImages.push({
             filename,
             url: githubUrl,
+            localUrl: localUrl,
             type,
             source: 'filesystem',
             isInGallery,
