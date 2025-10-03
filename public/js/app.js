@@ -897,12 +897,12 @@ class CMSApp {
             uploadProgressFill.style.width = '100%';
             uploadProgressText.textContent = '100%';
 
-            // Update preview
-            previewImg.src = result.url;
+            // Update preview with LOCAL URL for immediate display
+            previewImg.src = result.localUrl;
             previewImg.style.display = 'block';
             previewPlaceholder.style.display = 'none';
 
-            // Update profile data
+            // Update profile data with GitHub URL (same as saved in profile.json)
             this.data.profile.personalInfo.profileImage = result.url;
 
             // Show success

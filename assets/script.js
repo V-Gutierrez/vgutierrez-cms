@@ -322,6 +322,34 @@ function renderBlogPosts() {
   container.innerHTML = postsHtml;
 }
 
+// Render latest post preview in home
+function renderLatestPostInHome() {
+  const container = document.getElementById("latest-post-preview");
+  if (!container) return;
+
+  // Only render if there are posts available
+  if (!allBlogPosts || allBlogPosts.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  // Get the most recent post (already sorted by date)
+  const latestPost = allBlogPosts[0];
+
+  // Create a minimal card for the home page
+  container.innerHTML = `
+    <div class="latest-post-card" onclick="showPost('${latestPost.slug}')">
+      <div class="latest-post-label">Latest Post</div>
+      <h3 class="blog-post-title">${latestPost.title}</h3>
+      <div class="blog-post-meta">
+        <span class="blog-post-date">${formatRelativeTime(latestPost.date)}</span>
+        ${latestPost.readingTime ? `<span class="meta-separator">•</span><span class="reading-time">${latestPost.readingTime} min read</span>` : ""}
+      </div>
+      <p class="blog-post-excerpt">${latestPost.excerpt}</p>
+    </div>
+  `;
+}
+
 
 // Load full content for displayed posts only
 async function loadFullContentForPosts(postsSubset) {
@@ -358,6 +386,12 @@ function showPost(postSlug, updateURL = true) {
     Router.updateURL("post-detail", { postSlug });
   }
 
+  const shareIconSVG = `
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+    </svg>
+  `;
+
   const postMeta = `
     <div class="post-meta">
       <p class="post-date">Published on ${new Date(
@@ -368,9 +402,8 @@ function showPost(postSlug, updateURL = true) {
         day: "numeric",
       })}</p>
       <div class="post-share">
-        <button class="share-button" onclick="sharePost('${postSlug}')">
-          <span class="share-text">Share</span>
-          <span class="share-icon">📤</span>
+        <button class="share-button" onclick="sharePost('${postSlug}', this)">
+          <span class="share-icon">${shareIconSVG}</span>
         </button>
       </div>
     </div>
@@ -378,6 +411,11 @@ function showPost(postSlug, updateURL = true) {
 
   document.getElementById("post-content").innerHTML = `
           <div class="post-header">
+              <div class="share-button-top">
+                <button class="share-button" onclick="sharePost('${postSlug}', this)">
+                  <span class="share-icon">${shareIconSVG}</span>
+                </button>
+              </div>
               <h1 class="post-title">${post.title}</h1>
           </div>
           <div class="post-content">
@@ -433,6 +471,9 @@ async function loadBlogPosts() {
     await loadFullContentForPosts(allBlogPosts);
     // Inject reading time into all cards after content loads
     injectReadingTimes(allBlogPosts);
+
+    // Render latest post in home
+    renderLatestPostInHome();
 
     // Load initial route after blog posts are loaded
     Router.loadInitialRoute();
@@ -891,10 +932,8 @@ document.addEventListener("click", (e) => {
 });
 
 // Share functionality for posts
-function sharePost(postSlug) {
-  const shareButton = document.querySelector(".share-button");
-  const shareText = shareButton.querySelector(".share-text");
-  const shareIcon = shareButton.querySelector(".share-icon");
+function sharePost(postSlug, buttonElement) {
+  const shareButton = buttonElement;
 
   // Get post data for native sharing
   const post = allBlogPosts.find((p) => p.slug === postSlug);
@@ -911,84 +950,44 @@ function sharePost(postSlug) {
         url: postUrl,
       })
       .then(() => {
-        showShareSuccess(shareButton, shareText, shareIcon, "shared");
+        showShareSuccess(shareButton, "shared");
       })
       .catch((error) => {
         // User cancelled or error occurred, fallback to clipboard
         if (error.name !== "AbortError") {
-          copyToClipboard(postUrl, shareButton, shareText, shareIcon);
+          copyToClipboard(postUrl, shareButton);
         }
       });
   } else {
     // Fallback to clipboard copy
-    copyToClipboard(postUrl, shareButton, shareText, shareIcon);
+    copyToClipboard(postUrl, shareButton);
   }
 }
 
-function copyToClipboard(postUrl, shareButton, shareText, shareIcon) {
+function copyToClipboard(postUrl, shareButton) {
   // Try to copy to clipboard
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard
       .writeText(postUrl)
       .then(() => {
-        showShareSuccess(shareButton, shareText, shareIcon, "copied");
+        showShareSuccess(shareButton, "copied");
       })
       .catch(() => {
-        showShareFallback(postUrl, shareButton, shareText, shareIcon);
+        // Silent fail - could add a toast notification here
+        console.log("Failed to copy to clipboard");
       });
   } else {
-    // Fallback for older browsers or non-secure contexts
-    showShareFallback(postUrl, shareButton, shareText, shareIcon);
+    // Fallback for older browsers - just show success
+    showShareSuccess(shareButton, "copied");
   }
 }
 
-function showShareSuccess(shareButton, shareText, shareIcon, type) {
-  // Store original text
-  const originalText = shareText.textContent;
-  const originalIcon = shareIcon.textContent;
-
+function showShareSuccess(shareButton, type) {
   // Add success state
   shareButton.classList.add("success");
 
-  if (type === "shared") {
-    shareText.textContent = "Shared!";
-    shareIcon.textContent = "✅";
-  } else {
-    shareText.textContent = "Link Copied!";
-    shareIcon.textContent = "✓";
-  }
-
-  // Reset after 2.5 seconds
+  // Reset after 2 seconds
   setTimeout(() => {
     shareButton.classList.remove("success");
-    shareText.textContent = originalText;
-    shareIcon.textContent = originalIcon;
-  }, 2500);
-}
-
-function showShareFallback(postUrl, shareButton, shareText, shareIcon) {
-  // Store original content
-  const originalHTML = shareButton.innerHTML;
-
-  // Add fallback state
-  shareButton.classList.add("fallback");
-  shareButton.innerHTML = `
-    <span class="share-feedback">Copy link manually:</span>
-    <input type="text" value="${postUrl}" readonly class="share-url-input" onclick="this.select()">
-  `;
-
-  // Auto-select the URL
-  setTimeout(() => {
-    const input = shareButton.querySelector(".share-url-input");
-    if (input) {
-      input.focus();
-      input.select();
-    }
-  }, 100);
-
-  // Reset after 10 seconds
-  setTimeout(() => {
-    shareButton.classList.remove("fallback");
-    shareButton.innerHTML = originalHTML;
-  }, 10000);
+  }, 2000);
 }

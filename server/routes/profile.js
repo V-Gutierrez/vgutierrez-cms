@@ -81,16 +81,20 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'No image file provided' });
     }
 
-    // Get the relative URL for the uploaded image
-    const imageUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/${req.file.filename}`;
+    // Local URL for immediate preview in admin (served by Express)
+    const localUrl = `/data/images/profile/${req.file.filename}`;
 
-    // Update profile.json with new image URL
+    // GitHub URL for production use (available after git push)
+    const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/${req.file.filename}`;
+
+    // Update profile.json with GitHub URL (for public site)
     const profile = await loadJsonFile('profile.json');
-    profile.personalInfo.profileImage = imageUrl;
+    profile.personalInfo.profileImage = githubUrl;
     await saveJsonFile('profile.json', profile);
 
     res.json({
-      url: imageUrl,
+      url: githubUrl,           // GitHub URL for profile.json
+      localUrl: localUrl,       // Local URL for immediate preview
       filename: req.file.filename,
       originalName: req.file.originalname,
       size: req.file.size
