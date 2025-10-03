@@ -702,10 +702,19 @@ main {
 /* Home Section */
 .home-section {
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: center;
 	background: #000000;
+	min-height: calc(100vh - 96px - env(safe-area-inset-top, 0));
 	padding: 3rem 0 2rem;
+}
+
+.home-section .container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 2rem;
 }
 
 .profile-image-container {
@@ -719,7 +728,7 @@ main {
 /* Latest Post Preview in Home */
 .latest-post-container {
 	max-width: 600px;
-	margin: 2rem auto 0;
+	width: 100%;
 	opacity: 0;
 	animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
 }
@@ -1377,10 +1386,10 @@ body:has(#post-detail.active) .tab-progress {
 
 	.home-section {
 		padding: 2rem 0 1.5rem;
+		min-height: calc(100vh - 64px - env(safe-area-inset-top, 0));
 	}
 
 	.latest-post-container {
-		margin: 1.5rem auto 0;
 		padding: 0 1rem;
 	}
 
@@ -1861,10 +1870,6 @@ body:has(#post-detail.active) .tab-progress {
 
 	.home-section {
 		padding: 1.5rem 0 1rem;
-	}
-
-	.latest-post-container {
-		margin: 1.25rem auto 0;
 	}
 
 	.latest-post-card {
