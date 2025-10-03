@@ -4,6 +4,31 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+// Clean up browser flag on startup
+const browserFlagFile = path.join(__dirname, '.browser-opened');
+if (fs.existsSync(browserFlagFile)) {
+    try {
+        fs.unlinkSync(browserFlagFile);
+    } catch (error) {
+        // Ignore cleanup errors
+    }
+}
+
+// Clean up browser flag on exit
+function cleanup() {
+    if (fs.existsSync(browserFlagFile)) {
+        try {
+            fs.unlinkSync(browserFlagFile);
+        } catch (error) {
+            // Ignore cleanup errors
+        }
+    }
+}
+
+process.on('SIGINT', cleanup);
+process.on('SIGTERM', cleanup);
+process.on('exit', cleanup);
+
 console.log('🚀 Iniciando Victor Gutierrez CMS - Web App');
 console.log('==========================================\n');
 

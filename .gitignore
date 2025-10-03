@@ -35,6 +35,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+.browser-opened
 
 # Logs
 logs/
