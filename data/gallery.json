@@ -185,12 +185,23 @@
   },
   {
     "id": "47ef38bae9bb4d63a32780d731d8d576",
-    "slug": "teste",
-    "title": "Teste",
-    "description": "Oi",
+    "slug": "ib",
+    "title": "ib",
+    "description": "",
     "technique": "",
     "year": 2025,
     "image": "/data/images/img_5473-1759522752515.jpeg",
+    "dimensions": "",
+    "published": true
+  },
+  {
+    "id": "c6174d9416894ab48478cb15663d2cd8",
+    "slug": "jds",
+    "title": "jds",
+    "description": "Uncanny street",
+    "technique": "",
+    "year": 2025,
+    "image": "/data/images/img_5736-1759528240382.jpeg",
     "dimensions": "",
     "published": true
   }
