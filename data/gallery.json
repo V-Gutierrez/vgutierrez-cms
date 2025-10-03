@@ -182,16 +182,5 @@
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/nose.jpeg",
     "dimensions": "",
     "published": true
-  },
-  {
-    "id": "98e85d390c5d45468389e6080ff7b88e",
-    "title": "ok",
-    "description": "Teste 1 2",
-    "technique": "",
-    "year": 2025,
-    "dimensions": "",
-    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/profile/linkedin.png",
-    "published": true,
-    "slug": "ok"
   }
 ]

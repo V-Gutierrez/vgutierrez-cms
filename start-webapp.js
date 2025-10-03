@@ -36,13 +36,16 @@ if (!fs.existsSync(publicPath)) {
     process.exit(1);
 }
 
-// Start the server
-console.log('🌟 Iniciando servidor...');
+// Start the server with nodemon for hot reload
+console.log('🌟 Iniciando servidor com hot reload...');
+console.log('🔥 Hot reload ativado - Backend e Frontend');
 console.log('🔗 URL: http://localhost:3001/admin');
-console.log('⌨️  Pressione Ctrl+C para parar o servidor\n');
+console.log('🌐 Navegador abrirá automaticamente');
+console.log('⌨️  Pressione Ctrl+C para parar o servidor');
+console.log('💡 Dica: Digite "rs" para reiniciar manualmente\n');
 
 try {
-    execSync('node server/app.js', { stdio: 'inherit' });
+    execSync('npx nodemon server/app.js', { stdio: 'inherit' });
 } catch (error) {
     if (error.signal !== 'SIGINT') {
         console.error('❌ Erro ao iniciar servidor:', error.message);

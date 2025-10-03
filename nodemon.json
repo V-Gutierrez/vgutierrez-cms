@@ -1,0 +1,20 @@
+{
+  "watch": [
+    "server/",
+    "data/*.json"
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "data/images/",
+    "data/posts/*.json",
+    "node_modules/",
+    ".git/",
+    "public/"
+  ],
+  "delay": 1000,
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "verbose": false,
+  "restartable": "rs"
+}

@@ -4,7 +4,8 @@
 	"description": "Content Management System for Victor Gutierrez personal website",
 	"main": "index.js",
 	"scripts": {
-		"start-cms": "node start-webapp.js"
+		"start-cms": "node start-webapp.js",
+		"dev": "nodemon server/app.js"
 	},
 	"keywords": [
 		"cms",

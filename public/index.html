@@ -169,5 +169,49 @@
     <script src="js/api.js"></script>
     <script src="js/editor.js"></script>
     <script src="js/app.js"></script>
+
+    <!-- Live Reload for Development -->
+    <script>
+        (function() {
+            // Only enable in development (when running on localhost)
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                return;
+            }
+
+            let lastServerTimestamp = null;
+            let isFirstCheck = true;
+
+            async function checkServerHeartbeat() {
+                try {
+                    const response = await fetch('/api/dev/heartbeat');
+                    if (!response.ok) return;
+
+                    const data = await response.json();
+                    const currentTimestamp = data.timestamp;
+
+                    if (lastServerTimestamp === null) {
+                        // First check - just store the timestamp
+                        lastServerTimestamp = currentTimestamp;
+                        isFirstCheck = false;
+                    } else if (currentTimestamp !== lastServerTimestamp) {
+                        // Server restarted - reload the page
+                        console.log('🔄 Server restarted - reloading page...');
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    // Server is probably down/restarting - wait for it to come back
+                    console.log('⏳ Waiting for server...');
+                }
+            }
+
+            // Check every 2 seconds
+            setInterval(checkServerHeartbeat, 2000);
+
+            // Initial check
+            checkServerHeartbeat();
+
+            console.log('🔥 Live reload enabled');
+        })();
+    </script>
 </body>
 </html>

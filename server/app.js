@@ -8,9 +8,13 @@ const { promisify } = require('util');
 
 // Import utility functions
 const cmsUtils = require('./utils/cms-utils');
+const { openBrowser } = require('./utils/open-browser');
 
 // Promisify exec for async/await usage
 const execAsync = promisify(exec);
+
+// Server start timestamp for dev live reload
+const SERVER_START_TIME = Date.now();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -264,6 +268,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Dev heartbeat endpoint for live reload
+app.get('/api/dev/heartbeat', (req, res) => {
+  res.json({
+    timestamp: SERVER_START_TIME,
+    env: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Default route - redirect to admin interface
 app.get('/admin', (req, res) => {
   res.redirect('/admin/');
@@ -278,6 +290,16 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 CMS Server running at http://localhost:${PORT}`);
   console.log(`📝 Admin interface: http://localhost:${PORT}/admin`);
+
+  // Auto-open browser in development
+  if (process.env.NODE_ENV !== 'production') {
+    const adminUrl = `http://localhost:${PORT}/admin`;
+
+    // Wait 1 second to ensure server is fully ready
+    setTimeout(() => {
+      openBrowser(adminUrl);
+    }, 1000);
+  }
 });
 
 module.exports = app;
