@@ -812,12 +812,8 @@ async function loadGalleryImages() {
     galleryImages = publishedImages.map((image) => ({
       id: image.id,
       name: image.title,
-      type: image.category === "photography" ? "photos" : "drawings",
       description: image.description,
-      category: image.category,
-      tags: image.tags,
       url: image.image,
-      featured: image.featured,
     }));
 
     // Shuffle gallery images
@@ -847,19 +843,13 @@ function renderGallery(filter) {
   const container = document.querySelector(".gallery-grid");
   if (!container) return;
 
-  // Filter (if provided)
-  const list =
-    filter && filter !== "all"
-      ? galleryImages.filter((img) => img.type === filter)
-      : galleryImages.slice();
-
-  if (list.length === 0) {
+  if (galleryImages.length === 0) {
     container.innerHTML = '<div class="loading">No images found</div>';
     return;
   }
 
-  // Randomize order each render on filter
-  const randomized = list.sort(() => Math.random() - 0.5);
+  // Randomize order each render
+  const randomized = galleryImages.slice().sort(() => Math.random() - 0.5);
 
   container.innerHTML = randomized
     .map(

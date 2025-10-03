@@ -4,24 +4,12 @@
   "title": "The Dream of Flying",
   "date": "2025-08-21",
   "author": "Victor Gutierrez",
-  "tags": [
-    "life",
-    "aviation",
-    "dreams",
-    "reflections"
-  ],
   "published": true,
   "excerpt": "Not just a wish, but a possibility taking shape in my mind.",
   "content": "<section class=\"post-detail\" id=\"post-flying\">\n  <figure class=\"post-hero\">\n    <div class=\"media-frame\">\n      <img\n        src=\"https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/cs.jpeg\"\n        alt=\"First-person view from a small single-engine cockpit on final approach, runway centered on the horizon.\"\n        loading=\"lazy\"\n        decoding=\"async\"\n        width=\"1600\"\n        height=\"900\"\n        sizes=\"(max-width: 900px) 100vw, 900px\"\n      />\n    </div>\n    <figcaption class=\"post-hero-caption\">\n      That vivid moment when a dream turns into a scene you can almost live.\n    </figcaption>\n  </figure>\n\n  <article class=\"post-content\">\n    <p>I have a dream of piloting an airplane. I don’t say this casually, the way someone might say they’d like to learn guitar someday or take a far-off trip. I actually see myself flying. The image is clear in my mind: I’m in the cockpit of a small aircraft, hands on the controls, feeling the machine respond, and finally bringing the plane down safely onto a runway.</p>\n\n    <p>It’s not just an abstract idea. It’s a vivid scene, one I replay over and over, almost as if I’ve already been there. And that catches people’s attention. When I share it, I notice some are taken aback. Maybe because talking about flying a plane already feels so distant, like something from another world. Maybe because the clarity of this vision doesn’t sound like what we usually call a “dream.”</p>\n\n    <p>But that’s exactly what fascinates me: the strength a dream holds when it stops being vague and takes on details — sights, sounds, textures. For me, it’s not just a desire, it’s a possibility. And seeing this scene so clearly within myself is the first step toward making it real outside of me.</p>\n  </article>\n\n</section>\n\n<!-- Ajustes mínimos específicos do post, respeitando sua style-guide -->\n<style>\n  /* Hero sem fundo extra, borda e raio seguindo o tema */\n  #post-flying .post-hero {\n    border: 1px solid #333;\n    border-radius: 12px;\n    overflow: hidden;\n    margin: 0 0 1.5rem;\n  }\n  /* Mantém proporção e limita altura em qualquer tela */\n  #post-flying .post-hero .media-frame {\n    position: relative;\n    width: 100%;\n    aspect-ratio: 16 / 9;\n    max-height: min(60vh, 560px);\n    overflow: hidden;\n  }\n  #post-flying .post-hero img {\n    width: 100%;\n    height: 100%;\n    object-fit: cover; /* cobre sem distorcer */\n    display: block;\n  }\n  #post-flying .post-hero-caption {\n    color: #999;\n    font-size: 0.9rem;\n    padding: 0.75rem 1rem 1rem;\n    border-top: 1px solid #333;\n  }\n\n  /* Ajustes responsivos finos */\n  @media (max-width: 900px) {\n    #post-flying .post-title { font-size: 2rem; }\n    #post-flying .post-hero .media-frame { max-height: 52vh; }\n  }\n  @media (max-width: 600px) {\n    #post-flying .post-title { font-size: 1.75rem; }\n    #post-flying .post-hero .media-frame { max-height: 45vh; }\n  }\n  @media (max-width: 420px) {\n    #post-flying .post-hero .media-frame { max-height: 40vh; }\n    #post-flying .post-hero-caption { font-size: 0.85rem; padding: 0.6rem 0.8rem 0.9rem; }\n  }\n</style>\n",
   "readingTime": 3,
   "seo": {
     "metaTitle": "The Dream of Flying - Victor Gutierrez",
-    "metaDescription": "Not just a wish, but a possibility taking shape in my mind.",
-    "keywords": [
-      "life",
-      "aviation",
-      "dreams",
-      "reflections"
-    ]
+    "metaDescription": "Not just a wish, but a possibility taking shape in my mind."
   }
 }

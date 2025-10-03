@@ -134,30 +134,6 @@ class API {
         return this.request('/images/library');
     }
 
-    async uploadToLibrary(file, type = 'blog', description = '') {
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('type', type);
-        formData.append('description', description);
-
-        try {
-            const response = await fetch('/api/images/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Library upload failed:', error);
-            throw error;
-        }
-    }
-
     async uploadGalleryImage(file, description = '') {
         const formData = new FormData();
         formData.append('image', file);
@@ -181,10 +157,10 @@ class API {
         }
     }
 
-    async promoteToGallery(filename, metadata) {
-        return this.request(`/images/promote-to-gallery/${filename}`, {
+    async addToGallery(imageUrl, metadata) {
+        return this.request('/images/add-to-gallery', {
             method: 'POST',
-            body: JSON.stringify(metadata)
+            body: JSON.stringify({ imageUrl, ...metadata })
         });
     }
 
@@ -192,6 +168,28 @@ class API {
         return this.request(`/images/${type}/${filename}`, {
             method: 'DELETE'
         });
+    }
+
+    async replaceImage(type, filename, file) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(`/api/images/${type}/${filename}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Replace failed: ${response.statusText}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Image replace failed:', error);
+            throw error;
+        }
     }
 }
 

@@ -154,27 +154,14 @@ class CMSApp {
     }
 
     setupSearchAndFilters() {
-        // Blog search and filters
+        // Blog search
         document.getElementById('blog-search')?.addEventListener('input', (e) => {
-            const statusFilter = document.getElementById('blog-status-filter')?.value || '';
-            this.filterItems('blog', e.target.value, { status: statusFilter });
+            this.filterItems('blog', e.target.value);
         });
 
-        document.getElementById('blog-status-filter')?.addEventListener('change', (e) => {
-            const searchTerm = document.getElementById('blog-search')?.value || '';
-            this.filterItems('blog', searchTerm, { status: e.target.value });
-        });
-
-
-        // Gallery search and filters
+        // Gallery search
         document.getElementById('gallery-search')?.addEventListener('input', (e) => {
-            const categoryFilter = document.getElementById('gallery-category-filter')?.value || '';
-            this.filterItems('gallery', e.target.value, { category: categoryFilter });
-        });
-
-        document.getElementById('gallery-category-filter')?.addEventListener('change', (e) => {
-            const searchTerm = document.getElementById('gallery-search')?.value || '';
-            this.filterItems('gallery', searchTerm, { category: e.target.value });
+            this.filterItems('gallery', e.target.value);
         });
     }
 
@@ -204,7 +191,7 @@ class CMSApp {
             dashboard: 'Dashboard',
             blog: 'Blog Posts',
             gallery: 'Galeria',
-            library: 'Biblioteca de Imagens',
+            library: 'Assets Manager',
             profile: 'Perfil'
         };
 
@@ -340,9 +327,6 @@ class CMSApp {
                 </div>
                 <div class="item-card-body">
                     <p class="item-card-description">${post.excerpt || 'Sem descrição'}</p>
-                    <div class="item-card-tags">
-                        ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
                 </div>
                 <div class="item-card-actions">
                     <button class="btn btn-small btn-primary" onclick="app.editItem('blog', '${post.slug}')">
@@ -366,16 +350,9 @@ class CMSApp {
                 <img src="${item.image}" alt="${item.title}" class="gallery-item-image">
                 <div class="item-card-header">
                     <h3 class="item-card-title">${item.title}</h3>
-                    <div class="item-card-meta">
-                        <span class="tag">${item.category || 'uncategorized'}</span>
-                    </div>
                 </div>
                 <div class="item-card-body">
                     <p class="item-card-description">${item.description || 'Sem descrição'}</p>
-                    <div class="item-card-tags">
-                        ${(item.tags || []).slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        ${(item.tags || []).length > 2 ? `<span class="tag">+${(item.tags || []).length - 2}</span>` : ''}
-                    </div>
                 </div>
                 <div class="item-card-actions">
                     <button class="btn btn-small btn-secondary" onclick="app.copyImageUrl('${item.image}')" title="Copiar link da imagem">
@@ -402,7 +379,7 @@ class CMSApp {
                 this.createItem('gallery');
                 break;
             case 'library':
-                this.uploadToLibraryPrompt();
+                // Library is read-only, no upload needed
                 break;
         }
     }
@@ -544,10 +521,27 @@ class CMSApp {
             this.currentEditor = editor;
             this.currentEditorId = editorId;
 
+            // Setup live preview
+            this.updateBlogPreview(initialContent);
+
+            // Add event listener for live preview updates
+            editor.onDidChangeModelContent(() => {
+                const content = editor.getValue();
+                this.updateBlogPreview(content);
+            });
+
             // Setup blog image upload after editor is ready
             setTimeout(() => {
                 this.setupBlogImageUpload();
             }, 100);
+        }
+    }
+
+    updateBlogPreview(htmlContent) {
+        const previewContainer = document.getElementById('blog-content-preview');
+        if (previewContainer) {
+            // Sanitize and render HTML
+            previewContainer.innerHTML = htmlContent || '<p class="preview-empty">O preview aparecerá aqui...</p>';
         }
     }
 
@@ -686,10 +680,6 @@ class CMSApp {
                 <textarea class="form-textarea" id="blog-excerpt" rows="3">${item?.excerpt || ''}</textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Tags (separadas por vírgula)</label>
-                <input type="text" class="form-input" id="blog-tags" value="${item?.tags?.join(', ') || ''}">
-            </div>
-            <div class="form-group">
                 <label class="form-label">Data de Publicação</label>
                 <input type="date" class="form-input" id="blog-date" value="${item?.date || new Date().toISOString().split('T')[0]}">
             </div>
@@ -713,7 +703,17 @@ class CMSApp {
             </div>
             <div class="form-group">
                 <label class="form-label">Conteúdo</label>
-                <div id="content-editor" class="editor-container"></div>
+                <div class="blog-editor-preview-container">
+                    <div class="blog-editor-section">
+                        <div id="content-editor" class="editor-container"></div>
+                    </div>
+                    <div class="blog-preview-section">
+                        <div class="preview-header">
+                            <i class="fas fa-eye"></i> Preview
+                        </div>
+                        <div id="blog-content-preview" class="blog-preview-content"></div>
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -730,29 +730,8 @@ class CMSApp {
                 <textarea class="form-textarea" id="gallery-description" rows="3">${item?.description || ''}</textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Categoria</label>
-                <select class="form-select" id="gallery-category">
-                    <option value="photography" ${item?.category === 'photography' ? 'selected' : ''}>Fotografia</option>
-                    <option value="digital-art" ${item?.category === 'digital-art' ? 'selected' : ''}>Arte Digital</option>
-                    <option value="drawings" ${item?.category === 'drawings' ? 'selected' : ''}>Desenhos</option>
-                    <option value="mixed-media" ${item?.category === 'mixed-media' ? 'selected' : ''}>Mídia Mista</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Técnica</label>
-                <input type="text" class="form-input" id="gallery-technique" value="${item?.technique || ''}">
-            </div>
-            <div class="form-group">
                 <label class="form-label">Ano</label>
                 <input type="number" class="form-input" id="gallery-year" value="${item?.year || new Date().getFullYear()}" min="1900" max="2099">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Tags (separadas por vírgula)</label>
-                <input type="text" class="form-input" id="gallery-tags" value="${item?.tags?.join(', ') || ''}">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Dimensões</label>
-                <input type="text" class="form-input" id="gallery-dimensions" value="${item?.dimensions || ''}" placeholder="e.g., 1920x1080">
             </div>
             <div class="form-group">
                 <label class="form-label">Imagem</label>
@@ -1088,7 +1067,6 @@ class CMSApp {
             case 'blog':
                 formData.title = document.getElementById('blog-title')?.value || '';
                 formData.excerpt = document.getElementById('blog-excerpt')?.value || '';
-                formData.tags = document.getElementById('blog-tags')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
                 formData.date = document.getElementById('blog-date')?.value || '';
                 formData.published = document.getElementById('blog-published')?.checked || false;
                 break;
@@ -1097,11 +1075,7 @@ class CMSApp {
             case 'gallery':
                 formData.title = document.getElementById('gallery-title')?.value || '';
                 formData.description = document.getElementById('gallery-description')?.value || '';
-                formData.category = document.getElementById('gallery-category')?.value || 'photography';
-                formData.technique = document.getElementById('gallery-technique')?.value || '';
                 formData.year = parseInt(document.getElementById('gallery-year')?.value) || new Date().getFullYear();
-                formData.tags = document.getElementById('gallery-tags')?.value.split(',').map(t => t.trim()).filter(Boolean) || [];
-                formData.dimensions = document.getElementById('gallery-dimensions')?.value || '';
                 formData.imageUrl = document.getElementById('gallery-image-url')?.value || '';
                 break;
         }
@@ -1120,26 +1094,8 @@ class CMSApp {
                 return item.title?.toLowerCase().includes(search) ||
                        item.description?.toLowerCase().includes(search) ||
                        item.excerpt?.toLowerCase().includes(search) ||
-                       item.tags?.some(tag => tag.toLowerCase().includes(search)) ||
                        item.technologies?.some(tech => tech.toLowerCase().includes(search));
             });
-        }
-
-        // Apply status filter
-        if (filters.status && filters.status.trim()) {
-            if (type === 'blog') {
-                const published = filters.status === 'published';
-                filteredItems = filteredItems.filter(item => item.published === published);
-                filteredItems = filteredItems.filter(item => item.status === filters.status);
-            }
-        }
-
-        // Apply category filter
-        if (filters.category && filters.category.trim()) {
-            if (type === 'gallery') {
-                filteredItems = filteredItems.filter(item => item.category === filters.category);
-                filteredItems = filteredItems.filter(item => item.category === filters.category);
-            }
         }
 
         // Render filtered items
@@ -1182,19 +1138,11 @@ class CMSApp {
     }
 
     createLibraryImageCard(image) {
-        const typeBadge = {
-            'gallery': 'Galeria',
-            'profile': 'Perfil',
-            'projects': 'Projetos',
-            'blog': 'Blog'
-        };
-
         return `
             <div class="library-card" data-type="${image.type}">
                 <img src="${image.localUrl || image.url}" alt="${image.title || image.filename}"
                      onerror="this.src='${image.url}'">
                 <div class="library-card-info">
-                    <span class="type-badge type-${image.type}">${typeBadge[image.type] || image.type}</span>
                     <p class="filename" title="${image.filename || image.title}">
                         ${image.title || image.filename || 'Sem nome'}
                     </p>
@@ -1204,15 +1152,20 @@ class CMSApp {
                     <button class="btn btn-small btn-secondary"
                             onclick="app.copyImageUrl('${image.url}')"
                             title="Copiar link GitHub">
-                        <i class="fas fa-copy"></i>
+                        <i class="fas fa-link"></i>
                     </button>
-                    ${image.source !== 'gallery' ?
+                    <button class="btn btn-small btn-warning"
+                            onclick="app.replaceLibraryImage('${image.filename}', '${image.type}')"
+                            title="Trocar imagem">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                    ${!image.isInGallery ?
                         `<button class="btn btn-small btn-primary"
-                                 onclick="app.promoteImageToGallery('${image.filename}')"
-                                 title="Adicionar à Galeria">
-                            <i class="fas fa-images"></i>
+                                 onclick="app.addImageToGallery('${image.url}', '')"
+                                 title="Adicionar à galeria">
+                            <i class="fas fa-plus"></i>
                         </button>` :
-                        `<span class="badge-gallery" title="Já está na galeria">
+                        `<span class="badge-in-gallery" title="Já está na galeria">
                             <i class="fas fa-check"></i>
                         </span>`
                     }
@@ -1236,66 +1189,6 @@ class CMSApp {
         }
     }
 
-    uploadToLibraryPrompt() {
-        // Create hidden file input
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.multiple = true;
-
-        fileInput.addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files);
-            if (files.length > 0) {
-                await this.handleLibraryImagesUpload(files);
-            }
-        });
-
-        fileInput.click();
-    }
-
-    async handleLibraryImagesUpload(files) {
-        const totalFiles = files.length;
-        let uploaded = 0;
-        let failed = 0;
-
-        this.showToast('info', 'Upload iniciado', `Enviando ${totalFiles} imagem(ns)...`);
-
-        for (const file of files) {
-            try {
-                const result = await api.uploadToLibrary(file, 'blog');
-
-                // Add to library data
-                this.data.library.unshift({
-                    source: 'registry',
-                    type: result.type,
-                    filename: result.filename,
-                    url: result.url,
-                    localUrl: result.localUrl,
-                    createdAt: new Date().toISOString()
-                });
-
-                uploaded++;
-            } catch (error) {
-                console.error('Upload failed for', file.name, error);
-                failed++;
-            }
-        }
-
-        // Show result
-        if (uploaded > 0) {
-            this.showToast('success', 'Upload concluído',
-                `${uploaded} imagem(ns) enviada(s)${failed > 0 ? `, ${failed} falhou(aram)` : ''}`);
-
-            // Render library with updated data
-            this.renderLibrarySection();
-
-            // Update Git status
-            this.updateGitStatus();
-        } else {
-            this.showToast('error', 'Upload falhou', 'Nenhuma imagem foi enviada');
-        }
-    }
-
     async reloadLibrary() {
         try {
             this.data.library = await api.getImageLibrary();
@@ -1304,47 +1197,131 @@ class CMSApp {
         }
     }
 
-    async promoteImageToGallery(filename) {
-        // Find image in library
-        const image = this.data.library.find(img => img.filename === filename);
-        if (!image) {
-            this.showToast('error', 'Erro', 'Imagem não encontrada');
-            return;
-        }
+    async addImageToGallery(imageUrl, currentTitle) {
+        // Show modal with gallery form
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
 
-        // Prompt for gallery metadata
-        const title = prompt('Título para a galeria:', image.title || '');
-        if (!title) return;
+        modalTitle.textContent = 'Adicionar à Galeria';
 
-        const description = prompt('Descrição:', image.description || '');
-        const category = prompt('Categoria (photography, digital-art, drawings, mixed-media):', 'photography');
-        const tags = prompt('Tags (separadas por vírgula):', '');
+        // Create form with pre-filled image URL
+        modalBody.innerHTML = `
+            <div class="form-group">
+                <label class="form-label">Título</label>
+                <input type="text" class="form-input" id="gallery-title" value="${currentTitle || ''}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descrição</label>
+                <textarea class="form-textarea" id="gallery-description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ano</label>
+                <input type="number" class="form-input" id="gallery-year" value="${new Date().getFullYear()}" min="1900" max="2099">
+            </div>
+            <div class="form-group">
+                <label class="form-label">URL da Imagem</label>
+                <input type="url" class="form-input" id="gallery-image-url" value="${imageUrl}" required readonly>
+            </div>
+            <div class="gallery-image-preview">
+                <img src="${imageUrl}" alt="Preview" style="max-width: 100%; border-radius: 8px; margin-top: 1rem;">
+            </div>
+        `;
 
-        try {
-            const metadata = {
-                title,
-                description,
-                category,
-                tags: tags ? tags.split(',').map(t => t.trim()) : []
-            };
+        this.showModal();
 
-            const newGalleryItem = await api.promoteToGallery(filename, metadata);
+        // Override save button to handle gallery addition
+        const saveBtn = document.getElementById('modal-save');
+        const originalSaveHandler = saveBtn.onclick;
 
-            // Update local data
-            this.data.gallery.push(newGalleryItem);
+        saveBtn.onclick = async () => {
+            const title = document.getElementById('gallery-title')?.value || '';
+            const description = document.getElementById('gallery-description')?.value || '';
+            const year = parseInt(document.getElementById('gallery-year')?.value) || new Date().getFullYear();
 
-            this.showToast('success', 'Adicionado à galeria!', `"${title}" foi adicionado à galeria`);
+            if (!title) {
+                this.showToast('error', 'Título obrigatório', 'Por favor, preencha o título');
+                return;
+            }
 
-            // Reload library to update status
-            await this.reloadLibrary();
-            this.renderLibrarySection();
+            const originalText = saveBtn.innerHTML;
+            try {
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                saveBtn.disabled = true;
 
-            // Update Git status
-            this.updateGitStatus();
-        } catch (error) {
-            console.error('Failed to promote to gallery:', error);
-            this.showToast('error', 'Erro', 'Não foi possível adicionar à galeria');
-        }
+                const metadata = {
+                    title,
+                    description,
+                    year
+                };
+
+                const newGalleryItem = await api.addToGallery(imageUrl, metadata);
+
+                // Update local data
+                this.data.gallery.push(newGalleryItem);
+
+                this.closeModal();
+                this.showToast('success', 'Adicionado à galeria!', `"${title}" foi adicionado à galeria`);
+
+                // Reload library to update display
+                await this.reloadLibrary();
+                this.renderLibrarySection();
+
+                // Update Git status
+                this.updateGitStatus();
+            } catch (error) {
+                console.error('Failed to add to gallery:', error);
+                this.showToast('error', 'Erro', 'Não foi possível adicionar à galeria');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+                saveBtn.onclick = originalSaveHandler;
+            }
+        };
+    }
+
+    async replaceLibraryImage(filename, type) {
+        // Create file input
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                this.showToast('error', 'Arquivo inválido', 'Por favor, selecione uma imagem');
+                return;
+            }
+
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                this.showToast('error', 'Arquivo muito grande', 'Tamanho máximo: 10MB');
+                return;
+            }
+
+            try {
+                this.showToast('info', 'Substituindo imagem', 'Aguarde...');
+
+                // Replace image via API
+                const result = await api.replaceImage(type, filename, file);
+
+                // Reload library to show updated image
+                await this.reloadLibrary();
+                this.renderLibrarySection();
+
+                this.showToast('success', 'Imagem substituída', 'A imagem foi atualizada com sucesso');
+
+                // Update Git status
+                this.updateGitStatus();
+            } catch (error) {
+                console.error('Failed to replace image:', error);
+                this.showToast('error', 'Erro ao substituir', error.message);
+            }
+        });
+
+        fileInput.click();
     }
 
     async deleteLibraryImage(filename, type) {

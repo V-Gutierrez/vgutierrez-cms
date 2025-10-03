@@ -46,73 +46,80 @@ const upload = multer({
   }
 });
 
-// GET /api/images/library - Get unified image library
+// GET /api/images/library - Get unified image library (scan all directories)
 router.get('/library', async (req, res) => {
   try {
     const allImages = [];
+    const imageTypes = ['assets', 'blog', 'gallery', 'profile', 'projects'];
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 
-    // Load gallery items
+    // Load gallery.json to check which images are already in gallery
+    let gallery = [];
     try {
-      const gallery = await loadJsonFile('gallery.json');
-      gallery.forEach(item => {
-        allImages.push({
-          source: 'gallery',
-          type: 'gallery',
-          id: item.id,
-          title: item.title,
-          description: item.description,
-          url: item.image,
-          filename: item.image.split('/').pop(),
-          category: item.category,
-          tags: item.tags,
-          featured: item.featured,
-          createdAt: item.createdAt || null
-        });
-      });
+      gallery = await loadJsonFile('gallery.json');
     } catch (error) {
-      console.warn('Could not load gallery:', error.message);
+      console.warn('Could not load gallery.json:', error.message);
     }
 
-    // Load registry items
-    try {
-      const registry = await loadJsonFile('images/registry.json');
-      registry.forEach(item => {
-        allImages.push({
-          source: 'registry',
-          type: item.type,
-          filename: item.filename,
-          url: item.url,
-          description: item.description,
-          createdAt: item.createdAt
-        });
-      });
-    } catch (error) {
-      console.warn('Could not load registry:', error.message);
-    }
+    // Create a map of URLs to count occurrences in gallery
+    const galleryUrls = new Map();
+    gallery.forEach(item => {
+      const url = item.image;
+      galleryUrls.set(url, (galleryUrls.get(url) || 0) + 1);
+    });
 
-    // Load profile image
-    try {
-      const profile = await loadJsonFile('profile.json');
-      if (profile.personalInfo?.profileImage) {
-        allImages.push({
-          source: 'profile',
-          type: 'profile',
-          filename: profile.personalInfo.profileImage.split('/').pop(),
-          url: profile.personalInfo.profileImage,
-          description: 'Profile Photo',
-          current: true,
-          createdAt: null
-        });
+    // Scan all image directories
+    for (const type of imageTypes) {
+      const dirPath = path.join(__dirname, '..', '..', 'data', 'images', type);
+
+      try {
+        const files = await fs.readdir(dirPath);
+
+        for (const filename of files) {
+          // Skip hidden files and non-images
+          if (filename.startsWith('.')) continue;
+
+          const ext = path.extname(filename).toLowerCase();
+          if (!allowedExtensions.includes(ext)) continue;
+
+          // Generate GitHub URL
+          const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/${type}/${filename}`;
+
+          // Check if this URL is in gallery
+          const isInGallery = galleryUrls.has(githubUrl);
+          const galleryCount = galleryUrls.get(githubUrl) || 0;
+
+          // Get title and description if in gallery
+          let title = '';
+          let description = '';
+          if (isInGallery) {
+            const galleryItem = gallery.find(item => item.image === githubUrl);
+            if (galleryItem) {
+              title = galleryItem.title;
+              description = galleryItem.description;
+            }
+          }
+
+          allImages.push({
+            filename,
+            url: githubUrl,
+            type,
+            source: 'filesystem',
+            isInGallery,
+            galleryCount,
+            title,
+            description
+          });
+        }
+      } catch (error) {
+        console.warn(`Could not scan directory ${type}:`, error.message);
       }
-    } catch (error) {
-      console.warn('Could not load profile:', error.message);
     }
 
-    // Sort by creation date (most recent first)
+    // Sort by type and filename
     allImages.sort((a, b) => {
-      if (!a.createdAt) return 1;
-      if (!b.createdAt) return -1;
-      return new Date(b.createdAt) - new Date(a.createdAt);
+      if (a.type !== b.type) return a.type.localeCompare(b.type);
+      return a.filename.localeCompare(b.filename);
     });
 
     res.json(allImages);
@@ -122,86 +129,28 @@ router.get('/library', async (req, res) => {
   }
 });
 
-// POST /api/images/upload - Upload image to library
-router.post('/upload', upload.single('image'), async (req, res) => {
+
+// POST /api/images/add-to-gallery - Add existing image to gallery
+router.post('/add-to-gallery', async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+    const { imageUrl, title, description, technique, year, dimensions } = req.body;
 
-    const type = req.body.type || 'blog';
-    const description = req.body.description || '';
-
-    // Local URL for immediate preview
-    const localUrl = `/data/images/${type}/${req.file.filename}`;
-
-    // GitHub URL for production
-    const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/${type}/${req.file.filename}`;
-
-    // Update registry
-    const registryPath = path.join('images', 'registry.json');
-    let registry = [];
-    try {
-      registry = await loadJsonFile(registryPath);
-    } catch (error) {
-      console.log('Registry not found, creating new one');
-    }
-
-    const newEntry = {
-      type: type,
-      filename: req.file.filename,
-      url: githubUrl,
-      description: description,
-      createdAt: new Date().toISOString()
-    };
-
-    registry.push(newEntry);
-    await saveJsonFile(registryPath, registry);
-
-    res.json({
-      url: githubUrl,
-      localUrl: localUrl,
-      filename: req.file.filename,
-      originalName: req.file.originalname,
-      size: req.file.size,
-      type: type
-    });
-  } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({ error: 'Upload failed', details: error.message });
-  }
-});
-
-// POST /api/images/promote-to-gallery/:filename - Promote image to gallery
-router.post('/promote-to-gallery/:filename', async (req, res) => {
-  try {
-    const { filename } = req.params;
-    const { title, description, category, tags } = req.body;
-
-    if (!title) {
-      return res.status(400).json({ error: 'Title is required' });
-    }
-
-    // Find image in registry
-    const registry = await loadJsonFile('images/registry.json');
-    const image = registry.find(img => img.filename === filename);
-
-    if (!image) {
-      return res.status(404).json({ error: 'Image not found in registry' });
+    if (!title || !imageUrl) {
+      return res.status(400).json({ error: 'Title and image URL are required' });
     }
 
     // Load gallery
     const gallery = await loadJsonFile('gallery.json');
 
-    // Create new gallery item
+    // Create new gallery item (reusing existing image URL)
     const newItem = {
       id: generateId(),
       title: title,
       description: description || '',
-      category: category || 'photography',
-      image: image.url,
-      tags: tags || [],
-      featured: false,
+      technique: technique || '',
+      year: year || new Date().getFullYear(),
+      dimensions: dimensions || '',
+      image: imageUrl,
       published: true,
       slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
     };
@@ -211,8 +160,47 @@ router.post('/promote-to-gallery/:filename', async (req, res) => {
 
     res.json(newItem);
   } catch (error) {
-    console.error('Error promoting to gallery:', error);
-    res.status(500).json({ error: 'Failed to promote to gallery' });
+    console.error('Error adding to gallery:', error);
+    res.status(500).json({ error: 'Failed to add to gallery' });
+  }
+});
+
+// PUT /api/images/:type/:filename - Replace image (keeps same filename)
+router.put('/:type/:filename', upload.single('image'), async (req, res) => {
+  try {
+    const { type, filename } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Build paths
+    const targetPath = path.join(__dirname, '..', '..', 'data', 'images', type, filename);
+    const uploadedPath = req.file.path;
+
+    // Delete old file
+    try {
+      await fs.unlink(targetPath);
+    } catch (error) {
+      console.warn('Original file not found, continuing with replacement:', error.message);
+    }
+
+    // Rename uploaded file to target filename
+    await fs.rename(uploadedPath, targetPath);
+
+    // Generate URLs
+    const localUrl = `/data/images/${type}/${filename}`;
+    const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/${type}/${filename}`;
+
+    res.json({
+      message: 'Image replaced successfully',
+      url: githubUrl,
+      localUrl: localUrl,
+      filename: filename
+    });
+  } catch (error) {
+    console.error('Error replacing image:', error);
+    res.status(500).json({ error: 'Failed to replace image' });
   }
 });
 
@@ -227,16 +215,6 @@ router.delete('/:type/:filename', async (req, res) => {
       await fs.unlink(filePath);
     } catch (error) {
       console.warn('File not found or already deleted:', error.message);
-    }
-
-    // Remove from registry
-    const registryPath = path.join('images', 'registry.json');
-    try {
-      let registry = await loadJsonFile(registryPath);
-      registry = registry.filter(img => img.filename !== filename);
-      await saveJsonFile(registryPath, registry);
-    } catch (error) {
-      console.warn('Could not update registry:', error.message);
     }
 
     res.json({ message: 'Image deleted successfully' });

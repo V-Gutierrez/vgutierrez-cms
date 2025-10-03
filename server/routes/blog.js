@@ -51,7 +51,7 @@ router.get('/:slug', async (req, res) => {
 // POST /api/blog - Create new post
 router.post('/', async (req, res) => {
   try {
-    const { title, excerpt, tags, content, date } = req.body;
+    const { title, excerpt, content, date } = req.body;
 
     if (!title || !content) {
       return res.status(400).json({ error: 'Title and content are required' });
@@ -76,7 +76,6 @@ router.post('/', async (req, res) => {
       title,
       date: formattedDate,
       excerpt: excerpt || '',
-      tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
       published: true,
       contentFile: `posts/${slug}.json`
     };
@@ -87,15 +86,13 @@ router.post('/', async (req, res) => {
       title,
       date: formattedDate,
       author: 'Victor Gutierrez',
-      tags: postIndex.tags,
       published: true,
       excerpt: excerpt || '',
       content,
       readingTime: estimateReadingTime(content),
       seo: {
         metaTitle: `${title} - Victor Gutierrez`,
-        metaDescription: excerpt || '',
-        keywords: postIndex.tags
+        metaDescription: excerpt || ''
       }
     };
 
@@ -125,7 +122,7 @@ router.post('/', async (req, res) => {
 // PUT /api/blog/:slug - Update existing post
 router.put('/:slug', async (req, res) => {
   try {
-    const { title, excerpt, tags, content, date, published } = req.body;
+    const { title, excerpt, content, date, published } = req.body;
     const { slug: currentSlug } = req.params;
 
     const posts = await loadJsonFile('posts.json');
@@ -167,12 +164,6 @@ router.put('/:slug', async (req, res) => {
       fullPost.excerpt = excerpt;
     }
 
-    if (tags !== undefined) {
-      const tagsArray = Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []);
-      postIndex.tags = tagsArray;
-      fullPost.tags = tagsArray;
-    }
-
     if (content !== undefined) {
       fullPost.content = content;
       fullPost.readingTime = estimateReadingTime(content);
@@ -192,8 +183,7 @@ router.put('/:slug', async (req, res) => {
     // Update SEO
     fullPost.seo = {
       metaTitle: `${fullPost.title} - Victor Gutierrez`,
-      metaDescription: fullPost.excerpt,
-      keywords: fullPost.tags
+      metaDescription: fullPost.excerpt
     };
 
     // Save updated files

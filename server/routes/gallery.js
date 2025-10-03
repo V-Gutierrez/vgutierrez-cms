@@ -96,13 +96,10 @@ router.post('/', async (req, res) => {
     const {
       title,
       description,
-      category,
       technique,
       year,
-      tags,
       dimensions,
       imageUrl,
-      featured,
       published
     } = req.body;
 
@@ -120,15 +117,10 @@ router.post('/', async (req, res) => {
       slug,
       title,
       description: description || '',
-      category: (category || 'photography').toLowerCase(),
       technique: technique || '',
       year: year || new Date().getFullYear(),
       image: imageUrl,
-      tags: Array.isArray(tags)
-        ? tags
-        : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
       dimensions: dimensions || '',
-      featured: !!featured,
       published: published !== undefined ? !!published : true
     };
 
@@ -148,13 +140,10 @@ router.put('/:slug', async (req, res) => {
     const {
       title,
       description,
-      category,
       technique,
       year,
-      tags,
       dimensions,
       imageUrl,
-      featured,
       published
     } = req.body;
     const { slug: currentSlug } = req.params;
@@ -180,17 +169,10 @@ router.put('/:slug', async (req, res) => {
 
     if (title !== undefined) item.title = title;
     if (description !== undefined) item.description = description;
-    if (category !== undefined) item.category = category.toLowerCase();
     if (technique !== undefined) item.technique = technique;
     if (year !== undefined) item.year = year;
-    if (tags !== undefined) {
-      item.tags = Array.isArray(tags)
-        ? tags
-        : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []);
-    }
     if (dimensions !== undefined) item.dimensions = dimensions;
     if (imageUrl !== undefined) item.image = imageUrl;
-    if (featured !== undefined) item.featured = !!featured;
     if (published !== undefined) item.published = !!published;
 
     // Update slug if title changed (ensure item has a slug)
@@ -256,26 +238,6 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
 
     // GitHub URL for production
     const githubUrl = `https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/${req.file.filename}`;
-
-    // Update registry
-    const registryPath = path.join('images', 'registry.json');
-    let registry = [];
-    try {
-      registry = await loadJsonFile(registryPath);
-    } catch (error) {
-      console.log('Registry not found, creating new one');
-    }
-
-    const newEntry = {
-      type: 'gallery',
-      filename: req.file.filename,
-      url: githubUrl,
-      description: req.body.description || '',
-      createdAt: new Date().toISOString()
-    };
-
-    registry.push(newEntry);
-    await saveJsonFile(registryPath, registry);
 
     res.json({
       url: githubUrl,
