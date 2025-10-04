@@ -411,11 +411,6 @@ function showPost(postSlug, updateURL = true) {
 
   document.getElementById("post-content").innerHTML = `
           <div class="post-header">
-              <div class="share-button-top">
-                <button class="share-button" onclick="sharePost('${postSlug}', this)">
-                  <span class="share-icon">${shareIconSVG}</span>
-                </button>
-              </div>
               <h1 class="post-title">${post.title}</h1>
           </div>
           <div class="post-content">
