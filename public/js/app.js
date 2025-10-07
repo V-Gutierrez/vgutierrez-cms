@@ -557,7 +557,7 @@ class CMSApp {
 			this.currentEditorId = editorId;
 
 			// Setup live preview
-			this.updateBlogPreview(initialContent);
+			this.updateFullBlogPreview();
 
 			// Add event listener for live preview updates
 			editor.onDidChangeModelContent(() => {
@@ -568,7 +568,76 @@ class CMSApp {
 			// Setup blog image upload after editor is ready
 			setTimeout(() => {
 				this.setupBlogImageUpload();
+				this.setupBlogPreviewListeners();
 			}, 100);
+		}
+	}
+
+	setupBlogPreviewListeners() {
+		// Title input listener
+		const titleInput = document.getElementById("blog-title");
+		if (titleInput) {
+			titleInput.addEventListener("input", () => {
+				this.updateFullBlogPreview();
+			});
+		}
+
+		// Excerpt textarea listener
+		const excerptInput = document.getElementById("blog-excerpt");
+		if (excerptInput) {
+			excerptInput.addEventListener("input", () => {
+				this.updateFullBlogPreview();
+			});
+		}
+
+		// Date input listener
+		const dateInput = document.getElementById("blog-date");
+		if (dateInput) {
+			dateInput.addEventListener("change", () => {
+				this.updateFullBlogPreview();
+			});
+		}
+
+		// Published checkbox listener
+		const publishedCheckbox = document.getElementById("blog-published");
+		if (publishedCheckbox) {
+			publishedCheckbox.addEventListener("change", () => {
+				this.updateFullBlogPreview();
+			});
+		}
+
+		// Preview toggle button listener
+		const toggleBtn = document.getElementById("preview-toggle-btn");
+		const previewSection = document.getElementById("blog-preview-section");
+		const editorContainer = document.getElementById("blog-editor-preview-container");
+
+		if (toggleBtn && previewSection && editorContainer) {
+			let isPreviewVisible = true;
+
+			toggleBtn.addEventListener("click", () => {
+				isPreviewVisible = !isPreviewVisible;
+
+				if (isPreviewVisible) {
+					// Show preview
+					previewSection.classList.remove("collapsed");
+					editorContainer.classList.remove("preview-collapsed");
+					toggleBtn.classList.remove("collapsed");
+					toggleBtn.querySelector("span").textContent = "Esconder Preview";
+				} else {
+					// Hide preview
+					previewSection.classList.add("collapsed");
+					editorContainer.classList.add("preview-collapsed");
+					toggleBtn.classList.add("collapsed");
+					toggleBtn.querySelector("span").textContent = "Mostrar Preview";
+				}
+
+				// Trigger editor resize to adjust to new container size
+				if (this.currentEditor) {
+					setTimeout(() => {
+						this.currentEditor.layout();
+					}, 300);
+				}
+			});
 		}
 	}
 
@@ -579,6 +648,62 @@ class CMSApp {
 			previewContainer.innerHTML =
 				htmlContent ||
 				'<p class="preview-empty">O preview aparecerá aqui...</p>';
+		}
+	}
+
+	updateFullBlogPreview() {
+		// Get form values
+		const title = document.getElementById("blog-title")?.value || "";
+		const excerpt = document.getElementById("blog-excerpt")?.value || "";
+		const date = document.getElementById("blog-date")?.value || "";
+		const published = document.getElementById("blog-published")?.checked || false;
+
+		// Update title
+		const previewTitle = document.getElementById("preview-title");
+		if (previewTitle) {
+			if (title.trim()) {
+				previewTitle.textContent = title;
+				previewTitle.classList.remove("empty");
+			} else {
+				previewTitle.textContent = "Título do Post";
+				previewTitle.classList.add("empty");
+			}
+		}
+
+		// Update date
+		const previewDate = document.getElementById("preview-date");
+		if (previewDate && date) {
+			previewDate.textContent = this.formatDate(date);
+		}
+
+		// Update excerpt
+		const previewExcerpt = document.getElementById("preview-excerpt");
+		if (previewExcerpt) {
+			if (excerpt.trim()) {
+				previewExcerpt.textContent = excerpt;
+				previewExcerpt.classList.remove("empty");
+			} else {
+				previewExcerpt.textContent = "Resumo do post...";
+				previewExcerpt.classList.add("empty");
+			}
+		}
+
+		// Update status badge
+		const previewStatus = document.getElementById("preview-status");
+		if (previewStatus) {
+			if (published) {
+				previewStatus.textContent = "Publicado";
+				previewStatus.className = "blog-preview-status published";
+			} else {
+				previewStatus.textContent = "Rascunho";
+				previewStatus.className = "blog-preview-status draft";
+			}
+		}
+
+		// Update content preview (existing functionality)
+		if (this.currentEditor) {
+			const content = this.currentEditor.getValue();
+			this.updateBlogPreview(content);
 		}
 	}
 
@@ -746,15 +871,35 @@ class CMSApp {
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Conteúdo</label>
-                <div class="blog-editor-preview-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <label class="form-label" style="margin-bottom: 0;">Conteúdo</label>
+                    <button type="button" class="preview-toggle-btn" id="preview-toggle-btn">
+                        <i class="fas fa-eye"></i>
+                        <span>Esconder Preview</span>
+                    </button>
+                </div>
+                <div class="blog-editor-preview-container" id="blog-editor-preview-container">
                     <div class="blog-editor-section">
                         <div id="content-editor" class="editor-container"></div>
                     </div>
-                    <div class="blog-preview-section">
+                    <div class="blog-preview-section" id="blog-preview-section">
                         <div class="preview-header">
-                            <i class="fas fa-eye"></i> Preview
+                            <i class="fas fa-eye"></i> Preview do Post
                         </div>
+                        <div class="blog-preview-header">
+                            <h1 class="blog-preview-title empty" id="preview-title">Título do Post</h1>
+                            <div class="blog-preview-meta">
+                                <div class="blog-preview-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span id="preview-date">${this.formatDate(item?.date || new Date().toISOString())}</span>
+                                </div>
+                                <div class="blog-preview-meta-item">
+                                    <span class="blog-preview-status draft" id="preview-status">Rascunho</span>
+                                </div>
+                            </div>
+                            <div class="blog-preview-excerpt empty" id="preview-excerpt">Resumo do post...</div>
+                        </div>
+                        <div class="blog-preview-divider"></div>
                         <div id="blog-content-preview" class="blog-preview-content"></div>
                     </div>
                 </div>

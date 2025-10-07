@@ -52,5 +52,14 @@
     "excerpt": ". . .",
     "published": true,
     "contentFile": "posts/to-my-future-self.json"
+  },
+  {
+    "id": "98a2a864edf542e49c3f42aa51db1f5c",
+    "slug": "clientes-internos-tambm-so-clientes",
+    "title": "Clientes internos também são clientes",
+    "date": "2025-10-07",
+    "excerpt": "Hora de tratar ferramentas internas como produtos",
+    "published": true,
+    "contentFile": "posts/clientes-internos-tambm-so-clientes.json"
   }
 ]
