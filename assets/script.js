@@ -99,7 +99,7 @@ const formatRelativeTime = (dateString) => {
   const now = new Date();
   const diffTime = Math.abs(now - postDate);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays === 0) {
     return "today";
   } else if (diffDays === 1) {
@@ -123,10 +123,32 @@ const updateActiveByDataAttr = (selector, dataKey, value) => {
   );
 };
 
+// Update page title for GTM tracking and better UX
+const updatePageTitle = (tab, postTitle = null) => {
+  const baseName = "Victor Gutierrez";
+
+  if (postTitle) {
+    document.title = `${baseName} - ${postTitle}`;
+  } else if (tab === "home") {
+    document.title = baseName;
+  } else if (tab === "gallery") {
+    document.title = `${baseName} - Gallery`;
+  } else if (tab === "blog") {
+    document.title = `${baseName} - Blog`;
+  } else if (tab === "post-detail") {
+    document.title = `${baseName} - Post`;
+  } else {
+    document.title = baseName;
+  }
+};
+
 function showTab(tabName, updateURL = true) {
   if (isTransitioning || tabName === currentTab) return;
 
   isTransitioning = true;
+
+  // Update page title for GTM tracking
+  updatePageTitle(tabName);
 
   // Update URL unless explicitly disabled (to prevent hashchange loops)
   if (updateURL) {
@@ -380,6 +402,9 @@ async function loadFullContentForPosts(postsSubset) {
 function showPost(postSlug, updateURL = true) {
   const post = allBlogPosts.find((p) => p.slug === postSlug);
   if (!post) return;
+
+  // Update page title with post name
+  updatePageTitle("post-detail", post.title);
 
   // Update URL unless explicitly disabled
   if (updateURL) {
