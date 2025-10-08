@@ -204,5 +204,16 @@
     "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/img_5736-1759528240382.jpeg",
     "dimensions": "",
     "published": true
+  },
+  {
+    "id": "bfb170202c6d4910840941d034b5ee7b",
+    "slug": "hd-horizon",
+    "title": "hd-horizon",
+    "description": "",
+    "technique": "",
+    "year": 2024,
+    "image": "https://raw.githubusercontent.com/V-Gutierrez/vgutierrez-cms/main/data/images/gallery/4bb7c5cb-6a0e-45dd-a6a5-8cf518d895a4_1_105_c-1759940019693.jpeg",
+    "dimensions": "",
+    "published": true
   }
 ]
