@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.victorgutierrez.com.br/</loc>
-    <lastmod>2025-10-07</lastmod>
+    <lastmod>2025-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.victorgutierrez.com.br/#portfolio</loc>
-    <lastmod>2025-10-07</lastmod>
+    <lastmod>2025-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.victorgutierrez.com.br/#gallery</loc>
-    <lastmod>2025-10-07</lastmod>
+    <lastmod>2025-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.victorgutierrez.com.br/#blog</loc>
-    <lastmod>2025-10-07</lastmod>
+    <lastmod>2025-10-18</lastmod>
   </url>
   <url>
     <loc>https://www.victorgutierrez.com.br/#post/optimism-is-a-driving-force-in-development-teams</loc>
@@ -43,5 +43,9 @@
   <url>
     <loc>https://www.victorgutierrez.com.br/#post/clientes-internos-tambm-so-clientes</loc>
     <lastmod>2025-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://www.victorgutierrez.com.br/#post/commit-before-i-do</loc>
+    <lastmod>2025-10-18</lastmod>
   </url>
 </urlset>

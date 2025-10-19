@@ -3,22 +3,22 @@
     {
       "url": "/",
       "title": "Home",
-      "lastModified": "2025-10-07"
+      "lastModified": "2025-10-18"
     },
     {
       "url": "/#portfolio",
       "title": "Portfolio",
-      "lastModified": "2025-10-07"
+      "lastModified": "2025-10-18"
     },
     {
       "url": "/#gallery",
       "title": "Gallery",
-      "lastModified": "2025-10-07"
+      "lastModified": "2025-10-18"
     },
     {
       "url": "/#blog",
       "title": "Blog",
-      "lastModified": "2025-10-07"
+      "lastModified": "2025-10-18"
     }
   ],
   "posts": [
@@ -56,6 +56,11 @@
       "url": "/#post/clientes-internos-tambm-so-clientes",
       "title": "Clientes internos também são clientes",
       "lastModified": "2025-10-07"
+    },
+    {
+      "url": "/#post/commit-before-i-do",
+      "title": "Commit before I do",
+      "lastModified": "2025-10-18"
     }
   ],
   "projects": []

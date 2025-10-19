@@ -61,5 +61,14 @@
     "excerpt": "Hora de tratar ferramentas internas como produtos",
     "published": true,
     "contentFile": "posts/clientes-internos-tambm-so-clientes.json"
+  },
+  {
+    "id": "06708395c00e43218ef5dd1ddae1cd62",
+    "slug": "commit-before-i-do",
+    "title": "Commit before I do",
+    "date": "2025-10-18",
+    "excerpt": "-",
+    "published": true,
+    "contentFile": "posts/commit-before-i-do.json"
   }
 ]
